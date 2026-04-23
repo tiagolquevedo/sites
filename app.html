@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Avanti — Preparação Mental para Atletas</title>
+  <meta name="description" content="O #1 app brasileiro de preparação mental para atletas. Do amador ao profissional, treine sua mente como os melhores do mundo.">
+  <link rel="icon" type="image/png" href="iconesite.png">
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow: #fcc408;
+      --navy:   #10182a;
+      --dark:   #080e1a;
+      --border: rgba(255,255,255,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--navy); color: #fff; font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    .serif { font-family: 'DM Serif Display', Georgia, serif; }
+    .wrap { max-width: 1360px; margin: 0 auto; padding: 0 40px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* ── EYEBROW ── */
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
+
+    /* ── BUTTONS ── */
+    .btn-yellow {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--yellow); color: var(--navy);
+      font-weight: 700; font-size: .875rem; padding: 11px 22px;
+      border-radius: 9999px; text-decoration: none; border: none;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s, transform .15s, box-shadow .2s; white-space: nowrap;
+    }
+    .btn-yellow:hover { background: #ffd440; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(252,196,8,.3); }
+    .btn-yellow-lg {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--yellow); color: var(--navy);
+      font-weight: 700; font-size: 1rem; padding: 12px 28px;
+      border-radius: 9999px; text-decoration: none; border: none;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s, transform .15s, box-shadow .2s; white-space: nowrap;
+    }
+    .btn-yellow-lg:hover { background: #ffd440; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(252,196,8,.35); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(8,14,26,0); border-bottom: 1px solid rgba(255,255,255,0);
+      transition: background .35s, border-color .35s;
+    }
+    nav.scrolled { background: rgba(8,14,26,.93); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom-color: rgba(255,255,255,.1); }
+    .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    @media (max-width: 640px) { .nav-inner { padding: 0 20px; } }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: .1s; } .reveal-d2 { transition-delay: .2s; } .reveal-d3 { transition-delay: .3s; }
+
+    /* ── HERO ── */
+    .hero { min-height: 100vh; background: var(--dark); display: flex; align-items: center; padding-top: 64px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 80px 0 72px; width: 100%; }
+    @media (max-width: 899px) { .hero-grid { grid-template-columns: 1fr; gap: 0; padding: 24px 0 0; text-align: center; } }
+    .hero h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2.5rem, 4.4vw, 4.25rem); line-height: 1.06; letter-spacing: -.03em; margin-bottom: 20px; }
+    .hero h1 em { font-style: italic; color: var(--yellow); }
+    @media (max-width: 640px) { .hero h1 { font-size: 1.875rem; line-height: 1.1; margin-bottom: 14px; } }
+    .hero-sub { font-size: 1.0625rem; line-height: 1.72; color: rgba(255,255,255,.5); margin-bottom: 36px; max-width: 480px; }
+    @media (max-width: 899px) { .hero-sub { margin: 0 auto 28px; max-width: 300px; } }
+    @media (max-width: 640px) { .hero-sub { font-size: .9375rem; } }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    @media (max-width: 899px) { .hero-ctas { justify-content: center; } }
+
+    .btn-yellow-lg { padding: 9px 22px; font-size: .875rem; }
+
+    .phone-hero { position: relative; max-width: 460px; margin: 0 auto; }
+    .phone-hero img { width: 100%; display: block; filter: drop-shadow(0 32px 64px rgba(0,0,0,.55)); }
+    @media (max-width: 899px) { .phone-hero { max-width: 340px; margin-top: 24px; margin-bottom: -4px; } }
+    @media (max-width: 640px) { .phone-hero { max-width: 280px; margin-top: 20px; } }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      background: var(--navy); padding: 80px 0; text-align: center;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .quote-section::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url('plano de fundo app.png');
+      background-size: cover; background-position: center;
+      opacity: .14; pointer-events: none;
+    }
+    .quote-section .wrap { position: relative; z-index: 1; }
+    @media (max-width: 640px) { .quote-section { padding: 52px 0; } }
+    .quote-hl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.5rem, 3.5vw, 2.625rem); line-height: 1.18; letter-spacing: -.02em; margin-bottom: 18px; }
+    @media (max-width: 640px) { .quote-hl { font-size: 1.375rem; } }
+    .quote-sub { font-size: 1rem; color: rgba(255,255,255,.42); line-height: 1.72; max-width: 520px; margin: 0 auto; }
+    @media (max-width: 640px) {
+      .quote-inner { display: flex; flex-direction: column; align-items: center; }
+      .quote-hl { max-width: 260px; }
+      .quote-sub { max-width: 260px; font-size: .875rem; }
+    }
+
+    /* ── FEATURES SECTION wrapper ── */
+    .features-section { background: var(--dark); }
+    .features-header { padding: 88px 0 56px; text-align: center; }
+    @media (max-width: 640px) { .features-header { padding: 56px 0 36px; } }
+    .feat-hl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.1; letter-spacing: -.02em; margin-bottom: 12px; }
+    .feat-sub-header { font-size: clamp(.9375rem, 1.1vw, 1.0625rem); color: rgba(255,255,255,.45); line-height: 1.6; }
+    @media (max-width: 640px) { .feat-hl { font-size: clamp(1.5rem, 6vw, 1.875rem); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .feat-sub-header { font-size: .9rem; } }
+
+    /* ── DESKTOP: scrollable list + sticky photo ── */
+    .features-desktop-wrap { display: block; padding-bottom: calc(100vh - 120px); }
+    @media (max-width: 899px) { .features-desktop-wrap { display: none; } }
+
+    .feat-cols-inner { display: flex; gap: 80px; align-items: flex-start; }
+
+    .feat-list-col { flex: 1; min-width: 0; max-width: 520px; }
+
+    .feat-phone-col {
+      flex: 0 0 420px;
+      position: sticky;
+      top: 80px;
+      align-self: flex-start;
+      height: calc(100vh - 160px);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Crossfade images */
+    .feat-img-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .feat-main-img {
+      position: absolute;
+      max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,.55));
+      opacity: 0; transition: opacity .55s ease;
+    }
+    .feat-main-img.is-active { opacity: 1; }
+
+    /* Feature list items */
+    .feat-list-item {
+      padding: 72px 0; border-top: 1px solid rgba(255,255,255,.07);
+      opacity: .2; transition: opacity .4s ease;
+    }
+    .feat-list-item:first-child { border-top: none; padding-top: 0; }
+    .feat-list-item.active { opacity: 1; }
+
+    .feat-item-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+    .feat-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 30px; height: 30px; border-radius: 6px; flex-shrink: 0; margin-top: 6px;
+      background: var(--yellow); color: var(--navy);
+      font-size: .82rem; font-weight: 800;
+    }
+    .feat-item-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(1.625rem, 2.1vw, 2.125rem);
+      line-height: 1.15; letter-spacing: -.02em;
+    }
+    .feat-item-sub {
+      font-size: 1.0625rem; line-height: 1.72; color: rgba(255,255,255,.48);
+      padding-left: 46px; max-width: 360px;
+    }
+
+    /* ── MOBILE CAROUSEL ── */
+    .feat-carousel-section { display: none; padding-bottom: 56px; }
+    @media (max-width: 899px) { .feat-carousel-section { display: block; } }
+    .feat-carousel { overflow: hidden; position: relative; }
+    .feat-carousel-track { display: flex; will-change: transform; }
+    .feat-slide { min-width: 100%; padding: 0 24px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .feat-slide-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; justify-content: center; }
+    .feat-slide-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 26px; height: 26px; border-radius: 5px; flex-shrink: 0; margin-top: 4px;
+      background: var(--yellow); color: var(--navy);
+      font-size: .75rem; font-weight: 800;
+    }
+    .feat-slide-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.375rem; line-height: 1.2; letter-spacing: -.01em; }
+    .feat-slide-sub { font-size: .8125rem; line-height: 1.65; color: rgba(255,255,255,.45); max-width: 300px; margin-bottom: 8px; }
+    .feat-slide-img { width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; }
+    .feat-slide-img img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 16px 32px rgba(0,0,0,.5)); }
+    .feat-slide-img--lg { height: 360px; }
+    .feat-dots { display: flex; gap: 8px; justify-content: center; margin-top: 8px; padding-bottom: 8px; }
+    .feat-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); transition: background .3s, transform .3s; cursor: pointer; border: none; padding: 0; }
+    .feat-dot.active { background: var(--yellow); transform: scale(1.4); }
+
+    /* ── DEPO "mais" button ── */
+    .btn-depo-more {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .8125rem; font-weight: 600; color: rgba(255,255,255,.5);
+      border: 1px solid rgba(255,255,255,.15); border-radius: 9999px;
+      padding: 6px 14px; text-decoration: none; margin-top: 20px;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-depo-more:hover { color: #fff; border-color: rgba(255,255,255,.35); }
+
+    /* ── TESTIMONIALS ── */
+    .depo-section {
+      padding: 112px 0; position: relative; overflow: hidden;
+      background: var(--navy);
+    }
+    .depo-section::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url('plano de fundo app.png');
+      background-size: cover; background-position: center;
+      opacity: .18; pointer-events: none;
+    }
+    .depo-section .wrap { position: relative; z-index: 1; }
+    @media (max-width: 640px) { .depo-section { padding: 64px 0; } }
+    .depo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; }
+    @media (max-width: 640px) { .depo-grid { grid-template-columns: 1fr; gap: 12px; margin-top: 40px; } }
+    .depo-card { background: rgba(255,255,255,.055); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.11); border-radius: 20px; padding: 28px; transition: border-color .25s, transform .3s; }
+    .depo-card:hover { border-color: rgba(252,196,8,.22); transform: translateY(-4px); }
+    @media (max-width: 640px) { .depo-card { padding: 22px; } }
+    .depo-avatar { width: 60px; height: 60px; border-radius: 12px; overflow: hidden; flex-shrink: 0; border: 1.5px solid rgba(252,196,8,.2); }
+    .depo-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── TEAM ── */
+    .team-section { background: var(--dark); padding: 112px 0; }
+    @media (max-width: 640px) { .team-section { padding: 64px 0; } }
+    .team-wrap { max-width: 660px; margin: 52px auto 0; display: flex; flex-direction: column; gap: 20px; }
+    .team-card { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 24px; padding: 32px; display: flex; align-items: flex-start; gap: 22px; transition: border-color .25s; }
+    .team-card:hover { border-color: rgba(252,196,8,.22); }
+    @media (max-width: 640px) { .team-card { padding: 22px; gap: 16px; } }
+    .team-avatar { width: 72px; height: 72px; border-radius: 14px; flex-shrink: 0; overflow: hidden; border: 1.5px solid rgba(252,196,8,.22); }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @media (max-width: 640px) { .team-avatar { width: 56px; height: 56px; } }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--dark); padding: 96px 0; text-align: center; border-top: 1px solid var(--border); }
+    @media (max-width: 640px) { .cta-section { padding: 60px 0; } }
+    .cta-h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.625rem, 3.5vw, 2.625rem); line-height: 1.12; letter-spacing: -.025em; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 640px) { .cta-h2 { font-size: 1.5rem; margin-bottom: 32px; } }
+    .tally-wrap { max-width: 640px; margin: 0 auto; text-align: left; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); border-top: 1px solid var(--border); padding: 36px 0; }
+    .footer-inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      background: none; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.75);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
+      transition: color .2s, border-color .2s;
+    }
+    .theme-toggle:hover { border-color: rgba(255,255,255,.4); color: #fff; }
+    html.light .theme-toggle { border-color: rgba(16,24,42,.18); color: rgba(16,24,42,.65); }
+    html.light .theme-toggle:hover { border-color: rgba(16,24,42,.4); color: #10182a; }
+
+    /* ── LIGHT MODE ── */
+    html.light { --navy: #f4f4f0; --dark: #e8e8e3; --border: rgba(16,24,42,0.09); }
+    html.light body { color: #10182a; }
+    html.light .logo-img { filter: brightness(0); }
+
+    html.light .btn-yellow, html.light .btn-yellow-lg { color: #10182a; }
+
+    /* Nav */
+    html.light nav.scrolled { background: rgba(244,244,240,.95) !important; border-bottom-color: rgba(16,24,42,.1) !important; }
+
+    /* Hero */
+    html.light .hero-sub { color: rgba(16,24,42,.5); }
+
+    /* Quote */
+    html.light .quote-hl { color: #10182a; }
+    html.light .quote-sub { color: rgba(16,24,42,.42); }
+
+    /* Features */
+    html.light .feat-sub-header { color: rgba(16,24,42,.45); }
+    html.light .feat-list-item { border-color: rgba(16,24,42,.07); }
+    html.light .feat-item-sub { color: rgba(16,24,42,.48); }
+    html.light .feat-slide-sub { color: rgba(16,24,42,.45); }
+    html.light .feat-dot { background: rgba(16,24,42,.2); }
+    html.light .feat-dot.active { background: var(--yellow); }
+
+    /* Depo cards */
+    html.light .depo-card { background: rgba(16,24,42,.05); border-color: rgba(16,24,42,.1); }
+
+    /* Team cards */
+    html.light .team-card { background: rgba(16,24,42,.03); border-color: rgba(16,24,42,.1); }
+
+    /* Footer */
+    html.light footer { border-color: rgba(16,24,42,.1); }
+
+    /* Inline text overrides */
+    html.light *[style*="color:rgba(255,255,255,.2)"]  { color: rgba(16,24,42,.25) !important; }
+    html.light *[style*="color:rgba(255,255,255,.28)"] { color: rgba(16,24,42,.32) !important; }
+    html.light *[style*="color:rgba(255,255,255,.3)"]  { color: rgba(16,24,42,.35) !important; }
+    html.light *[style*="color:rgba(255,255,255,.35)"] { color: rgba(16,24,42,.4)  !important; }
+    html.light *[style*="color:rgba(255,255,255,.42)"] { color: rgba(16,24,42,.48) !important; }
+    html.light *[style*="color:rgba(255,255,255,.45)"] { color: rgba(16,24,42,.5)  !important; }
+    html.light *[style*="color:rgba(255,255,255,.48)"] { color: rgba(16,24,42,.52) !important; }
+    html.light *[style*="color:rgba(255,255,255,.5)"]  { color: rgba(16,24,42,.55) !important; }
+    html.light *[style*="color:rgba(255,255,255,.55)"] { color: rgba(16,24,42,.6)  !important; }
+    html.light *[style*="color:rgba(255,255,255,.6)"]  { color: rgba(16,24,42,.65) !important; }
+    html.light *[style*="color:rgba(255,255,255,.65)"] { color: rgba(16,24,42,.7)  !important; }
+    html.light *[style*="color:rgba(255,255,255,.68)"] { color: rgba(16,24,42,.72) !important; }
+    html.light *[style*="color:rgba(255,255,255,.7)"]  { color: rgba(16,24,42,.75) !important; }
+    html.light *[style*="color:#fff"]                  { color: #10182a !important; }
+
+    /* Inline background overrides */
+    html.light *[style*="background:rgba(255,255,255"] { background: rgba(16,24,42,.05) !important; }
+    html.light *[style*="background: rgba(255,255,255"] { background: rgba(16,24,42,.05) !important; }
+
+    /* Inline border overrides */
+    html.light *[style*="solid rgba(255,255,255"] { border-color: rgba(16,24,42,.1) !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home"><img src="1.png" alt="Avanti" class="logo-img" style="height:20px; display:block;"></a>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
+      <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="wrap" style="width:100%;">
+    <div class="hero-grid">
+      <div>
+        <h1 class="reveal">
+          #1 app brasileiro de<br>
+          <em>preparação mental</em><br>
+          para atletas
+        </h1>
+        <p class="hero-sub reveal reveal-d1">
+          Do amador ao profissional, agora qualquer atleta pode treinar a mente como os melhores do mundo.
+        </p>
+        <div class="hero-ctas reveal reveal-d2">
+          <a href="#waitlist" class="btn-yellow-lg">Entrar na lista de espera</a>
+        </div>
+      </div>
+      <div>
+        <div class="phone-hero reveal reveal-d1">
+          <img src="48.png" alt="App Avanti">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="wrap" style="max-width:720px;">
+    <div class="quote-inner">
+      <h2 class="quote-hl reveal">
+        Chega de perder para si mesmo<br>e limitar o seu potencial.
+      </h2>
+      <p class="quote-sub reveal reveal-d1">
+        Chegou a hora de desenvolver as habilidades mentais necessárias para atingir seus objetivos.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+
+  <!-- Header -->
+  <div class="features-header">
+    <div class="wrap">
+      <h2 class="feat-hl reveal">Como o app funciona pra você</h2>
+      <p class="feat-sub-header reveal reveal-d1">Seu sistema mental inteligente. Na palma da mão.</p>
+    </div>
+  </div>
+
+  <!-- DESKTOP: scrollable list + sticky phone -->
+  <div class="features-desktop-wrap">
+    <div class="wrap" style="width:100%;">
+      <div class="feat-cols-inner">
+
+        <!-- Left: feature list (scrolls with page) -->
+        <div class="feat-list-col" id="featListDesktop">
+
+          <div class="feat-list-item active" data-feat="0">
+            <div class="feat-item-head">
+              <span class="feat-num">1</span>
+              <h3 class="feat-item-title">Onboarding e trilha personalizada</h3>
+            </div>
+            <p class="feat-item-sub">Faça seu onboarding e receba sua trilha de desenvolvimento dentro do nosso app.</p>
+          </div>
+
+          <div class="feat-list-item" data-feat="1">
+            <div class="feat-item-head">
+              <span class="feat-num">2</span>
+              <h3 class="feat-item-title">Campeonatos e Metas</h3>
+            </div>
+            <p class="feat-item-sub">Estabeleça metas, planeje e avalie seus campeonatos. Depois disso, tudo vira insight a qualquer momento.</p>
+          </div>
+
+          <div class="feat-list-item" data-feat="2">
+            <div class="feat-item-head">
+              <span class="feat-num">3</span>
+              <h3 class="feat-item-title">Diário de pensamentos</h3>
+            </div>
+            <p class="feat-item-sub">Em 2 minutos diários, incorpore a rotina dos melhores atletas do mundo: journaling.</p>
+          </div>
+
+          <div class="feat-list-item" data-feat="3">
+            <div class="feat-item-head">
+              <span class="feat-num">4</span>
+              <h3 class="feat-item-title">Relatórios personalizados</h3>
+            </div>
+            <p class="feat-item-sub">Um resumo com feedback das suas atividades, padrões de autoconhecimento e insights de performance.</p>
+          </div>
+
+          <div class="feat-list-item" data-feat="4">
+            <div class="feat-item-head">
+              <span class="feat-num">5</span>
+              <h3 class="feat-item-title">Ciência aplicada para atletas</h3>
+            </div>
+            <p class="feat-item-sub">Conteúdos objetivos sobre preparação mental, divididos em temas e esportes específicos. Escolha se preparar com aulas, desafios ou áudios dentro do app.</p>
+          </div>
+
+          <div class="feat-list-item" data-feat="5">
+            <div class="feat-item-head">
+              <span class="feat-num">6</span>
+              <h3 class="feat-item-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+            </div>
+          </div>
+
+        </div><!-- /feat-list-col -->
+
+        <!-- Right: sticky crossfade images -->
+        <div class="feat-phone-col">
+          <div class="feat-img-wrap">
+            <img id="featImgA" class="feat-main-img is-active" src="../site app avanti/37.png" alt="Feature">
+            <img id="featImgB" class="feat-main-img" src="../site app avanti/37.png" alt="Feature">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /features-desktop-wrap -->
+
+  <!-- MOBILE: infinite loop carousel -->
+  <div class="feat-carousel-section">
+    <div class="feat-carousel" id="featCarousel">
+      <div class="feat-carousel-track" id="featTrack">
+
+        <!-- Clone of slide 6 (for infinite backward) -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">6</span>
+            <h3 class="feat-slide-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+          </div>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Mais features"></div>
+        </div>
+
+        <!-- Real slide 1 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">1</span>
+            <h3 class="feat-slide-title">Onboarding e trilha personalizada</h3>
+          </div>
+          <p class="feat-slide-sub">Faça seu onboarding e receba sua trilha de desenvolvimento dentro do nosso app.</p>
+          <div class="feat-slide-img"><img src="../site app avanti/37.png" alt="Onboarding"></div>
+        </div>
+
+        <!-- Real slide 2 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">2</span>
+            <h3 class="feat-slide-title">Campeonatos e Metas</h3>
+          </div>
+          <p class="feat-slide-sub">Estabeleça metas, planeje e avalie seus campeonatos. Tudo vira insight a qualquer momento.</p>
+          <div class="feat-slide-img"><img src="50.png" alt="Campeonatos"></div>
+        </div>
+
+        <!-- Real slide 3 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">3</span>
+            <h3 class="feat-slide-title">Diário de pensamentos</h3>
+          </div>
+          <p class="feat-slide-sub">Em 2 minutos diários, incorpore a rotina dos melhores atletas do mundo: journaling.</p>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="../site app avanti/47.png" alt="Diário"></div>
+        </div>
+
+        <!-- Real slide 4 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">4</span>
+            <h3 class="feat-slide-title">Relatórios personalizados</h3>
+          </div>
+          <p class="feat-slide-sub">Resumo com feedback das suas atividades, padrões de autoconhecimento e insights de performance.</p>
+          <div class="feat-slide-img"><img src="../site app avanti/42.png" alt="Relatórios"></div>
+        </div>
+
+        <!-- Real slide 5 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">5</span>
+            <h3 class="feat-slide-title">Ciência aplicada para atletas</h3>
+          </div>
+          <p class="feat-slide-sub">Conteúdos sobre preparação mental com aulas, desafios e áudios dentro do app.</p>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Academy"></div>
+        </div>
+
+        <!-- Real slide 6 -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">6</span>
+            <h3 class="feat-slide-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+          </div>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Mais features"></div>
+        </div>
+
+        <!-- Clone of slide 1 (for infinite forward) -->
+        <div class="feat-slide">
+          <div class="feat-slide-head">
+            <span class="feat-slide-num">1</span>
+            <h3 class="feat-slide-title">Onboarding e trilha personalizada</h3>
+          </div>
+          <p class="feat-slide-sub">Faça seu onboarding e receba sua trilha de desenvolvimento dentro do nosso app.</p>
+          <div class="feat-slide-img"><img src="../site app avanti/37.png" alt="Onboarding"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="feat-dots" id="featDots">
+      <button class="feat-dot active" onclick="goSlide(0)"></button>
+      <button class="feat-dot" onclick="goSlide(1)"></button>
+      <button class="feat-dot" onclick="goSlide(2)"></button>
+      <button class="feat-dot" onclick="goSlide(3)"></button>
+      <button class="feat-dot" onclick="goSlide(4)"></button>
+      <button class="feat-dot" onclick="goSlide(5)"></button>
+    </div>
+  </div><!-- /carousel -->
+
+</section>
+
+
+<!-- TESTIMONIALS -->
+<section class="depo-section">
+  <div class="wrap">
+    <p class="eyebrow reveal" style="margin-bottom:14px;">Depoimentos</p>
+    <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.75rem,3.5vw,2.5rem); line-height:1.12; letter-spacing:-.02em; max-width:500px;">
+      O que dizem sobre o app da Avanti
+    </h2>
+    <div class="depo-grid">
+
+      <div class="depo-card reveal">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div class="depo-avatar"><img src="felipeloch.jpg" alt="Felipe Loch"></div>
+          <div>
+            <div style="font-size:.9rem; font-weight:600; margin-bottom:2px;">Felipe Loch</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.42);">Beach Tênis</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.28);">#4 melhor do mundo</div>
+          </div>
+        </div>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O app mudou completamente minha rotina pré-competição. Consigo visualizar meu estado mental em tempo real e me preparar muito melhor."</p>
+      </div>
+
+      <div class="depo-card reveal reveal-d1">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div class="depo-avatar"><img src="melecchi1.jpg" alt="Matheus Melecchi"></div>
+          <div>
+            <div style="font-size:.9rem; font-weight:600; margin-bottom:2px;">Matheus Melecchi</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.42);">Natação</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Campeão Brasileiro</div>
+          </div>
+        </div>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"Uso o journaling todo dia antes do treino. Em 3 meses consegui identificar os padrões que me faziam travar nas provas decisivas."</p>
+      </div>
+
+      <div class="depo-card reveal reveal-d2">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div class="depo-avatar"><img src="jorgefanck.jpg" alt="Jorge Fanck"></div>
+          <div>
+            <div style="font-size:.9rem; font-weight:600; margin-bottom:2px;">Jorge Fanck</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.42);">Tênis de Mesa</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Treinador Paris 2024</div>
+          </div>
+        </div>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O Airton é surreal. É como ter um psicólogo disponível às 23h antes de uma prova importante. Isso não existe em lugar nenhum."</p>
+      </div>
+
+      <div class="depo-card reveal reveal-d3">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div class="depo-avatar"><img src="fred.png" alt="Frederico Francavilla"></div>
+          <div>
+            <div style="font-size:.9rem; font-weight:600; margin-bottom:2px;">Frederico Francavilla</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.42);">Vela</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Campeão Sul-americano</div>
+          </div>
+        </div>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"Finalmente um app feito pra atleta de verdade. Os dados são sérios e me ajudam a conversar melhor com meu treinador."</p>
+      </div>
+
+    </div>
+    <div style="margin-top:32px;">
+      <a href="https://app.avantiperformance.com.br/depoimentos" target="_blank" rel="noopener" class="btn-depo-more reveal">
+        Mais depoimentos ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- A AVANTI -->
+<section class="team-section">
+  <div class="wrap">
+    <div style="text-align:center;">
+      <p class="eyebrow reveal" style="margin-bottom:14px;">A Avanti</p>
+      <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.5rem,3vw,2.25rem); line-height:1.15; letter-spacing:-.02em; max-width:480px; margin:0 auto;">
+        Criada por quem vive o esporte de dentro pra fora.
+      </h2>
+    </div>
+    <div class="team-wrap">
+      <div class="team-card reveal">
+        <div class="team-avatar"><img src="lucas-rosito.jpg" alt="Lucas Rosito"></div>
+        <div>
+          <h3 class="serif" style="font-size:1.25rem; line-height:1.2; margin-bottom:4px;">Lucas Rosito</h3>
+          <p style="font-size:.72rem; color:var(--yellow); font-weight:700; letter-spacing:.07em; text-transform:uppercase; margin-bottom:12px;">Psicólogo · Fundador</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.48); line-height:1.72; margin:0;">Psicólogo especialista em performance esportiva e TCC. Acompanhou mais de 500 atletas — de amadores a medalhistas olímpicos e campeões mundiais. Co-fundador da Avanti e referência em psicologia do esporte no Brasil.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-d1">
+        <div class="team-avatar"><img src="Tiago Quevedo_Avanti_CJ_7507.jpg" alt="Tiago Quevedo"></div>
+        <div>
+          <h3 class="serif" style="font-size:1.25rem; line-height:1.2; margin-bottom:4px;">Tiago Quevedo</h3>
+          <p style="font-size:.72rem; color:var(--yellow); font-weight:700; letter-spacing:.07em; text-transform:uppercase; margin-bottom:12px;">Atleta · Fundador</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.48); line-height:1.72; margin:0;">Atleta, Campeão Sul-Americano e Mundial de Vela. Fundou a Avanti com a convicção de que a força mental é o diferencial mais negligenciado no esporte brasileiro.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA FINAL -->
+<section class="cta-section" id="waitlist">
+  <div class="wrap" style="max-width:640px;">
+    <h2 class="cta-h2 reveal">
+      Entre na lista exclusiva e garanta bônus especiais no lançamento.
+    </h2>
+    <div class="tally-wrap reveal reveal-d1">
+      <iframe data-tally-src="https://tally.so/embed/5BqZvb?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="633" frameborder="0" marginheight="0" marginwidth="0" title="Lista Exclusiva App Avanti"></iframe>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <img src="1.png" alt="Avanti" class="logo-img" style="height:24px; display:block;">
+      <span style="font-size:.8125rem; color:rgba(255,255,255,.55);">© 2026 Avanti. Todos os direitos reservados.</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* ── Nav scroll ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+
+  /* ── Theme toggle ── */
+  function syncThemeIcons() {
+    const isLight = document.documentElement.classList.contains('light');
+    document.getElementById('icon-sun').style.display  = isLight ? 'none' : '';
+    document.getElementById('icon-moon').style.display = isLight ? '' : 'none';
+  }
+  function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+    const isLight = document.documentElement.classList.contains('light');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    syncThemeIcons();
+  }
+  syncThemeIcons();
+
+  /* ── Scroll reveal ── */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06, rootMargin: '0px 0px -32px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('visible'));
+  setTimeout(() => { document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')); }, 900);
+
+  /* ── Desktop features: scroll-based trigger + crossfade ── */
+  (function() {
+    const featItems = document.querySelectorAll('.feat-list-item');
+    const imgA = document.getElementById('featImgA');
+    const imgB = document.getElementById('featImgB');
+    if (!featItems.length || !imgA) return;
+
+    const SRCS = [
+      '../site app avanti/37.png',
+      '50.png',
+      '../site app avanti/47.png',
+      '../site app avanti/42.png',
+      '51.png',
+      '51.png'
+    ];
+
+    let lastIdx = -1;
+    let useA = true;
+
+    function activateFeat(idx) {
+      featItems.forEach((el, i) => el.classList.toggle('active', i === idx));
+      const next = useA ? imgB : imgA;
+      const prev = useA ? imgA : imgB;
+      next.src = SRCS[idx];
+      next.classList.add('is-active');
+      prev.classList.remove('is-active');
+      useA = !useA;
+    }
+
+    function updateFeatActive() {
+      const trigger = window.innerHeight * 0.60;
+      let idx = 0;
+      featItems.forEach((item, i) => {
+        if (item.getBoundingClientRect().top <= trigger) idx = i;
+      });
+      if (idx !== lastIdx) { lastIdx = idx; activateFeat(idx); }
+    }
+
+    window.addEventListener('scroll', updateFeatActive, { passive: true });
+    window.addEventListener('resize', updateFeatActive, { passive: true });
+    updateFeatActive();
+  })();
+
+  /* ── Mobile carousel: infinite loop ── */
+  (function() {
+    const carousel = document.getElementById('featCarousel');
+    const track    = document.getElementById('featTrack');
+    const dots     = document.querySelectorAll('.feat-dot');
+    if (!track || !carousel) return;
+
+    const REAL  = 6;   // real slides
+    const TOTAL = REAL + 2; // includes head/tail clones
+    let vIdx = 1;      // start at first real slide
+    let autoTimer;
+    let txStart = 0;
+    let dragging = false;
+
+    function setPos(idx, animate) {
+      vIdx = idx;
+      const w = carousel.offsetWidth;
+      track.style.transition = animate ? 'transform .4s cubic-bezier(.4,0,.2,1)' : 'none';
+      track.style.transform  = 'translateX(-' + (idx * w) + 'px)';
+      // dot: real index is vIdx-1 (mod REAL)
+      const realIdx = ((idx - 1) % REAL + REAL) % REAL;
+      dots.forEach((d, i) => d.classList.toggle('active', i === realIdx));
+    }
+
+    track.addEventListener('transitionend', () => {
+      if (vIdx === 0)          setPos(REAL, false);
+      else if (vIdx === TOTAL - 1) setPos(1, false);
+    });
+
+    function nextSlide() { setPos(vIdx + 1, true); }
+    function prevSlide() { setPos(vIdx - 1, true); }
+
+    window.goSlide = function(n) { setPos(n + 1, true); resetAuto(); };
+
+    function startAuto() { autoTimer = setInterval(nextSlide, 4000); }
+    function resetAuto() { clearInterval(autoTimer); startAuto(); }
+
+    // Touch swipe
+    track.addEventListener('touchstart', e => {
+      txStart = e.touches[0].clientX;
+      clearInterval(autoTimer);
+    }, { passive: true });
+
+    track.addEventListener('touchend', e => {
+      const diff = txStart - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) { diff > 0 ? nextSlide() : prevSlide(); }
+      resetAuto();
+    }, { passive: true });
+
+    // Handle resize without animation
+    window.addEventListener('resize', () => setPos(vIdx, false), { passive: true });
+
+    // Init — defer one frame so offsetWidth is computed
+    requestAnimationFrame(() => { setPos(1, false); startAuto(); });
+  })();
+
+  /* ── Tally ── */
+  var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
+</script>
+
+</body>
+</html>
