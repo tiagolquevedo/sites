@@ -106,6 +106,28 @@
       .quote-sub { max-width: 260px; font-size: .875rem; }
     }
 
+    /* ── GRID BACKGROUND ── */
+    .grid-bg { position: relative; }
+    .grid-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(255,255,255,1) 10%, transparent 75%);
+      mask-image: radial-gradient(ellipse at center, rgba(255,255,255,1) 10%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .grid-bg > div { position: relative; z-index: 1; }
+    html.light .grid-bg::before {
+      background-image:
+        linear-gradient(to right, rgba(16,24,42,.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16,24,42,.07) 1px, transparent 1px);
+    }
+
     /* ── FEATURES SECTION wrapper ── */
     .features-section { background: var(--dark); }
     .features-header { padding: 88px 0 56px; text-align: center; }
@@ -115,7 +137,7 @@
     @media (max-width: 640px) { .feat-hl { font-size: clamp(1.5rem, 6vw, 1.875rem); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .feat-sub-header { font-size: .9rem; } }
 
     /* ── DESKTOP: scrollable list + sticky photo ── */
-    .features-desktop-wrap { display: block; padding-bottom: calc(100vh - 120px); }
+    .features-desktop-wrap { display: block; padding-bottom: 120px; }
     @media (max-width: 899px) { .features-desktop-wrap { display: none; } }
 
     .feat-cols-inner { display: flex; gap: 80px; align-items: flex-start; }
@@ -243,6 +265,9 @@
     footer { background: var(--dark); border-top: 1px solid var(--border); padding: 36px 0; }
     .footer-inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
 
+    /* ── TALLY DARK FORCE ── */
+    html.light .tally-dark-iframe { filter: invert(1) hue-rotate(180deg); }
+
     /* ── THEME TOGGLE ── */
     .theme-toggle {
       background: none; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.75);
@@ -327,7 +352,7 @@
 
 
 <!-- HERO -->
-<section id="home" class="hero">
+<section id="home" class="hero grid-bg">
   <div class="wrap" style="width:100%;">
     <div class="hero-grid">
       <div>
@@ -369,7 +394,7 @@
 
 
 <!-- FEATURES -->
-<section class="features-section" id="features">
+<section class="features-section grid-bg" id="features">
 
   <!-- Header -->
   <div class="features-header">
@@ -406,7 +431,7 @@
           <div class="feat-list-item" data-feat="2">
             <div class="feat-item-head">
               <span class="feat-num">3</span>
-              <h3 class="feat-item-title">Diário de pensamentos</h3>
+              <h3 class="feat-item-title">Report diário com feedback imediato</h3>
             </div>
             <p class="feat-item-sub">Em 2 minutos diários, incorpore a rotina dos melhores atletas do mundo: journaling.</p>
           </div>
@@ -422,7 +447,7 @@
           <div class="feat-list-item" data-feat="4">
             <div class="feat-item-head">
               <span class="feat-num">5</span>
-              <h3 class="feat-item-title">Ciência aplicada para atletas</h3>
+              <h3 class="feat-item-title">Preparação mental com conteúdo</h3>
             </div>
             <p class="feat-item-sub">Conteúdos objetivos sobre preparação mental, divididos em temas e esportes específicos. Escolha se preparar com aulas, desafios ou áudios dentro do app.</p>
           </div>
@@ -430,8 +455,9 @@
           <div class="feat-list-item" data-feat="5">
             <div class="feat-item-head">
               <span class="feat-num">6</span>
-              <h3 class="feat-item-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+              <h3 class="feat-item-title">Comunidade Avanti</h3>
             </div>
+            <p class="feat-item-sub">Siga seus amigos, compartilhe conquistas e conquiste pontos no ranking.</p>
           </div>
 
         </div><!-- /feat-list-col -->
@@ -457,9 +483,10 @@
         <div class="feat-slide">
           <div class="feat-slide-head">
             <span class="feat-slide-num">6</span>
-            <h3 class="feat-slide-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+            <h3 class="feat-slide-title">Comunidade Avanti</h3>
           </div>
-          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Mais features"></div>
+          <p class="feat-slide-sub">Siga seus amigos, compartilhe conquistas e conquiste pontos no ranking.</p>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="54.png" alt="Comunidade Avanti"></div>
         </div>
 
         <!-- Real slide 1 -->
@@ -486,10 +513,10 @@
         <div class="feat-slide">
           <div class="feat-slide-head">
             <span class="feat-slide-num">3</span>
-            <h3 class="feat-slide-title">Diário de pensamentos</h3>
+            <h3 class="feat-slide-title">Report diário com feedback imediato</h3>
           </div>
           <p class="feat-slide-sub">Em 2 minutos diários, incorpore a rotina dos melhores atletas do mundo: journaling.</p>
-          <div class="feat-slide-img feat-slide-img--lg"><img src="47.png" alt="Diário"></div>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="47.png" alt="Report diário"></div>
         </div>
 
         <!-- Real slide 4 -->
@@ -506,19 +533,20 @@
         <div class="feat-slide">
           <div class="feat-slide-head">
             <span class="feat-slide-num">5</span>
-            <h3 class="feat-slide-title">Ciência aplicada para atletas</h3>
+            <h3 class="feat-slide-title">Preparação mental com conteúdo</h3>
           </div>
-          <p class="feat-slide-sub">Conteúdos sobre preparação mental com aulas, desafios e áudios dentro do app.</p>
-          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Academy"></div>
+          <p class="feat-slide-sub">Conteúdos objetivos sobre preparação mental, divididos em temas e esportes específicos. Escolha se preparar com aulas, desafios ou áudios dentro do app.</p>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Preparação mental"></div>
         </div>
 
         <!-- Real slide 6 -->
         <div class="feat-slide">
           <div class="feat-slide-head">
             <span class="feat-slide-num">6</span>
-            <h3 class="feat-slide-title">Alertas de cuidado, integração de dados com treinadores, psicólogos e muito mais.</h3>
+            <h3 class="feat-slide-title">Comunidade Avanti</h3>
           </div>
-          <div class="feat-slide-img feat-slide-img--lg"><img src="51.png" alt="Mais features"></div>
+          <p class="feat-slide-sub">Siga seus amigos, compartilhe conquistas e conquiste pontos no ranking.</p>
+          <div class="feat-slide-img feat-slide-img--lg"><img src="54.png" alt="Comunidade Avanti"></div>
         </div>
 
         <!-- Clone of slide 1 (for infinite forward) -->
@@ -614,7 +642,7 @@
 
 
 <!-- A AVANTI -->
-<section class="team-section">
+<section class="team-section grid-bg">
   <div class="wrap">
     <div style="text-align:center;">
       <p class="eyebrow reveal" style="margin-bottom:14px;">A Avanti</p>
@@ -645,13 +673,15 @@
 
 
 <!-- CTA FINAL -->
-<section class="cta-section" id="waitlist">
+<section class="cta-section grid-bg" id="waitlist">
   <div class="wrap" style="max-width:640px;">
     <h2 class="cta-h2 reveal">
       Entre na lista exclusiva e garanta bônus especiais no lançamento.
     </h2>
     <div class="tally-wrap reveal reveal-d1">
-      <iframe data-tally-src="https://tally.so/embed/5BqZvb?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="633" frameborder="0" marginheight="0" marginwidth="0" title="Lista Exclusiva App Avanti"></iframe>
+      <div style="background:#080e1a; border-radius:16px; padding:32px 24px; text-align:left; border:1px solid rgba(255,255,255,.1); overflow:hidden;">
+        <iframe class="tally-dark-iframe" data-tally-src="https://tally.so/embed/5BqZvb?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="633" frameborder="0" marginheight="0" marginwidth="0" title="Lista Exclusiva App Avanti"></iframe>
+      </div>
     </div>
   </div>
 </section>
@@ -708,7 +738,7 @@
       '47.png',
       '42.png',
       '51.png',
-      '51.png'
+      '54.png'
     ];
 
     let lastIdx = -1;
@@ -725,10 +755,13 @@
     }
 
     function updateFeatActive() {
-      const trigger = window.innerHeight * 0.60;
+      const vh = window.innerHeight;
+      // item 1 (index 1): lower threshold → ativa mais tarde → foto 1 dura mais
+      // item 5 (index 5): threshold maior → ativa mais cedo → foto 6 tem mais tempo antes do fim
+      const TRIGGERS = [0.60, 0.45, 0.60, 0.60, 0.60, 0.75];
       let idx = 0;
       featItems.forEach((item, i) => {
-        if (item.getBoundingClientRect().top <= trigger) idx = i;
+        if (item.getBoundingClientRect().top <= vh * TRIGGERS[i]) idx = i;
       });
       if (idx !== lastIdx) { lastIdx = idx; activateFeat(idx); }
     }

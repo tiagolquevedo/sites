@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avanti — Preparação Mental para Atletas</title>
+  <meta name="description" content="A Avanti é uma empresa de educação e tecnologia especializada em preparação psicológica para atletas.">
+  <link rel="icon" type="image/png" href="iconesite.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow: #fcc408;
+      --navy:   #10182a;
+      --dark:   #080e1a;
+      --border: rgba(255,255,255,0.08);
+      --muted:  rgba(255,255,255,0.45);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--navy); color: #fff; font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    .serif { font-family: 'DM Serif Display', Georgia, serif; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: .1s; }
+    .reveal-d2 { transition-delay: .2s; }
+    .reveal-d3 { transition-delay: .3s; }
+    .reveal-d4 { transition-delay: .4s; }
+
+    /* ── GRADIENT TEXT ── */
+    .grad-text {
+      background: linear-gradient(135deg, var(--yellow) 0%, #ffeaa0 50%, var(--yellow) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── GLOW BLOB ── */
+    .glow-yellow {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle, rgba(252,196,8,.18) 0%, transparent 70%);
+    }
+
+    /* ── NAV ── */
+    #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: background .4s, border-color .4s; }
+
+    /* ── HERO BG ── */
+    .hero-bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.2s cubic-bezier(.4,0,.2,1); }
+    .hero-bg-slide.active { opacity: 0.2; }
+
+    /* ── MOBILE CAROUSEL ── */
+    .hero-mobile-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity .9s ease; }
+    .hero-mobile-slide.active { opacity: 1; }
+
+    /* ── MARQUEE ── */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── FLOAT ── */
+    @keyframes floatA { 0%,100% { transform: translateY(0) rotate(-.5deg); } 50% { transform: translateY(-10px) rotate(.5deg); } }
+    @keyframes floatB { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* ── BLINK DOT ── */
+    @keyframes blink { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.6); } }
+
+    /* ── GLASS CARD ── */
+    .glass {
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    /* ── GRADIENT BORDER CARD ── */
+    .grad-border {
+      position: relative;
+      background: rgba(255,255,255,.04);
+      border-radius: 24px;
+    }
+    .grad-border::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 24px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(252,196,8,.3), rgba(255,255,255,.05), rgba(252,196,8,.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ── SECTION LINE ── */
+    .section-line {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08) 20%, rgba(252,196,8,.15) 50%, rgba(255,255,255,.08) 80%, transparent);
+    }
+
+    /* ── CARD HOVER ── */
+    .card-lift { transition: transform .35s ease, box-shadow .35s ease; }
+    .card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.3), 0 0 0 1px rgba(252,196,8,.2); }
+
+    /* ── BUTTONS ── */
+    .btn-yellow {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--yellow); color: var(--navy);
+      font-weight: 700; font-size: .9rem; padding: 13px 26px;
+      border-radius: 9999px; text-decoration: none; border: none;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn-yellow:hover { background: #ffd440; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(252,196,8,.35); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; color: #fff;
+      font-weight: 600; font-size: .9rem; padding: 12px 24px;
+      border-radius: 9999px; text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.2);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.05); }
+
+    /* ── FAQ ── */
+    .faq-body { display: none; }
+    .faq-item.open .faq-body { display: block; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--yellow); }
+    .faq-chevron { transition: transform .25s, color .2s; color: rgba(255,255,255,.3); }
+
+    /* ── MOBILE MENU ── */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: flex; }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .eyebrow::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--yellow); animation: blink 2s ease-in-out infinite;
+    }
+
+    /* ── STEP NUMBER ── */
+    .step-num {
+      width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+      background: rgba(252,196,8,.1); border: 1px solid rgba(252,196,8,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; color: var(--yellow);
+    }
+
+    /* ── FEATURE ICON ── */
+    .feat-icon {
+      width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+      background: rgba(252,196,8,.08); border: 1px solid rgba(252,196,8,.18);
+      display: flex; align-items: center; justify-content: center; color: var(--yellow);
+    }
+
+    /* ── PILL TAG ── */
+    .pill-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 9999px; padding: 6px 16px;
+      font-size: .8rem; font-weight: 600; color: rgba(255,255,255,.55);
+    }
+
+    /* ── DOT LIST ── */
+    .dot-list { display: flex; flex-direction: column; gap: 10px; }
+    .dot-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .9rem; color: rgba(255,255,255,.6); list-style: none;
+    }
+    .dot-list li::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--yellow); flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 899px) {
+      #nav-links, #nav-cta { display: none !important; }
+      .desktop-only { display: none !important; }
+    }
+    @media (min-width: 900px) {
+      #hamburger { display: none !important; }
+      #mobile-menu { display: none !important; }
+      .desktop-only { display: block !important; }
+      .mobile-only { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav id="nav" style="background:rgba(8,14,26,0); border-bottom:1px solid transparent;">
+  <div class="wrap" style="height:64px; display:flex; align-items:center; justify-content:space-between;">
+
+    <a href="#home"><img src="1.png" alt="Avanti" style="height:26px;"></a>
+
+    <div id="nav-links" style="display:flex; gap:2px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.09); border-radius:9999px; padding:5px;">
+      <a href="#home" class="nav-link">Início</a>
+      <a href="#solucoes" class="nav-link">Soluções</a>
+      <a href="#assessoria" class="nav-link">Assessoria</a>
+      <a href="#equipe" class="nav-link">Quem somos</a>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a id="nav-cta" href="https://wa.me/5551997929080" target="_blank" class="btn-yellow" style="font-size:.8rem; padding:8px 20px;">Falar com a gente</a>
+      <button id="hamburger" onclick="toggleMenu()" style="display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px;">
+        <span style="display:block; width:22px; height:2px; background:#fff; border-radius:2px;"></span>
+        <span style="display:block; width:22px; height:2px; background:#fff; border-radius:2px;"></span>
+        <span style="display:block; width:22px; height:2px; background:#fff; border-radius:2px;"></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" style="flex-direction:column; position:fixed; top:72px; left:12px; right:12px; background:rgba(8,14,26,.97); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,.1); border-radius:16px; z-index:99; overflow:hidden;">
+    <a href="#home" onclick="toggleMenu()" style="padding:16px 22px; font-size:.9375rem; font-weight:500; color:rgba(255,255,255,.75); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.06);">Início</a>
+    <a href="#solucoes" onclick="toggleMenu()" style="padding:16px 22px; font-size:.9375rem; font-weight:500; color:rgba(255,255,255,.75); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.06);">Soluções</a>
+    <a href="#assessoria" onclick="toggleMenu()" style="padding:16px 22px; font-size:.9375rem; font-weight:500; color:rgba(255,255,255,.75); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.06);">Assessoria</a>
+    <a href="#equipe" onclick="toggleMenu()" style="padding:16px 22px; font-size:.9375rem; font-weight:500; color:rgba(255,255,255,.75); text-decoration:none;">Quem somos</a>
+  </div>
+</nav>
+
+<style>
+.nav-link { font-size:.875rem; font-weight:500; color:rgba(255,255,255,.6); text-decoration:none; padding:6px 16px; border-radius:9999px; transition:color .2s, background .2s; }
+.nav-link:hover { color:#fff; background:rgba(255,255,255,.1); }
+</style>
+
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section id="home" style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:64px; position:relative; overflow:hidden; background:var(--dark);">
+
+  <!-- BG image carousel desktop -->
+  <div id="heroBgCarousel" class="desktop-only" style="position:absolute; inset:0; z-index:0; overflow:hidden;">
+    <div class="hero-bg-slide active" style="background-image:url('backgroud1.jpg')"></div>
+    <div class="hero-bg-slide" style="background-image:url('background2.jpg')"></div>
+    <div class="hero-bg-slide" style="background-image:url('background3.jpg')"></div>
+    <div class="hero-bg-slide" style="background-image:url('background4.jpg')"></div>
+    <div class="hero-bg-slide" style="background-image:url('background5.jpg')"></div>
+  </div>
+
+  <!-- Glow blobs -->
+  <div class="glow-yellow" style="width:800px; height:800px; top:-300px; left:-200px; z-index:1;"></div>
+  <div class="glow-yellow" style="width:600px; height:600px; bottom:-200px; right:-150px; z-index:1; opacity:.5;"></div>
+
+  <!-- Bottom gradient fade into navy -->
+  <div style="position:absolute; bottom:0; left:0; right:0; height:220px; background:linear-gradient(to top, var(--navy), transparent); z-index:2; pointer-events:none;"></div>
+
+  <div class="wrap" style="position:relative; z-index:3; padding-top:80px; padding-bottom:100px;">
+
+    <!-- Social proof badge -->
+    <div class="reveal" style="display:inline-flex; align-items:center; gap:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:9999px; padding:8px 20px 8px 8px; margin-bottom:36px; backdrop-filter:blur(12px);">
+      <div style="display:flex;">
+        <img src="lucas-rosito.jpg" alt="Lucas" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid var(--dark);">
+        <img src="Tiago Quevedo_Avanti_CJ_7507.jpg" alt="Tiago" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:2px solid var(--dark); margin-left:-10px;">
+      </div>
+      <span style="font-size:.8rem; font-weight:600; color:rgba(255,255,255,.7);">Feito por quem viveu o esporte de alto rendimento</span>
+    </div>
+
+    <!-- Headline with gradient text -->
+    <h1 class="serif reveal reveal-d1" style="font-size:clamp(2.75rem,6vw,4.5rem); line-height:1.05; letter-spacing:-.02em; max-width:840px; margin-bottom:24px;">
+      Um ecossistema de preparação mental <em class="grad-text" style="font-style:italic;">feito para atletas que querem mais.</em>
+    </h1>
+
+    <p class="reveal reveal-d2" style="font-size:1.0625rem; color:rgba(255,255,255,.5); line-height:1.75; max-width:500px; margin-bottom:40px;">
+      Do amador ao profissional, feito por quem já formou medalhistas olímpicos e campeões mundiais.
+    </p>
+
+    <!-- CTAs -->
+    <div class="reveal reveal-d3" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:56px;">
+      <a href="https://wa.me/5551997929080" target="_blank" class="btn-yellow" style="font-size:.9375rem; padding:14px 28px;">Quero começar ↗</a>
+      <a href="#solucoes" class="btn-ghost" style="font-size:.9375rem; padding:13px 28px;">Ver soluções</a>
+    </div>
+
+    <!-- Feature pills -->
+    <div class="reveal reveal-d4" style="display:flex; flex-wrap:wrap; gap:10px;">
+      <span style="display:inline-flex; align-items:center; gap:8px; background:rgba(252,196,8,.08); border:1px solid rgba(252,196,8,.2); border-radius:9999px; padding:6px 16px; font-size:.8rem; font-weight:600; color:rgba(255,255,255,.75);">
+        <span style="width:6px; height:6px; background:var(--yellow); border-radius:50%; animation:blink 2s ease-in-out infinite;"></span>
+        +500 atletas acompanhados
+      </span>
+      <span class="pill-tag">Medalhistas olímpicos</span>
+      <span class="pill-tag">Campeões mundiais</span>
+      <span class="pill-tag">100% online</span>
+    </div>
+
+    <!-- Mobile carousel -->
+    <div id="heroMobileCarousel" class="mobile-only" style="overflow:hidden; border-radius:20px; aspect-ratio:4/3; position:relative; margin-top:48px; box-shadow:0 32px 80px rgba(0,0,0,.5);">
+      <div class="hero-mobile-slide active" style="background-image:url('backgroud1.jpg')"></div>
+      <div class="hero-mobile-slide" style="background-image:url('background2.jpg')"></div>
+      <div class="hero-mobile-slide" style="background-image:url('background3.jpg')"></div>
+      <div class="hero-mobile-slide" style="background-image:url('background4.jpg')"></div>
+      <div class="hero-mobile-slide" style="background-image:url('background5.jpg')"></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════ MARQUEE ═══════════════════ -->
+<div style="position:relative; overflow:hidden; background:var(--navy);">
+  <div class="section-line"></div>
+  <div style="padding:16px 0; overflow:hidden;">
+    <div style="display:flex; white-space:nowrap; animation:marquee 20s linear infinite;">
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Futebol <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Vela <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Corrida <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Natação <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Tênis <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Triathlon <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Ciclismo <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Surf <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Jiu-Jitsu <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Judô <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Atletismo <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Basquete <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Vôlei <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Futebol <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Vela <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Corrida <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Natação <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Triathlon <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+      <span style="display:inline-flex;align-items:center;gap:20px;padding:0 24px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);">Atletismo <span style="width:4px;height:4px;border-radius:50%;background:var(--yellow);opacity:.5;"></span></span>
+    </div>
+  </div>
+  <div class="section-line"></div>
+</div>
+
+
+<!-- ═══════════════════ SOLUÇÕES ═══════════════════ -->
+<section id="solucoes" style="background:var(--dark); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:600px; height:600px; top:-200px; right:-200px; opacity:.5; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="position:relative; z-index:1;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-bottom:64px;">
+      <div>
+        <p class="eyebrow reveal" style="margin-bottom:16px;">Soluções</p>
+        <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.875rem,4vw,3rem); line-height:1.1; letter-spacing:-.02em; max-width:520px;">
+          Tudo que você precisa para treinar sua mente como um <em style="font-style:italic; color:var(--yellow);">campeão.</em>
+        </h2>
+      </div>
+      <a href="https://wa.me/5551997929080" target="_blank" class="btn-yellow reveal" style="white-space:nowrap; flex-shrink:0;">Entrar em contato ↗</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px;">
+
+      <div class="grad-border card-lift reveal" style="padding:32px; cursor:default;">
+        <div class="feat-icon" style="margin-bottom:20px;"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+        <h3 style="font-size:1.0625rem; font-weight:700; margin-bottom:10px;">App Avanti</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.75;">#1 app de preparação mental. Journaling, IA e dados para turbinar sua performance.</p>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d1" style="padding:32px; cursor:default;">
+        <div class="feat-icon" style="margin-bottom:20px;"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+        <h3 style="font-size:1.0625rem; font-weight:700; margin-bottom:10px;">Assessoria Individual</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.75;">Acompanhamento personalizado com psicólogos especialistas em performance esportiva.</p>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d2" style="padding:32px; cursor:default;">
+        <div class="feat-icon" style="margin-bottom:20px;"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <h3 style="font-size:1.0625rem; font-weight:700; margin-bottom:10px;">Clubes e Federações</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.75;">Programas corporativos com dados, relatórios e acesso ao app para toda a equipe.</p>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d3" style="padding:32px; cursor:default;">
+        <div class="feat-icon" style="margin-bottom:20px;"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+        <h3 style="font-size:1.0625rem; font-weight:700; margin-bottom:10px;">Psicólogos e Estudantes</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.75;">Capacitações, ferramentas e comunidade para potencializar a psicologia da performance.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ APP + DEPOIMENTOS ═══════════════════ -->
+<section id="app" style="background:var(--navy); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:500px; height:500px; bottom:-150px; left:-150px; opacity:.4; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="position:relative; z-index:1;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-bottom:64px;">
+      <div>
+        <p class="eyebrow reveal" style="margin-bottom:16px;">App Avanti</p>
+        <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.875rem,4vw,3rem); line-height:1.1; letter-spacing:-.02em; max-width:520px;">
+          #1 app brasileiro de preparação mental <em style="font-style:italic; color:var(--yellow);">para atletas.</em>
+        </h2>
+      </div>
+      <a href="#" class="btn-yellow reveal" style="white-space:nowrap; flex-shrink:0;">Quero saber mais ↗</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+
+      <div class="glass card-lift reveal" style="border-radius:20px; padding:28px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3);">
+            <img src="felipeloch.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Felipe Loch">
+          </div>
+          <div>
+            <div style="font-size:.9rem; font-weight:700;">Felipe Loch</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.45);">Beach Tênis</div>
+            <div style="font-size:.75rem; color:var(--yellow); font-weight:600;">#4 melhor do mundo</div>
+          </div>
+        </div>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.65); line-height:1.75;">"O app mudou completamente minha rotina pré-competição. Consigo visualizar meu estado mental em tempo real e me preparar muito melhor."</p>
+      </div>
+
+      <div class="glass card-lift reveal reveal-d1" style="border-radius:20px; padding:28px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3);">
+            <img src="melecchi1.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Matheus Melecchi">
+          </div>
+          <div>
+            <div style="font-size:.9rem; font-weight:700;">Matheus Melecchi</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.45);">Natação</div>
+            <div style="font-size:.75rem; color:var(--yellow); font-weight:600;">Campeão Brasileiro</div>
+          </div>
+        </div>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.65); line-height:1.75;">"Uso o journaling todo dia antes do treino. Em 3 meses consegui identificar os padrões que me faziam travar nas provas decisivas."</p>
+      </div>
+
+      <div class="glass card-lift reveal reveal-d2" style="border-radius:20px; padding:28px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3);">
+            <img src="jorgefanck.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Jorge Fanck">
+          </div>
+          <div>
+            <div style="font-size:.9rem; font-weight:700;">Jorge Fanck</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.45);">Tênis de Mesa</div>
+            <div style="font-size:.75rem; color:var(--yellow); font-weight:600;">Treinador Paris 2024</div>
+          </div>
+        </div>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.65); line-height:1.75;">"O Airton é surreal. É como ter um psicólogo disponível às 23h antes de uma prova importante. Isso não existe em lugar nenhum."</p>
+      </div>
+
+      <div class="glass card-lift reveal reveal-d3" style="border-radius:20px; padding:28px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3);">
+            <img src="fred.png" style="width:100%; height:100%; object-fit:cover;" alt="Frederico Francavilla">
+          </div>
+          <div>
+            <div style="font-size:.9rem; font-weight:700;">Frederico Francavilla</div>
+            <div style="font-size:.75rem; color:rgba(255,255,255,.45);">Vela</div>
+            <div style="font-size:.75rem; color:var(--yellow); font-weight:600;">Campeão Sul-americano</div>
+          </div>
+        </div>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.65); line-height:1.75;">"Finalmente um app feito pra atleta de verdade. Os dados são sérios e me ajudam a conversar melhor com meu treinador."</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ASSESSORIA ═══════════════════ -->
+<section id="assessoria" style="background:var(--dark); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:500px; height:500px; top:-100px; right:-100px; opacity:.4; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="position:relative; z-index:1;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-bottom:40px;">
+      <div>
+        <p class="eyebrow reveal" style="margin-bottom:16px;">Assessoria Individual</p>
+        <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.875rem,4vw,2.875rem); line-height:1.1; letter-spacing:-.02em; max-width:540px;">
+          Do amador ao profissional, acompanhamento <em style="font-style:italic; color:var(--yellow);">humano e personalizado.</em>
+        </h2>
+      </div>
+      <a href="https://wa.me/5551997929080" target="_blank" class="btn-yellow reveal" style="white-space:nowrap; flex-shrink:0;">Entrar em contato ↗</a>
+    </div>
+
+    <p class="reveal" style="font-size:1rem; color:rgba(255,255,255,.5); line-height:1.75; max-width:560px; margin-bottom:56px;">
+      Uma equipe de profissionais que vai te ajudar a desenvolver as habilidades mentais necessárias para atingir seus objetivos.
+    </p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+
+      <div class="grad-border card-lift reveal" style="padding:32px;">
+        <div class="step-num" style="margin-bottom:20px;">1</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:10px;">Definição do formato e objetivos</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.7;">Vínculo com o profissional, integração com o app da Avanti e início do trabalho.</p>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d1" style="padding:32px;">
+        <div class="step-num" style="margin-bottom:20px;">2</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:10px;">Espaço do atleta</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.7;">Um local de escuta para lidar com os desafios do esporte e da vida pessoal.</p>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d2" style="padding:32px;">
+        <div class="step-num" style="margin-bottom:20px;">3</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:10px;">Acompanhamento contínuo</h3>
+        <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.7;">Encontros regulares e adaptados conforme o progresso e momento do atleta.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ B2B ═══════════════════ -->
+<section id="clubes" style="background:var(--navy); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:700px; height:700px; top:50%; left:50%; transform:translate(-50%,-50%); opacity:.25; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="position:relative; z-index:1;">
+
+    <p class="eyebrow reveal" style="margin-bottom:16px;">Para organizações</p>
+    <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.875rem,4vw,3rem); line-height:1.1; letter-spacing:-.02em; max-width:600px; margin-bottom:64px;">
+      Uma suite de soluções para o seu <em style="font-style:italic; color:var(--yellow);">negócio ou equipe.</em>
+    </h2>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+
+      <div class="grad-border card-lift reveal" style="padding:40px;">
+        <p class="eyebrow" style="margin-bottom:20px;">Para organizações</p>
+        <h3 class="serif" style="font-size:clamp(1.375rem,2.5vw,1.875rem); line-height:1.2; margin-bottom:14px;">Clubes, federações e organizações esportivas.</h3>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.5); line-height:1.75; margin-bottom:28px;">Treinadores tomam decisões com dados, atletas desenvolvem repertório e a equipe evolui com sistema.</p>
+        <ul class="dot-list" style="margin-bottom:32px;">
+          <li>Programas personalizados</li>
+          <li>Acesso corporativo ao app da Avanti</li>
+          <li>Integrações de dados</li>
+        </ul>
+        <button onclick="openTallyModal()" class="btn-yellow">Entrar em contato</button>
+      </div>
+
+      <div class="grad-border card-lift reveal reveal-d1" style="padding:40px;">
+        <p class="eyebrow" style="margin-bottom:20px;">Para profissionais</p>
+        <h3 class="serif" style="font-size:clamp(1.375rem,2.5vw,1.875rem); line-height:1.2; margin-bottom:14px;">Psicólogas(os) e estudantes.</h3>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.5); line-height:1.75; margin-bottom:28px;">Educação, tecnologia e comunidade para potencializar a psicologia da performance no Brasil.</p>
+        <ul class="dot-list" style="margin-bottom:32px;">
+          <li>Capacitações para estudantes e profissionais</li>
+          <li>Ferramenta para monitorar seus clientes</li>
+          <li>100% alinhado com LGPD</li>
+        </ul>
+        <button class="btn-ghost">Tenho interesse</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ EQUIPE ═══════════════════ -->
+<section id="equipe" style="background:var(--dark); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:500px; height:500px; bottom:-100px; right:-100px; opacity:.35; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="position:relative; z-index:1;">
+    <div id="equipe-grid" style="display:grid; grid-template-columns:1fr; gap:64px; align-items:center;">
+
+      <div>
+        <p class="eyebrow reveal" style="margin-bottom:16px;">Quem somos</p>
+        <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.5rem,3.5vw,2.5rem); line-height:1.15; letter-spacing:-.02em; max-width:500px; margin-bottom:20px;">
+          A Avanti é uma empresa de soluções em preparação mental para <em style="font-style:italic; color:var(--yellow);">performance.</em>
+        </h2>
+        <p class="reveal reveal-d2" style="font-size:1rem; color:rgba(255,255,255,.5); line-height:1.75; margin-bottom:48px; max-width:480px;">
+          Criada por quem respira o esporte, unimos conhecimento científico, dados e tecnologia para trazer o que há de melhor em preparação psicológica no esporte.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+
+          <div class="glass card-lift reveal reveal-d1" style="border-radius:20px; padding:28px; display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:72px; height:72px; border-radius:16px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3), 0 8px 24px rgba(0,0,0,.3);">
+              <img src="lucas-rosito.jpg" alt="Lucas Rosito" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div>
+              <h3 class="serif" style="font-size:1.25rem; margin-bottom:4px;">Lucas Rosito</h3>
+              <p style="font-size:.75rem; color:var(--yellow); font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;">Psicólogo · Fundador</p>
+              <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.7;">Especialista em performance esportiva e TCC. Acompanhou mais de 500 atletas — de amadores a medalhistas olímpicos e campeões mundiais.</p>
+            </div>
+          </div>
+
+          <div class="glass card-lift reveal reveal-d2" style="border-radius:20px; padding:28px; display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:72px; height:72px; border-radius:16px; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1.5px rgba(252,196,8,.3), 0 8px 24px rgba(0,0,0,.3);">
+              <img src="Tiago Quevedo_Avanti_CJ_7507.jpg" alt="Tiago Quevedo" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div>
+              <h3 class="serif" style="font-size:1.25rem; margin-bottom:4px;">Tiago Quevedo</h3>
+              <p style="font-size:.75rem; color:var(--yellow); font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;">Atleta · Fundador</p>
+              <p style="font-size:.875rem; color:rgba(255,255,255,.5); line-height:1.7;">Campeão Sul-Americano e Mundial de Vela. Fundou a Avanti com a convicção de que a força mental é o diferencial mais negligenciado no esporte.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Photo desktop only -->
+      <div class="reveal reveal-d2 desktop-only" style="position:relative;">
+        <div style="position:relative;">
+          <img src="Design sem nome (8).png" alt="Fundadores Avanti" style="width:100%; border-radius:28px; box-shadow:0 40px 100px rgba(0,0,0,.6);">
+          <div style="position:absolute; inset:-1px; border-radius:29px; background:linear-gradient(140deg, rgba(252,196,8,.25) 0%, transparent 50%); pointer-events:none;"></div>
+        </div>
+        <div class="glass" style="position:absolute; bottom:28px; left:-28px; border-radius:18px; padding:16px 20px; animation:floatA 5s ease-in-out infinite;">
+          <div style="font-size:.75rem; color:rgba(255,255,255,.45); margin-bottom:4px;">Atletas acompanhados</div>
+          <div style="font-size:1.5rem; font-weight:800; color:var(--yellow);">+500</div>
+        </div>
+        <div class="glass" style="position:absolute; top:32px; right:-24px; border-radius:18px; padding:16px 20px; animation:floatB 5s ease-in-out infinite;">
+          <div style="font-size:.75rem; color:rgba(255,255,255,.45); margin-bottom:4px;">Nível olímpico</div>
+          <div style="font-size:1rem; font-weight:800; color:var(--yellow);">Medalhistas 🥇</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<style>@media(min-width:900px){ #equipe-grid { grid-template-columns: 1fr 1fr !important; } }</style>
+
+
+<!-- ═══════════════════ CTA FINAL ═══════════════════ -->
+<section style="background:var(--yellow); padding:112px 0; text-align:center; position:relative; overflow:hidden;">
+  <div style="position:absolute; inset:0; background:linear-gradient(135deg, #ffd440 0%, var(--yellow) 50%, #e6b000 100%);"></div>
+  <div class="wrap" style="position:relative; z-index:1;">
+    <h2 class="serif reveal" style="font-size:clamp(2rem,5vw,3.75rem); color:var(--navy); line-height:1.05; letter-spacing:-.02em; max-width:760px; margin:0 auto 24px;">
+      O esporte evoluiu, a preparação mental também precisa evoluir.
+    </h2>
+    <p class="reveal reveal-d1" style="font-size:1.0625rem; color:rgba(16,24,42,.65); max-width:520px; margin:0 auto 40px; line-height:1.7;">
+      Na Avanti, agora você tem tudo o que precisa para treinar sua mente como os melhores atletas do mundo.
+    </p>
+    <div class="reveal reveal-d2" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+      <a href="https://wa.me/5551997929080" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:var(--navy); color:#fff; font-weight:700; font-size:.9375rem; padding:14px 28px; border-radius:9999px; text-decoration:none; transition:background .2s, transform .15s;" onmouseover="this.style.background='#1a2a48';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--navy)';this.style.transform=''">Quero começar ↗</a>
+      <a href="#app" style="display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--navy); font-weight:700; font-size:.9375rem; padding:13px 28px; border-radius:9999px; text-decoration:none; border:2px solid rgba(16,24,42,.25); transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(16,24,42,.5)'" onmouseout="this.style.borderColor='rgba(16,24,42,.25)'">Conhecer o App</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ FAQ ═══════════════════ -->
+<section style="background:var(--navy); padding:112px 0; position:relative; overflow:hidden;">
+  <div class="glow-yellow" style="width:500px; height:500px; top:-100px; left:50%; transform:translateX(-50%); opacity:.2; z-index:0;"></div>
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+
+  <div class="wrap" style="max-width:760px; position:relative; z-index:1;">
+
+    <div class="reveal" style="margin-bottom:56px;">
+      <p class="eyebrow" style="margin-bottom:14px;">FAQ</p>
+      <h2 class="serif" style="font-size:clamp(1.875rem,4vw,2.75rem); line-height:1.1; letter-spacing:-.02em;">
+        Tem dúvidas? Relaxa, nós temos as <em style="font-style:italic; color:var(--yellow);">respostas.</em>
+      </h2>
+    </div>
+
+    <div id="faq-list">
+      <div class="faq-item reveal" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleFaq(this)" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0; background:none; border:none; cursor:pointer; color:#fff; font-family:inherit; text-align:left;">
+          <span style="font-size:1rem; font-weight:600;">O App Avanti é gratuito?</span>
+          <svg class="faq-chevron" width="20" height="20" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-body" style="padding-bottom:24px; font-size:.9375rem; color:rgba(255,255,255,.5); line-height:1.7;">O app possui uma versão gratuita com funcionalidades essenciais. Planos premium desbloqueiam relatórios avançados, acesso ilimitado ao Airton (IA) e funcionalidades exclusivas da comunidade.</div>
+      </div>
+      <div class="faq-item reveal reveal-d1" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleFaq(this)" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0; background:none; border:none; cursor:pointer; color:#fff; font-family:inherit; text-align:left;">
+          <span style="font-size:1rem; font-weight:600;">A assessoria é presencial ou online?</span>
+          <svg class="faq-chevron" width="20" height="20" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-body" style="padding-bottom:24px; font-size:.9375rem; color:rgba(255,255,255,.5); line-height:1.7;">100% online. As sessões acontecem por videoconferência, permitindo acompanhar atletas de qualquer lugar do Brasil e do mundo.</div>
+      </div>
+      <div class="faq-item reveal reveal-d2" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleFaq(this)" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0; background:none; border:none; cursor:pointer; color:#fff; font-family:inherit; text-align:left;">
+          <span style="font-size:1rem; font-weight:600;">A assessoria é para atletas de alto rendimento ou amadores também?</span>
+          <svg class="faq-chevron" width="20" height="20" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-body" style="padding-bottom:24px; font-size:.9375rem; color:rgba(255,255,255,.5); line-height:1.7;">Para ambos. Trabalhamos com atletas em todos os níveis — do iniciante até atletas olímpicos em preparação para competições de alto nível. O trabalho é sempre personalizado.</div>
+      </div>
+      <div class="faq-item reveal reveal-d3" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleFaq(this)" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0; background:none; border:none; cursor:pointer; color:#fff; font-family:inherit; text-align:left;">
+          <span style="font-size:1rem; font-weight:600;">O que diferencia a Avanti de uma psicoterapia comum?</span>
+          <svg class="faq-chevron" width="20" height="20" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-body" style="padding-bottom:24px; font-size:.9375rem; color:rgba(255,255,255,.5); line-height:1.7;">O trabalho da Avanti é focado em performance — desenvolvemos habilidades mentais específicas para o esporte: foco, resiliência, controle da pressão, gestão de erros e preparação para competição.</div>
+      </div>
+      <div class="faq-item reveal" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleFaq(this)" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0; background:none; border:none; cursor:pointer; color:#fff; font-family:inherit; text-align:left;">
+          <span style="font-size:1rem; font-weight:600;">Como funciona o acompanhamento para clubes e federações?</span>
+          <svg class="faq-chevron" width="20" height="20" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-body" style="padding-bottom:24px; font-size:.9375rem; color:rgba(255,255,255,.5); line-height:1.7;">Desenvolvemos programas personalizados conforme o tamanho da equipe, modalidade e objetivos. Inclui acesso corporativo ao app, relatórios de grupo e capacitações para treinadores.</div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="grad-border reveal" style="margin-top:80px; text-align:center; padding:48px;">
+      <p style="font-size:.875rem; color:rgba(255,255,255,.3); margin-bottom:12px;">Você chegou no fim da página.</p>
+      <h3 class="serif" style="font-size:1.75rem; margin-bottom:24px;">Se chegou até aqui, é porque tá interessado.</h3>
+      <a href="https://wa.me/5551997929080" target="_blank" class="btn-yellow" style="font-size:.9375rem; padding:14px 28px;">Vai, clica nesse botão ↗</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer style="background:var(--dark); padding:64px 0 40px; position:relative;">
+  <div class="section-line" style="position:absolute; top:0; left:0; right:0;"></div>
+  <div class="wrap">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:40px; margin-bottom:48px;">
+      <div style="grid-column:1/-1; max-width:280px;">
+        <img src="1.png" alt="Avanti" style="height:28px; margin-bottom:16px; display:block;">
+        <p style="font-size:.875rem; color:rgba(255,255,255,.35); line-height:1.8;">Preparação mental para atletas que querem mais.</p>
+      </div>
+      <div>
+        <div style="font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.25); margin-bottom:16px;">Soluções</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="#app" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">App</a>
+          <a href="#assessoria" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Assessoria</a>
+          <a href="#clubes" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Organizações</a>
+          <a href="#clubes" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Psicólogos</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.25); margin-bottom:16px;">Empresa</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="#equipe" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Sobre nós</a>
+          <a href="#faq-list" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">FAQ</a>
+          <a href="https://wa.me/5551997929080" target="_blank" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Contato</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.25); margin-bottom:16px;">Legal</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="#" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Termos de uso</a>
+          <a href="#" style="font-size:.875rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Privacidade</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.06); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <span style="font-size:.875rem; color:rgba(255,255,255,.25);">© 2026 Avanti. Todos os direitos reservados.</span>
+      <span style="font-size:.875rem; color:rgba(255,255,255,.15);">Preparação mental para atletas brasileiros.</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Hero bg carousel
+  (function() {
+    const slides = document.querySelectorAll('.hero-bg-slide');
+    if (!slides.length) return;
+    let current = 0;
+    setInterval(() => {
+      const prev = current;
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+      slides[prev].classList.remove('active');
+    }, 6000);
+  })();
+
+  // Mobile carousel
+  (function() {
+    const slides = document.querySelectorAll('.hero-mobile-slide');
+    if (!slides.length) return;
+    let current = 0;
+    setInterval(() => {
+      const prev = current;
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+      setTimeout(() => slides[prev].classList.remove('active'), 900);
+    }, 5000);
+  })();
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const progress = Math.min(Math.max((y - 80) / (window.innerHeight * 0.5), 0), 1);
+    nav.style.background = `rgba(8,14,26,${(progress * 0.94).toFixed(3)})`;
+    nav.style.backdropFilter = `blur(${(progress * 24).toFixed(1)}px)`;
+    nav.style.webkitBackdropFilter = `blur(${(progress * 24).toFixed(1)}px)`;
+    nav.style.borderBottomColor = `rgba(255,255,255,${(progress * 0.1).toFixed(3)})`;
+  }, { passive: true });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // FAQ
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  function openTallyModal() {
+    alert('Modal de contato — integre com Tally ou outro formulário.');
+  }
+</script>
+
+</body>
+</html>
