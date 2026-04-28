@@ -212,6 +212,13 @@
     .feat-dots { display: flex; gap: 8px; justify-content: center; margin-top: 8px; padding-bottom: 8px; }
     .feat-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); transition: background .3s, transform .3s; cursor: pointer; border: none; padding: 0; }
     .feat-dot.active { background: var(--yellow); transform: scale(1.4); }
+    .feat-carousel-wrap { position: relative; }
+    .feat-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s; z-index: 2; }
+    .feat-arrow:hover { background: rgba(255,255,255,.18); }
+    .feat-arrow--prev { left: 8px; }
+    .feat-arrow--next { right: 8px; }
+    html.light .feat-arrow { background: rgba(16,24,42,.07); border-color: rgba(16,24,42,.14); color: #10182a; }
+    html.light .feat-arrow:hover { background: rgba(16,24,42,.14); }
 
     /* ── DEPO "mais" button ── */
     .btn-depo-more {
@@ -477,6 +484,13 @@
 
   <!-- MOBILE: infinite loop carousel -->
   <div class="feat-carousel-section">
+    <div class="feat-carousel-wrap">
+      <button class="feat-arrow feat-arrow--prev" onclick="window.carouselPrev()" aria-label="Anterior">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="feat-arrow feat-arrow--next" onclick="window.carouselNext()" aria-label="Próximo">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     <div class="feat-carousel" id="featCarousel">
       <div class="feat-carousel-track" id="featTrack">
 
@@ -570,6 +584,7 @@
       <button class="feat-dot" onclick="goSlide(4)"></button>
       <button class="feat-dot" onclick="goSlide(5)"></button>
     </div>
+    </div><!-- /feat-carousel-wrap -->
   </div><!-- /carousel -->
 
 </section>
@@ -805,8 +820,10 @@
     function prevSlide() { setPos(vIdx - 1, true); }
 
     window.goSlide = function(n) { setPos(n + 1, true); resetAuto(); };
+    window.carouselPrev = function() { prevSlide(); resetAuto(); };
+    window.carouselNext = function() { nextSlide(); resetAuto(); };
 
-    function startAuto() { autoTimer = setInterval(nextSlide, 4000); }
+    function startAuto() { autoTimer = setInterval(nextSlide, 5000); }
     function resetAuto() { clearInterval(autoTimer); startAuto(); }
 
     // Touch swipe
