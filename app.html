@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>App Avanti — Preparação Mental para Atletas</title>
   <meta name="description" content="O #1 app brasileiro de preparação mental para atletas. Do amador ao profissional, treine sua mente como os melhores do mundo.">
   <link rel="icon" type="image/png" href="iconesite.png">
@@ -19,7 +19,7 @@
       --border: rgba(255,255,255,0.08);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: #080e1a; }
     body { background: var(--navy); color: #fff; font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     .serif { font-family: 'DM Serif Display', Georgia, serif; }
     .wrap { max-width: 1360px; margin: 0 auto; padding: 0 40px; }
@@ -53,6 +53,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: rgba(8,14,26,0); border-bottom: 1px solid rgba(255,255,255,0);
       transition: background .35s, border-color .35s;
+      padding-top: env(safe-area-inset-top, 0px);
     }
     nav.scrolled { background: rgba(8,14,26,.93); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom-color: rgba(255,255,255,.1); }
     .nav-inner { max-width: 1160px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
@@ -79,7 +80,7 @@
     .btn-yellow-lg { padding: 9px 22px; font-size: .875rem; }
 
     .phone-hero { position: relative; max-width: 460px; margin: 0 auto; }
-    .phone-hero img { width: 100%; display: block; filter: drop-shadow(0 32px 64px rgba(0,0,0,.55)); }
+    .phone-hero img { width: 100%; display: block; }
     @media (max-width: 899px) { .phone-hero { max-width: 340px; margin-top: 24px; margin-bottom: -4px; } }
     @media (max-width: 640px) { .phone-hero { max-width: 280px; margin-top: 20px; } }
 
@@ -193,7 +194,7 @@
     /* ── MOBILE CAROUSEL ── */
     .feat-carousel-section { display: none; padding-bottom: 56px; }
     @media (max-width: 899px) { .feat-carousel-section { display: block; } }
-    .feat-carousel { overflow: hidden; position: relative; }
+    .feat-carousel { overflow: hidden; position: relative; touch-action: pan-y; }
     .feat-carousel-track { display: flex; will-change: transform; }
     .feat-slide { min-width: 100%; padding: 0 24px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .feat-slide-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; justify-content: center; }
@@ -247,7 +248,7 @@
     .team-section { background: var(--dark); padding: 112px 0; }
     @media (max-width: 640px) { .team-section { padding: 64px 0; } }
     .team-wrap { max-width: 660px; margin: 52px auto 0; display: flex; flex-direction: column; gap: 20px; }
-    .team-card { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 24px; padding: 32px; display: flex; align-items: flex-start; gap: 22px; transition: border-color .25s; }
+    .team-card { background: transparent; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 32px; display: flex; align-items: flex-start; gap: 22px; transition: border-color .25s; }
     .team-card:hover { border-color: rgba(252,196,8,.22); }
     @media (max-width: 640px) { .team-card { padding: 22px; gap: 16px; } }
     .team-avatar { width: 72px; height: 72px; border-radius: 14px; flex-shrink: 0; overflow: hidden; border: 1.5px solid rgba(252,196,8,.22); }
@@ -262,7 +263,7 @@
     .tally-wrap { max-width: 640px; margin: 0 auto; text-align: left; }
 
     /* ── FOOTER ── */
-    footer { background: var(--dark); border-top: 1px solid var(--border); padding: 36px 0; }
+    footer { background: var(--dark); border-top: 1px solid var(--border); padding: 36px 0 calc(36px + env(safe-area-inset-bottom, 0px)); }
     .footer-inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
 
     /* ── TALLY DARK FORCE ── */
@@ -592,7 +593,7 @@
             <div style="font-size:.75rem; color:rgba(255,255,255,.28);">#4 melhor do mundo</div>
           </div>
         </div>
-        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O app mudou completamente minha rotina pré-competição. Consigo visualizar meu estado mental em tempo real e me preparar muito melhor."</p>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O app da Avanti me ajuda a organizar meus pensamentos e emoções que normalmente eram esquecidos na rotina e transformar isso em dados que agora eu vejo com clareza."</p>
       </div>
 
       <div class="depo-card reveal reveal-d1">
@@ -604,7 +605,7 @@
             <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Campeão Brasileiro</div>
           </div>
         </div>
-        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"Uso o journaling todo dia antes do treino. Em 3 meses consegui identificar os padrões que me faziam travar nas provas decisivas."</p>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O app foi muito importante pra mim. Ele mostrou que eu não estava descansando o suficiente e, graças ao relatório mensal da Avanti, identifiquei isso e estou muito melhor."</p>
       </div>
 
       <div class="depo-card reveal reveal-d2">
@@ -616,7 +617,7 @@
             <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Treinador Paris 2024</div>
           </div>
         </div>
-        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O Airton é surreal. É como ter um psicólogo disponível às 23h antes de uma prova importante. Isso não existe em lugar nenhum."</p>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"O app da Avanti me ajuda muito na abordagem com os meus atletas. Consigo ver se estão bem e o que tem treinado, além de acompanhar suas metas e avaliação das competições."</p>
       </div>
 
       <div class="depo-card reveal reveal-d3">
@@ -628,7 +629,7 @@
             <div style="font-size:.75rem; color:rgba(255,255,255,.28);">Campeão Sul-americano</div>
           </div>
         </div>
-        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"Finalmente um app feito pra atleta de verdade. Os dados são sérios e me ajudam a conversar melhor com meu treinador."</p>
+        <p style="font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.75; margin:0;">"Finalmente um app feito pra atleta de verdade. Os dados são ótimos e consigo ver meus padrões psicológicos e evoluir com isso."</p>
       </div>
 
     </div>
@@ -823,8 +824,8 @@
     // Handle resize without animation
     window.addEventListener('resize', () => setPos(vIdx, false), { passive: true });
 
-    // Init — defer one frame so offsetWidth is computed
-    requestAnimationFrame(() => { setPos(1, false); startAuto(); });
+    // Init — defer 80ms so layout is fully painted before reading offsetWidth
+    setTimeout(() => { setPos(1, false); startAuto(); }, 80);
   })();
 
   /* ── Tally ── */
