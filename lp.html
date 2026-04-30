@@ -294,7 +294,7 @@
     .offer-section { background:var(--dark); padding:104px 0; border-top:1px solid var(--border); }
     @media (max-width:640px) { .offer-section { padding:64px 0; } }
     .offer-card { max-width:640px; margin:0 auto; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:28px; padding:48px 40px; }
-    @media (max-width:640px) { .offer-card { padding:32px 24px; border-radius:20px; } }
+    @media (max-width:640px) { .offer-card { padding:28px 16px; border-radius:20px; } }
     html.light .offer-card { background:rgba(16,24,42,.04); border-color:rgba(16,24,42,.1); }
     .offer-label { display:inline-block; font-size:.8125rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--yellow); border:1px solid rgba(252,196,8,.3); border-radius:9999px; padding:6px 18px; margin-bottom:32px; }
     .vs-item { display:flex; justify-content:space-between; align-items:flex-start; padding:18px 0; border-bottom:1px dashed rgba(255,255,255,.1); gap:16px; }
@@ -313,7 +313,8 @@
     .vs-total-line { width:100%; height:1px; background:rgba(255,255,255,.15); margin-bottom:10px; }
     .vs-total-result { display:flex; justify-content:space-between; align-items:center; }
     .vs-total-result-label { font-size:.875rem; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.06em; }
-    .vs-total-price-struck { font-family:'DM Serif Display',serif; font-size:1.5rem; color:rgba(220,60,60,.75); text-decoration:line-through; }
+    .vs-total-price-struck { font-family:'DM Serif Display',serif; font-size:1.5rem; color:#fff; position:relative; display:inline-block; }
+    .vs-total-price-struck::after { content:''; position:absolute; left:-3px; right:-3px; top:52%; height:2px; background:rgba(210,50,50,.85); transform:rotate(-6deg); border-radius:1px; }
     html.light .vs-total-equation { color:rgba(16,24,42,.35); }
     html.light .vs-total-line { background:rgba(16,24,42,.15); }
     html.light .vs-total-result-label { color:rgba(16,24,42,.4); }
@@ -333,32 +334,42 @@
     html.light .offer-guarantee { color:rgba(16,24,42,.5); }
 
     /* ── PRICING SUB-CARD ── */
-    .plan-subcard { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:32px 28px; margin-top:32px; }
+    .plan-subcard { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:32px 28px; margin-top:32px; position:relative; overflow:hidden; }
+    @media (max-width:640px) { .plan-subcard { padding:24px 16px; } }
     html.light .plan-subcard { background:rgba(16,24,42,.04); border-color:rgba(16,24,42,.09); }
-    .plan-subcard-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:6px; flex-wrap:wrap; }
-    .plan-subcard-title { font-family:'DM Serif Display',Georgia,serif; font-size:1.25rem; }
+    /* Corner ribbon */
+    .plan-ribbon { position:absolute; top:0; right:0; overflow:hidden; width:88px; height:88px; pointer-events:none; }
+    .plan-ribbon span { position:absolute; top:18px; right:-22px; width:110px; background:var(--yellow); color:var(--navy); font-size:.6rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; text-align:center; padding:5px 0; transform:rotate(45deg); transform-origin:center; white-space:nowrap; }
+    .plan-subcard-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; flex-wrap:nowrap; }
+    .plan-subcard-title { font-family:'DM Serif Display',Georgia,serif; font-size:2rem; white-space:nowrap; }
     .plan-subcard-desc { font-size:.875rem; color:rgba(255,255,255,.45); margin-bottom:20px; }
     html.light .plan-subcard-title { color:#10182a; }
     html.light .plan-subcard-desc { color:rgba(16,24,42,.45); }
+    /* iOS-style switch toggle */
+    .plan-switch-row { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .plan-switch-label { font-size:.75rem; color:rgba(255,255,255,.45); white-space:nowrap; }
+    .plan-switch-label.active-label { color:rgba(255,255,255,.85); font-weight:600; }
+    .plan-switch { position:relative; width:44px; height:24px; flex-shrink:0; cursor:pointer; }
+    .plan-switch input { opacity:0; width:0; height:0; position:absolute; }
+    .plan-switch-track { position:absolute; inset:0; background:rgba(255,255,255,.15); border-radius:12px; transition:background .25s; }
+    .plan-switch input:checked ~ .plan-switch-track { background:var(--yellow); }
+    .plan-switch-thumb { position:absolute; top:3px; left:3px; width:18px; height:18px; background:#fff; border-radius:50%; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .25s; }
+    .plan-switch input:checked ~ .plan-switch-thumb { transform:translateX(20px); }
+    html.light .plan-switch-track { background:rgba(16,24,42,.15); }
     .plan-incl-label { font-size:.8125rem; font-weight:700; color:rgba(255,255,255,.55); margin-bottom:14px; }
     html.light .plan-incl-label { color:rgba(16,24,42,.55); }
-
-    /* ── PRICING TOGGLE ── */
-    .plan-toggle-wrap { display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.07); border-radius:9999px; padding:4px; margin-bottom:28px; width:fit-content; margin-left:auto; margin-right:auto; }
-    .plan-toggle-btn { padding:9px 24px; border-radius:9999px; font-size:.875rem; font-weight:600; cursor:pointer; border:none; background:none; color:rgba(255,255,255,.5); font-family:inherit; transition:background .2s,color .2s; }
-    .plan-toggle-btn.active { background:var(--yellow); color:var(--navy); }
-    .plan-price-main { font-family:'DM Serif Display',Georgia,serif; font-size:clamp(3rem,8vw,4.5rem); color:var(--yellow); line-height:1; text-align:center; margin-bottom:4px; }
-    .plan-price-period { font-size:1rem; color:rgba(255,255,255,.45); text-align:center; margin-bottom:6px; }
-    .plan-savings { font-size:.8125rem; color:#34d399; font-weight:600; text-align:center; margin-bottom:24px; min-height:20px; }
-    .plan-features { list-style:none; margin:0 0 28px; display:flex; flex-direction:column; gap:12px; }
-    .plan-feature { display:flex; align-items:center; gap:12px; font-size:.9375rem; }
-    .plan-check { width:22px; height:22px; border-radius:50%; background:var(--yellow); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .plan-launch-note { font-size:.75rem; color:rgba(255,255,255,.32); text-align:center; margin-top:14px; }
-    html.light .plan-toggle-wrap { background:rgba(16,24,42,.07); }
-    html.light .plan-toggle-btn { color:rgba(16,24,42,.5); }
-    html.light .plan-toggle-btn.active { color:#10182a; }
+    /* Price */
+    .plan-price-main { font-family:'DM Serif Display',Georgia,serif; font-size:clamp(2rem,5vw,3rem); color:var(--yellow); line-height:1; margin-bottom:0; }
+    .plan-price-period { font-size:.9375rem; color:rgba(255,255,255,.45); margin-bottom:0; }
+    .plan-savings { font-size:.8125rem; color:#34d399; font-weight:600; margin-bottom:0; }
     html.light .plan-price-period { color:rgba(16,24,42,.45); }
-    html.light .plan-launch-note { color:rgba(16,24,42,.32); }
+    /* Features */
+    .plan-features { list-style:none; margin:0 0 24px; display:flex; flex-direction:column; gap:10px; }
+    .plan-feature { display:flex; align-items:center; gap:10px; font-size:.9rem; }
+    @media (max-width:640px) { .plan-feature { font-size:.8375rem; } }
+    .plan-check { width:20px; height:20px; border-radius:50%; background:var(--yellow); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .plan-launch-note { font-size:.8125rem; color:rgba(255,255,255,.5); text-align:center; margin-top:14px; }
+    html.light .plan-launch-note { color:rgba(16,24,42,.45); }
 
     /* Bonuses (below CTA) */
     .offer-bonuses { margin-top:32px; padding:20px; background:rgba(252,196,8,.06); border:1px solid rgba(252,196,8,.15); border-radius:14px; }
@@ -509,7 +520,7 @@
 <!-- DORES -->
 <section class="pain-section">
   <div class="wrap">
-    <h2 class="pain-headline reveal h-desktop"><em style="color:var(--yellow); font-style:normal;">Você treina bem. Tem repertório.</em> Só não sabe como destravar isso na hora do campeonato.</h2>
+    <h2 class="pain-headline reveal h-desktop"><em style="color:var(--yellow); font-style:normal;">Você treina bem. Tem repertório.</em><br>Só não sabe como destravar isso na hora do campeonato.</h2>
     <h2 class="pain-headline reveal h-mobile"><em style="color:var(--yellow); font-style:normal;">Você treina bem. Tem repertório.</em><br>Só não sabe como destravar isso<br>na hora do campeonato.</h2>
     <p class="pain-sub reveal reveal-d1">Todo atleta reconhece isso, mas poucos conhecem seus padrões psicológicos que causam a queda de desempenho na hora da competição.</p>
     <div class="pain-items">
@@ -547,16 +558,13 @@
 <section class="method-section" id="metodo">
   <div class="wrap">
     <div class="method-intro">
-      <h2 class="method-headline reveal h-desktop">Estamos cansados de ver protocolos genéricos e receitas prontas.<br><em>Por isso criamos algo diferente.</em></h2>
-      <h2 class="method-headline reveal h-mobile">Estamos cansados de ver<br>protocolos genéricos<br>e receitas prontas.<br><em>Por isso criamos algo diferente.</em></h2>
+      <h2 class="method-headline reveal h-desktop">Estamos cansados de ver protocolos genéricos e receitas prontas.<br><em>Por isso, criamos algo diferente.</em></h2>
+      <h2 class="method-headline reveal h-mobile">Estamos cansados de ver<br>protocolos genéricos<br>e receitas prontas.<br><em>Por isso, criamos algo diferente.</em></h2>
       <ul class="method-negpos reveal reveal-d1">
-        <li class="neg">❌ Chega de gurus de internet e promessas milagrosas.</li>
-        <li class="neg">❌ Receitas prontas feitas com IA? Nunca mais.</li>
-        <li class="neg">❌ Nada de "dicas", frases bonitas e superficiais.</li>
-        <li class="neg">❌ Esqueça resultados rápidos e permanentes.</li>
-        <li class="pos">✅ Conhecimento aplicado por +25 anos</li>
-        <li class="pos">✅ Orientações individuais para o seu contexto</li>
-        <li class="pos">✅ Suporte real de quem já liderou centenas de atletas</li>
+        <li class="neg" style="white-space:nowrap;">❌ Chega de gurus e promessas milagrosas.</li>
+        <li class="neg" style="white-space:nowrap;">❌ Receitas prontas feitas com IA? Não.</li>
+        <li class="neg" style="white-space:nowrap;">❌ Nada de "dicas", frases bonitas e superficiais.</li>
+        <li class="neg" style="white-space:nowrap;">❌ Esqueça resultados rápidos e permanentes.</li>
       </ul>
       <p class="method-tripe reveal reveal-d2">O tripé da Avanti:</p>
     </div>
@@ -615,7 +623,6 @@
 
   <div class="features-header">
     <div class="wrap">
-      <div style="width:100%; height:1px; background:rgba(255,255,255,.1); margin-bottom:48px;"></div>
       <h2 class="feat-hl reveal">Conheça a sua jornada dentro da Avanti:</h2>
     </div>
   </div>
@@ -757,7 +764,7 @@
 <!-- FEATURES GRID (6 cards) -->
 <section class="feat-grid-section">
   <div class="wrap">
-    <h2 class="feat-grid-hl reveal">Um verdadeiro ecossistema de preparação psicológica, na palma da sua mão.</h2>
+    <h2 class="feat-grid-hl reveal">Um verdadeiro ecossistema de<br>preparação psicológica,<br>na palma da sua mão.</h2>
     <div class="feat-grid">
 
       <div class="feat-card reveal">
@@ -879,12 +886,9 @@
   <div class="wrap">
 
     <div style="text-align:center; margin-bottom:48px;">
-      <h2 class="serif reveal" style="font-size:clamp(1.75rem,3.5vw,2.625rem); line-height:1.12; letter-spacing:-.025em; margin-bottom:14px;">
-        Tudo que você precisa para<br>evoluir mentalmente como atleta
+      <h2 class="serif reveal" style="font-size:clamp(1.75rem,3.5vw,2.625rem); line-height:1.12; letter-spacing:-.025em; margin-bottom:0;">
+        Tudo que você precisa para<br>evoluir mentalmente como atleta.
       </h2>
-      <p class="reveal reveal-d1" style="font-size:1rem; color:rgba(255,255,255,.48); max-width:460px; margin:0 auto; line-height:1.7;">
-        Um membership completo, com tecnologia e método desenvolvidos por especialistas em psicologia do esporte.
-      </p>
     </div>
 
     <div class="offer-card reveal">
@@ -945,54 +949,65 @@
         <div class="vs-total-line"></div>
         <div class="vs-total-result">
           <span class="vs-total-result-label">Total:</span>
-          <span class="vs-total-price-struck">R$ 3.882</span>
+          <span class="vs-total-price-struck">R$ 3.880</span>
         </div>
       </div>
 
       <!-- Pricing sub-card -->
       <div class="plan-subcard">
-        <div class="plan-subcard-header">
+        <!-- Corner ribbon -->
+        <div class="plan-ribbon"><span>AVANTI</span></div>
+
+        <!-- Header: title only -->
+        <div style="margin-bottom:6px;">
           <span class="plan-subcard-title">Membership Avanti</span>
-          <div class="plan-toggle-wrap" style="margin-bottom:0;">
-            <button class="plan-toggle-btn active" id="planBtnMonthly" onclick="setPlan('monthly')">Mensal</button>
-            <button class="plan-toggle-btn" id="planBtnAnnual" onclick="setPlan('annual')">Anual</button>
+        </div>
+
+        <!-- Price display + switch inline -->
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-top:28px; margin-bottom:6px; flex-wrap:nowrap;">
+          <div style="display:flex; align-items:baseline; gap:8px; flex-shrink:0;">
+            <p class="plan-price-main" id="planPrice">R$ 79</p>
+            <p class="plan-price-period" id="planPeriod">/ mês</p>
+          </div>
+          <div class="plan-switch-row" style="flex-shrink:0; padding-bottom:4px;">
+            <span class="plan-switch-label active-label" id="labelMonthly">Mensal</span>
+            <label class="plan-switch">
+              <input type="checkbox" id="planSwitchInput" onchange="setPlanSwitch(this.checked)">
+              <span class="plan-switch-track"></span>
+              <span class="plan-switch-thumb"></span>
+            </label>
+            <span class="plan-switch-label" id="labelAnnual">Anual</span>
           </div>
         </div>
-        <p class="plan-subcard-desc">Acesso completo para atletas de todos os níveis.</p>
-
-        <!-- Price display -->
-        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
-          <p class="plan-price-main" id="planPrice" style="margin-bottom:0;">R$ 79</p>
-          <p class="plan-price-period" id="planPeriod" style="margin-bottom:0; text-align:left;">/ mês</p>
+        <div style="min-height:18px; margin-bottom:10px;">
+          <p class="plan-savings" id="planSavings" style="display:none;">Economize R$ 350 (35%) com a assinatura anual</p>
         </div>
-        <p class="plan-savings" id="planSavings" style="display:none; text-align:left; margin-bottom:20px;">Economize R$ 350 (35%) com o membership anual</p>
-        <div style="height:20px;" id="planSavingsSpacer"></div>
 
         <!-- Features -->
         <p class="plan-incl-label">O que está incluso:</p>
         <ul class="plan-features">
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             Acesso completo ao app e aos cursos
           </li>
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             Avaliação de perfil de atleta
           </li>
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             Relatórios mensais personalizados
           </li>
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             Desconto para assessoria individual
           </li>
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Integração com Wearable <span style="color:rgba(255,255,255,.4); font-size:.8rem; margin-left:4px;">(em breve)</span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Integração com Wearable <span style="color:rgba(255,255,255,.4); font-size:.75rem; margin-left:2px;">(em breve)</span>
           </li>
           <li class="plan-feature">
-            <span class="plan-check"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="plan-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             +10 features e atualizações semanais
           </li>
         </ul>
@@ -1006,31 +1021,90 @@
 
       <!-- Bonuses — after CTA -->
       <div class="offer-bonuses">
-        <div class="offer-bonuses-header">🎁 Bônus exclusivos</div>
+        <div class="offer-bonuses-header">Benefícios dos membros</div>
 
         <div class="vs-bonus">
           <div class="vs-item-left">
             <div class="vs-bonus-name">Consultoria individual com profissional da Avanti</div>
-            <div class="vs-bonus-desc">Sessão individual com um psicólogo do esporte da equipe Avanti. Válido para os 50 primeiros.*</div>
+            <div class="vs-bonus-desc">Sessão individual com um psicólogo do esporte da equipe Avanti.<br><em style="color:rgba(255,255,255,.35);">*Válido apenas para os 50 primeiros.</em></div>
           </div>
-          <div class="vs-gratis">GRÁTIS</div>
         </div>
 
         <div class="vs-bonus">
           <div class="vs-item-left">
-            <div class="vs-bonus-name">Descontos no atendimento individual com a Avanti</div>
-            <div class="vs-bonus-desc">Acesso a condições exclusivas para membros no acompanhamento personalizado com especialistas.</div>
+            <div class="vs-bonus-name">20% de desconto na assessoria individual com a Avanti</div>
+            <div class="vs-bonus-desc">Acesso a condições exclusivas para membros no acompanhamento individual com nossa equipe.</div>
           </div>
-          <div class="vs-gratis">INCLUSO</div>
         </div>
 
         <div class="vs-bonus">
           <div class="vs-item-left">
             <div class="vs-bonus-name">Sistema de modelagem de outros atletas</div>
-            <div class="vs-bonus-desc">Aprenda com os padrões mentais de atletas de elite e adapte ao seu esporte.</div>
+            <div class="vs-bonus-desc">Um formato para você se comparar com outros atletas do seu esporte, idade e nível.</div>
           </div>
-          <div class="vs-gratis">INCLUSO</div>
         </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="wrap">
+    <div style="text-align:center; margin-bottom:0;">
+      <p class="eyebrow reveal" style="margin-bottom:14px;">FAQ</p>
+      <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.75rem,3vw,2.5rem); line-height:1.12; letter-spacing:-.025em;">Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Para qual tipo de atleta é o app?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Para qualquer atleta, do amador ao profissional, em qualquer esporte. Se você compete ou treina com metas, o app foi feito para você.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Como funciona a garantia de 7 dias?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Você tem 7 dias para testar o app sem nenhum compromisso. Se não gostar, basta cancelar e não cobraremos nada.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>O app substitui um psicólogo?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Não. O app é uma ferramenta de autoconhecimento, monitoramento e preparação. Para acompanhamento clínico individual, temos opção de vínculo com profissionais da Avanti.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Como funciona o plano anual?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Pagamento único de R$ 600 com acesso por 12 meses — equivale a R$ 50/mês, uma economia de 37% em relação ao plano mensal.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Posso cancelar quando quiser?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Sim. No plano mensal, você cancela a qualquer momento sem multa. No plano anual, o acesso dura até o fim do período pago.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>O app funciona para qualquer esporte?</span>
+          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">Sim. Temos conteúdos e trilhas específicos para endurance, tênis, beach, vela, natação, lutas e muito mais.</div>
       </div>
 
     </div>
@@ -1098,68 +1172,6 @@
       <!-- Coluna direita: foto dos fundadores (desktop only) -->
       <div class="equipe-photo-col reveal reveal-d2" style="position:relative;">
         <img src="Design sem nome (8).png" alt="Lucas Rosito e Tiago Quevedo — Fundadores Avanti">
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- FAQ -->
-<section class="faq-section">
-  <div class="wrap">
-    <div style="text-align:center; margin-bottom:0;">
-      <p class="eyebrow reveal" style="margin-bottom:14px;">FAQ</p>
-      <h2 class="serif reveal reveal-d1" style="font-size:clamp(1.75rem,3vw,2.5rem); line-height:1.12; letter-spacing:-.025em;">Perguntas frequentes</h2>
-    </div>
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>Para qual tipo de atleta é o app?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Para qualquer atleta, do amador ao profissional, em qualquer esporte. Se você compete ou treina com metas, o app foi feito para você.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>Como funciona a garantia de 7 dias?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Você tem 7 dias para testar o app sem nenhum compromisso. Se não gostar, basta cancelar e não cobraremos nada.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>O app substitui um psicólogo?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Não. O app é uma ferramenta de autoconhecimento, monitoramento e preparação. Para acompanhamento clínico individual, temos opção de vínculo com profissionais da Avanti.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>Como funciona o plano anual?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Pagamento único de R$ 600 com acesso por 12 meses — equivale a R$ 50/mês, uma economia de 37% em relação ao plano mensal.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>Posso cancelar quando quiser?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Sim. No plano mensal, você cancela a qualquer momento sem multa. No plano anual, o acesso dura até o fim do período pago.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>O app funciona para qualquer esporte?</span>
-          <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">Sim. Temos conteúdos e trilhas específicos para endurance, tênis, beach, vela, natação, lutas e muito mais.</div>
       </div>
 
     </div>
@@ -1409,29 +1421,26 @@
     if (!isOpen) item.classList.add('open');
   }
 
-  /* ── Pricing toggle ── */
-  function setPlan(plan) {
-    const btnM = document.getElementById('planBtnMonthly');
-    const btnA = document.getElementById('planBtnAnnual');
-    const price = document.getElementById('planPrice');
-    const period = document.getElementById('planPeriod');
+  /* ── Pricing switch ── */
+  function setPlanSwitch(isAnnual) {
+    const price   = document.getElementById('planPrice');
+    const period  = document.getElementById('planPeriod');
     const savings = document.getElementById('planSavings');
-    const cta = document.getElementById('planCta');
-    const spacer = document.getElementById('planSavingsSpacer');
-    if (plan === 'monthly') {
-      btnM.classList.add('active'); btnA.classList.remove('active');
-      price.textContent = 'R$ 79';
+    const cta     = document.getElementById('planCta');
+    const lbM     = document.getElementById('labelMonthly');
+    const lbA     = document.getElementById('labelAnnual');
+    if (!isAnnual) {
+      price.textContent  = 'R$ 79';
       period.textContent = '/ mês';
       savings.style.display = 'none';
-      if (spacer) spacer.style.display = 'block';
       cta.href = 'https://pay.cakto.com.br/33mxnx7_653893';
+      lbM.classList.add('active-label');    lbA.classList.remove('active-label');
     } else {
-      btnA.classList.add('active'); btnM.classList.remove('active');
-      price.textContent = 'R$ 600';
-      period.textContent = '/ ano · R$ 50/mês';
+      price.textContent  = 'R$ 600';
+      period.textContent = '/ ano';
       savings.style.display = 'block';
-      if (spacer) spacer.style.display = 'none';
       cta.href = 'https://pay.cakto.com.br/zh5j4an';
+      lbA.classList.add('active-label');    lbM.classList.remove('active-label');
     }
   }
 </script>
