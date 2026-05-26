@@ -457,8 +457,9 @@
     html.light *[style*="solid rgba(255,255,255"]      { border-color:rgba(16,24,42,.1) !important; }
     .app-store-badges { display: none; }
     @media (max-width: 640px) {
-      .app-store-badges { display: flex; flex-direction: row; gap: 12px; justify-content: center; margin-top: 16px; }
-      .app-store-badges img { height: 40px; width: auto; }
+      .app-store-badges { display: flex; flex-direction: row; gap: 12px; justify-content: center; align-items: center; margin-top: 16px; }
+      .app-store-badges a { display: flex; }
+      .app-store-badges img { height: 48px; width: auto; object-fit: contain; }
     }
   </style>
 </head>
