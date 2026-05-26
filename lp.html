@@ -455,6 +455,11 @@
     html.light *[style*="background:rgba(255,255,255"] { background:rgba(16,24,42,.05) !important; }
     html.light *[style*="background: rgba(255,255,255"] { background:rgba(16,24,42,.05) !important; }
     html.light *[style*="solid rgba(255,255,255"]      { border-color:rgba(16,24,42,.1) !important; }
+    .app-store-badges { display: none; }
+    @media (max-width: 640px) {
+      .app-store-badges { display: flex; flex-direction: row; gap: 12px; justify-content: center; margin-top: 16px; }
+      .app-store-badges img { height: 40px; width: auto; }
+    }
   </style>
 </head>
 <body>
@@ -510,6 +515,14 @@
       <div>
         <div class="phone-hero reveal reveal-d1">
           <img src="48.png" alt="App Avanti">
+        </div>
+        <div class="app-store-badges">
+          <a href="https://play.google.com/store/apps/details?id=com.despia.avanti" target="_blank" rel="noopener">
+            <img src="Google_Play_Store_badge_EN.svg.png" alt="Disponível no Google Play">
+          </a>
+          <a href="https://apps.apple.com/us/app/avanti-feito-para-atletas/id6758354583" target="_blank" rel="noopener">
+            <img src="download-on-the-app-store-apple-logo-svgrepo-com.svg" alt="Baixar na App Store">
+          </a>
         </div>
       </div>
     </div>
