@@ -458,8 +458,8 @@
     .app-store-badges { display: none; }
     @media (max-width: 640px) {
       .app-store-badges { display: flex; flex-direction: row; gap: 12px; justify-content: center; align-items: center; margin-top: 16px; }
-      .app-store-badges a { display: flex; }
-      .app-store-badges img { height: 48px; width: auto; object-fit: contain; }
+      .app-store-badges a { display: flex; height: 48px; }
+      .app-store-badges img { height: 48px !important; width: auto !important; max-height: 48px !important; object-fit: contain; }
     }
   </style>
 </head>
