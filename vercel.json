@@ -1,6 +1,8 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/docs", "destination": "/docs.html" }
+    { "source": "/docs", "destination": "/docs.html" },
+    { "source": "/termos-de-uso", "destination": "/Avanti-Termos-de-Uso.pdf" },
+    { "source": "/politica-de-privacidade", "destination": "/Avanti-Politica-de-Privacidade.pdf" }
   ]
 }
