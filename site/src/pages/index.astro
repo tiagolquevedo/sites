@@ -1,0 +1,417 @@
+---
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import HeroFan from "@/components/HeroFan.tsx";
+import Mindset from "@/components/Mindset.tsx";
+import Check from "@/components/Check.astro";
+import Btn from "@/components/Btn.astro";
+import Marquee from "@/components/Marquee.astro";
+import Footer from "@/components/Footer.astro";
+import Faq from "@/components/Faq.astro";
+import { LINKS, testimonials, community, faq } from "@/data/site";
+
+const title = "Avanti · Preparação mental para atletas";
+const description =
+  "Um ecossistema completo de psicologia do esporte: app, assessoria individual com psicólogos e educação para profissionais. Do amador ao profissional, mais de 1.000 atletas impactados.";
+
+const asQuote = (c: (typeof community)[number]) => ({ name: c.name, quote: c.quote, meta: `${c.who} · ${c.sport}`, tag: c.tag });
+const rowA = community.filter((_, i) => i % 2 === 0).map(asQuote);
+const rowB = community.filter((_, i) => i % 2 === 1).map(asQuote);
+
+// Telas do app em moldura de iPhone (440 px de largura, proporção 1262 × 2624).
+const ph = (name: string) => `/app/${name}-440.webp`;
+const PH_W = 440;
+const PH_H = 915;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Avanti",
+    url: "https://www.avantiperformance.com.br",
+    logo: "https://www.avantiperformance.com.br/apple-touch-icon.png",
+    description,
+    taxID: "62.401.678/0001-33",
+    founder: [
+      { "@type": "Person", name: "Lucas Rosito", jobTitle: "Psicólogo" },
+      { "@type": "Person", name: "Tiago Quevedo", jobTitle: "Ex-atleta profissional de vela" },
+    ],
+    contactPoint: { "@type": "ContactPoint", telephone: "+55-51-99792-9080", contactType: "customer support", availableLanguage: "Portuguese" },
+    sameAs: [LINKS.appStore, LINKS.googlePlay],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <Header />
+
+  <main>
+    <!-- 1. Hero: o que é e pra quem -->
+    <section class="relative pt-24 md:pt-32">
+      <div class="wrap text-center">
+        <a href="#depoimentos" class="pill inline-flex items-center gap-3 rounded-full border border-line bg-surface py-1.5 pl-1.5 pr-4 text-[14px] font-medium text-ink-2">
+          <span class="flex -space-x-2">
+            {testimonials.slice(0, 3).map((t) => (
+              <img src={t.photo} alt="" width="28" height="28" class="size-7 rounded-full border-2 border-surface object-cover" />
+            ))}
+          </span>
+          <span><strong class="font-semibold text-ink">1.000+ atletas</strong> impactados</span>
+        </a>
+
+        <h1 class="mx-auto mt-6 max-w-[14ch] text-[clamp(2.9rem,1.5rem+5.6vw,5.75rem)]">
+          Preparação mental para atletas
+        </h1>
+        <p class="lead mx-auto mt-5 max-w-[46ch]">
+          <strong class="font-semibold text-ink">Um ecossistema completo de psicologia do esporte.</strong>{" "}
+          Do amador ao profissional, tudo o que você precisa para treinar a cabeça como treina o corpo.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Btn href={LINKS.plans} avanti />
+          <Btn href="#solucoes" variant="line">Conhecer as soluções</Btn>
+        </div>
+      </div>
+
+      <div class="relative mt-10 md:mt-12">
+        <div class="absolute inset-x-3 bottom-0 top-[34%] rounded-[32px] bg-yellow md:inset-x-8 md:rounded-panel" aria-hidden="true"></div>
+        <div class="relative">
+          <HeroFan client:load />
+        </div>
+        <div class="relative flex justify-center px-5 pb-10 pt-2 md:pb-14">
+          <Mindset client:visible />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Soluções -->
+    <section id="solucoes" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-5 md:grid-cols-12 md:items-end">
+          <h2 class="h2 md:col-span-7">Escolha por onde começar</h2>
+          <p class="lead md:col-span-5">
+            Tecnologia, gente especializada e ciência. Você usa o que fizer sentido para o seu momento, e tudo conversa entre si.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-4 md:mt-14 md:grid-cols-12 md:gap-5">
+          <!-- App -->
+          <article id="app" class="anchor-card relative overflow-hidden rounded-card border border-[#f1dc8a] bg-yellow-soft md:col-span-7">
+            <div class="relative z-10 p-7 sm:max-w-[60%] md:p-10">
+              <p class="text-[15px] font-semibold text-ink-2">App Avanti</p>
+              <h3 class="mt-2 text-[clamp(1.75rem,1.3rem+1.4vw,2.4rem)]">#1 app de psicologia esportiva do Brasil</h3>
+              <ul class="mt-6 space-y-2.5 text-[16px]">
+                <li class="flex gap-3"><Check />Report diário em 2 minutos</li>
+                <li class="flex gap-3"><Check />Seus dados e o Mental Score</li>
+                <li class="flex gap-3"><Check />Airton, assistente com IA</li>
+                <li class="flex gap-3"><Check />Cursos da Avanti Academy</li>
+                <li class="flex gap-3"><Check />Avaliações psicológicas</li>
+                <li class="flex gap-3"><Check />Comunidade de atletas</li>
+                <li class="flex gap-3"><Check />Algoritmo de alertas</li>
+              </ul>
+              <div class="mt-8">
+                <Btn href="/app" icon="arrow">Saiba mais</Btn>
+              </div>
+            </div>
+            <img src="/app/app-home-vela-720.webp" alt="" width="720" height="1497" loading="lazy" class="pointer-events-none relative mx-auto -mb-44 mt-1 w-[62%] max-w-[280px] rotate-[4deg] sm:absolute sm:-bottom-20 sm:right-6 sm:m-0 sm:w-[36%] md:right-8 md:w-[33%]" />
+          </article>
+
+          <!-- Assessoria -->
+          <article id="assessoria" class="anchor-card card flex flex-col overflow-hidden md:col-span-5">
+            <img src="/img/natacao.webp" alt="Nadador em treino" width="1400" height="1050" loading="lazy" class="aspect-[16/9] w-full object-cover" />
+            <div class="flex flex-1 flex-col p-7 md:p-9">
+              <p class="text-[15px] font-semibold text-ink-2">Assessoria individual</p>
+              <h3 class="mt-2 text-[clamp(1.6rem,1.25rem+1.1vw,2.1rem)]">Acompanhamento com psicólogo</h3>
+              <p class="mt-3 text-ink-2">Encontros online e regulares, com um plano feito para o seu esporte e integrado ao app.</p>
+              <div class="mt-auto pt-6">
+                <Btn href={LINKS.whatsappMsg("Olá! Quero saber mais sobre a assessoria individual da Avanti.")} variant="line" icon="whatsapp">Fale com o fundador</Btn>
+              </div>
+            </div>
+          </article>
+
+          <!-- Educação -->
+          <article id="educacao" class="anchor-card relative overflow-hidden rounded-card bg-navy text-white md:col-span-7">
+            <img src="/brush.webp" alt="" width="1400" height="455" loading="lazy" class="pointer-events-none absolute -bottom-2 -right-40 w-[560px] max-w-none -rotate-[10deg] opacity-60" />
+            <div class="relative z-10 p-7 md:p-10">
+              <p class="text-[15px] font-semibold text-white/65">Educação para psicólogos e estudantes</p>
+              <h3 class="mt-2 text-[clamp(1.6rem,1.25rem+1.1vw,2.1rem)]">Desenvolva-se e atue em psicologia do esporte</h3>
+              <ul class="mt-6 space-y-2.5 text-[16px] text-white/90">
+                <li class="flex gap-3"><Check dark />Capacitações em psicologia do esporte</li>
+                <li class="flex gap-3"><Check dark />Supervisão individual e em grupo</li>
+                <li class="flex gap-3"><Check dark />Comunidade de profissionais</li>
+                <li class="flex gap-3"><Check dark />Tecnologia para acompanhar atletas</li>
+              </ul>
+              <div class="mt-8">
+                <Btn href="/educacao" variant="yellow" icon="arrow">Saiba mais</Btn>
+              </div>
+            </div>
+          </article>
+
+          <!-- Organizações -->
+          <article id="organizacoes" class="anchor-card card flex flex-col overflow-hidden md:col-span-5">
+            <img src="/img/foto-atleta-app-4.webp" alt="Atleta da Avanti Team usando o app" width="900" height="1600" loading="lazy" class="aspect-[16/8] w-full object-cover object-[50%_42%]" />
+            <div class="flex flex-1 flex-col p-7 md:p-9">
+              <p class="text-[15px] font-semibold text-ink-2">Organizações</p>
+              <h3 class="mt-2 text-[clamp(1.5rem,1.2rem+0.9vw,1.9rem)]">Clubes, federações e equipes</h3>
+              <p class="mt-3 text-ink-2">Programas sob medida, acesso ao app para o time e relatórios de grupo para a comissão técnica.</p>
+              <div class="mt-auto pt-6">
+                <Btn href={LINKS.whatsappMsg("Olá! Quero conhecer a Avanti para a minha organização.")} variant="line" icon="whatsapp">Fale com o fundador</Btn>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Por dentro do app -->
+    <section id="por-dentro" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-6 md:grid-cols-12 md:items-end">
+          <div class="md:col-span-7">
+            <h2 class="h2 max-w-[16ch]">Sua rotina vira dados. Os dados viram evolução.</h2>
+          </div>
+          <div class="md:col-span-5">
+            <p class="lead">Dois minutos por dia no app e você passa a enxergar o que antes passava batido.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <Btn href={LINKS.plans} avanti />
+            </div>
+          </div>
+        </div>
+
+        <div class="tiles mt-10 grid gap-4 md:mt-14 md:grid-cols-12 md:gap-5">
+          <article class="tile border border-[#f1dc8a] bg-yellow-soft md:col-span-7">
+            <div class="tile-text">
+              <h3 class="tile-title">Report do dia</h3>
+              <p>Treino, sono, humor e emoções em menos de dois minutos.</p>
+            </div>
+            <div class="duo">
+              <img class="phone" src={ph("app-report-bem-estar")} alt="Report do dia: bem-estar, com humor, energia, sono e estados emocionais" width={PH_W} height={PH_H} loading="lazy" />
+              <img class="phone" src={ph("app-report-atividades")} alt="Report do dia: atividades, com treino, duração e treino mental" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile tile-dark bg-navy text-white md:col-span-5">
+            <div class="tile-text">
+              <h3 class="tile-title">Airton, com IA</h3>
+              <p>Um assistente de preparação mental que conhece a sua rotina.</p>
+            </div>
+            <div class="solo">
+              <img class="phone" src={ph("app-airton-chat")} alt="Conversa com o Airton, assistente com IA do app" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile card md:col-span-5">
+            <div class="tile-text">
+              <h3 class="tile-title">Seus dados</h3>
+              <p>O mês inteiro num calendário, com Mental Score e as emoções que mais aparecem.</p>
+            </div>
+            <div class="duo">
+              <img class="phone" src={ph("app-dados-calendario")} alt="Calendário de atividades do mês" width={PH_W} height={PH_H} loading="lazy" />
+              <img class="phone" src={ph("app-dados-mental-score")} alt="Mental Score do mês, últimos 15 dias e emoções do mês" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile card md:col-span-7">
+            <div class="tile-text">
+              <h3 class="tile-title">Compartilhe seus treinos</h3>
+              <p>Seu dia e sua semana viram um card pronto para o story.</p>
+            </div>
+            <div class="duo">
+              <div class="phone cycle" data-cycle>
+                {[1, 2, 3].map((n, i) => (
+                  <img class:list={[i === 0 && "is-on"]} src={ph(`app-story-treino-${n}`)} alt={i === 0 ? "Story com o tempo de treino do dia e a marca Avanti sobre a foto" : ""} width={PH_W} height={PH_H} loading="lazy" />
+                ))}
+              </div>
+              <div class="phone cycle" data-cycle data-offset="1400">
+                <img class="is-on" src={ph("app-compartilhar-semana")} alt="Compartilhar semana: resumo de treinos da semana" width={PH_W} height={PH_H} loading="lazy" />
+                <img src={ph("app-compartilhar-dia")} alt="" width={PH_W} height={PH_H} loading="lazy" />
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile-dark bg-navy text-white md:col-span-6">
+            <div class="tile-text">
+              <h3 class="tile-title">Avanti Academy</h3>
+              <p>Cursos curtos e baseados em ciência, feitos para atletas.</p>
+            </div>
+            <div class="solo">
+              <img class="phone" src={ph("app-academy")} alt="Cursos da Avanti Academy dentro do app" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile border border-[#f1dc8a] bg-yellow-soft md:col-span-6">
+            <div class="tile-text">
+              <h3 class="tile-title">Avaliações psicológicas</h3>
+              <p>Mapeiam seus padrões e mostram onde focar.</p>
+            </div>
+            <div class="solo">
+              <img class="phone" src={ph("app-avaliacao-resultado")} alt="Resultado de uma avaliação psicológica no app" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-10 hidden flex-wrap items-center justify-center gap-3 md:flex">
+          <Btn href={LINKS.plans} avanti />
+          <Btn href="/app" variant="line">Conhecer o app</Btn>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Depoimentos -->
+    <section id="depoimentos" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-6 md:grid-cols-12 md:items-end">
+          <div class="md:col-span-5">
+            <p class="font-display text-[clamp(4rem,2.5rem+6vw,7.5rem)] font-semibold leading-none tracking-[-0.05em]">1.000+</p>
+            <p class="mt-2 text-[17px] font-medium text-ink-2">atletas impactados pela Avanti</p>
+          </div>
+          <div class="md:col-span-7 md:text-right">
+            <h2 class="h2 md:ml-auto md:max-w-[16ch]">Quem treina com a gente, conta</h2>
+          </div>
+        </div>
+
+        <!-- Atletas parceiros -->
+        <div class="-mx-5 mt-10 flex snap-x snap-mandatory scroll-pl-5 gap-4 overflow-x-auto px-5 pb-3 [scrollbar-width:none] md:mx-0 md:mt-14 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0">
+          {testimonials.map((t) => (
+            <figure class="partner card w-[86%] shrink-0 snap-start sm:w-[62%] md:w-auto">
+              <div class="flex items-center gap-4">
+                <img src={t.photo} alt={t.name} width="56" height="56" loading="lazy" class="size-14 shrink-0 rounded-[18px] object-cover" />
+                <span class="min-w-0 leading-tight">
+                  <span class="block font-display text-[18px] font-semibold tracking-tight">{t.name}</span>
+                  <span class="mt-1 block text-[13.5px] text-ink-3">{t.role}</span>
+                </span>
+              </div>
+              <blockquote class="mt-4 text-[15.5px] leading-relaxed text-ink">“{t.quote}”</blockquote>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mural: corre sozinho e dá para arrastar com mouse ou dedo -->
+      <Marquee rows={[rowA, rowB]} label="Mais depoimentos de clientes" class="mt-4 md:mt-5" />
+
+      <div class="wrap mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Btn href={LINKS.plans} avanti />
+        <Btn href="https://app.avantiperformance.com.br/depoimentos" variant="line">Ver todos os depoimentos</Btn>
+      </div>
+    </section>
+
+    <!-- 5. Quem somos -->
+    <section id="quem-somos" class="pt-24 md:pt-32">
+      <div class="wrap grid items-center gap-10 md:grid-cols-2 md:gap-16">
+        <img src="/img/fundadores.webp" alt="Lucas Rosito e Tiago Quevedo, fundadores da Avanti" width="1200" height="1200" loading="lazy" class="aspect-square w-full rounded-[32px] object-cover md:rounded-panel" />
+        <div>
+          <h2 class="h2 max-w-[14ch]">Feita por quem vive o esporte</h2>
+          <p class="lead mt-5 max-w-[46ch]">
+            A Avanti nasceu do encontro entre a psicologia e a vida de atleta. Unimos ciência, dados e tecnologia para levar a preparação mental de alto nível a qualquer atleta.
+          </p>
+          <dl class="mt-9 grid gap-4 sm:grid-cols-2">
+            <div class="card p-6">
+              <dt class="font-display text-[20px] font-semibold tracking-tight">Lucas Rosito</dt>
+              <dd class="mt-1 text-[15px] leading-relaxed text-ink-2">Psicólogo, há mais de 25 anos acompanhando atletas. Já formou medalhistas olímpicos e campeões mundiais. 2x psicólogo do Time Brasil (COB).</dd>
+            </div>
+            <div class="card p-6">
+              <dt class="font-display text-[20px] font-semibold tracking-tight">Tiago Quevedo</dt>
+              <dd class="mt-1 text-[15px] leading-relaxed text-ink-2">Ex-atleta profissional. 6x campeão brasileiro, campeão sul-americano e campeão mundial.</dd>
+            </div>
+          </dl>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Btn href={LINKS.plans} avanti />
+            <Btn href={LINKS.whatsapp} variant="line" icon="whatsapp">Fale com o fundador</Btn>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. FAQ -->
+    <section id="faq" class="pt-24 md:pt-32">
+      <div class="wrap grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+        <div class="md:sticky md:top-28 md:self-start">
+          <h2 class="h2">FAQ</h2>
+        </div>
+        <Faq items={faq} />
+      </div>
+    </section>
+
+    <!-- 7. Chamada final -->
+    <section class="pb-6 pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="relative overflow-hidden rounded-[32px] bg-yellow md:rounded-panel">
+          <div class="relative z-10 p-8 sm:p-10 md:max-w-[58%] md:p-16">
+            <h2 class="h2 max-w-[13ch]">Comece hoje a treinar a sua mente</h2>
+            <p class="mt-4 max-w-[40ch] text-[17px] leading-relaxed text-ink/80">Assine pelo site, entre no app e faça o seu primeiro report ainda hoje.</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <Btn href={LINKS.plans} avanti />
+              <Btn href={LINKS.whatsapp} variant="glass" icon="whatsapp">Fale com o fundador</Btn>
+            </div>
+          </div>
+          <img src="/app/app-conquista-elite-720.webp" alt="" width="720" height="1497" loading="lazy" class="pointer-events-none hidden rotate-[6deg] md:absolute md:block md:-bottom-40 md:right-[9%] md:m-0 md:w-[24%] md:max-w-[280px]" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  .pill { transition: border-color 180ms, translate 260ms var(--ease-spring); }
+  @media (hover: hover) { .pill:hover { border-color: rgb(16 24 42 / 0.25); translate: 0 -1px; } }
+
+  /* Leque do hero: sem sombra (o card recorta a sombra num retângulo escuro). */
+  .hero-fan.fan-gallery { padding: 8px 0 0; }
+  .hero-fan .fan-gallery-card { background: transparent; }
+
+  /* Frase com chips: uma linha por chip, sem ponto final. */
+  .mindset.wc-root { max-width: 720px; color: var(--color-ink); gap: 0; }
+  .mindset .wc-title { display: none; }
+  .mindset .wc-text { font-family: var(--font-display); font-size: clamp(20px, 1rem + 0.9vw, 27px); font-weight: 560; letter-spacing: -0.02em; line-height: 1.8; text-wrap: wrap; }
+  .mindset .wc-text > span { display: block; }
+  .mindset .wc-chip { background: #fff; box-shadow: 0 1px 0 rgb(16 24 42 / 0.08), 0 6px 16px -10px rgb(16 24 42 / 0.4); }
+  @media (hover: hover) { .mindset .wc-chip:hover { background: #fffdf5; } }
+
+  /* Depoimentos */
+  .partner { padding: 22px 24px; }
+  .partner-tag { margin-left: auto; align-self: flex-start; flex: none; padding: 4px 10px; border-radius: 999px; background: var(--color-yellow-soft); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  @media (max-width: 420px) { .partner-tag { display: none; } }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone, .cycle img { transition: none; }
+  }
+</style>
+
+<script>
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = matchMedia("(hover: hover)").matches;
+
+  // Só anima o que está na tela.
+  const seen = new WeakMap<Element, boolean>();
+  const io = new IntersectionObserver((es) => es.forEach((e) => seen.set(e.target, e.isIntersecting)), { rootMargin: "100px" });
+
+  // Telas que se revezam (compartilhar treinos).
+  if (!still) {
+    document.querySelectorAll<HTMLElement>("[data-cycle]").forEach((box) => {
+      const imgs = [...box.querySelectorAll("img")];
+      if (imgs.length < 2) return;
+      io.observe(box);
+      let i = 0;
+      imgs.forEach((im) => (im.loading = "eager"));
+      // Troca seca, só quando a próxima foto já está pronta: nada pisca.
+      const tick = () => {
+        if (!seen.get(box) || document.hidden) return;
+        const next = (i + 1) % imgs.length;
+        imgs[next].decode().catch(() => {}).then(() => {
+          imgs[next].classList.add("is-on");
+          imgs[i].classList.remove("is-on");
+          i = next;
+        });
+      };
+      setTimeout(() => setInterval(tick, 2800), Number(box.dataset.offset || 0));
+    });
+  }
+
+</script>

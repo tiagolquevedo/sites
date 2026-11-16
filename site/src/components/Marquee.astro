@@ -1,0 +1,122 @@
+---
+// Mural de depoimentos: corre sozinho, para quando a pessoa mexe, arrasta com o mouse
+// e rola com o dedo (scroll nativo no toque). Cada linha anda num sentido.
+export interface Quote {
+  name: string;
+  quote: string;
+  meta: string;
+  photo?: string;
+  tag?: string;
+}
+interface Props { rows: Quote[][]; label?: string; class?: string }
+const { rows, label = "Depoimentos", class: cls = "" } = Astro.props;
+---
+<div class:list={["marquee", cls]} aria-label={label}>
+  {rows.map((row, r) => (
+    <div class="mq" data-mq data-dir={r % 2 === 1 ? "-1" : "1"}>
+      <div class="mq-track">
+        {[0, 1].map((copy) =>
+          row.map((c) => (
+            <figure class="quote" aria-hidden={copy === 1 ? "true" : undefined}>
+              <blockquote>“{c.quote}”</blockquote>
+              <figcaption>
+                {c.photo
+                  ? <img class="quote-avatar" src={c.photo} alt="" width="36" height="36" loading="lazy" />
+                  : <span class="quote-avatar" aria-hidden="true">{c.name[0]}</span>}
+                <span><strong>{c.name}</strong><span>{c.meta}</span></span>
+                {c.tag && <span class="quote-tag">{c.tag}</span>}
+              </figcaption>
+            </figure>
+          ))
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style is:global>
+  .marquee { display: grid; gap: 14px; }
+  .mq {
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; cursor: grab;
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+  .mq::-webkit-scrollbar { display: none; }
+  .mq.is-dragging { cursor: grabbing; user-select: none; }
+  .mq.is-dragging .quote { pointer-events: none; }
+  .mq-track { display: flex; gap: 14px; width: max-content; padding: 2px 0 4px; }
+  .quote { width: 420px; flex: none; display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 20px; background: var(--color-surface); box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06); }
+  .quote blockquote { font-size: 14.5px; line-height: 1.55; color: var(--color-ink); }
+  .quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; line-height: 1.25; }
+  .quote figcaption strong { display: block; font-weight: 650; font-size: 14px; }
+  .quote figcaption span > span { color: var(--color-ink-3); }
+  .quote-avatar { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: var(--color-navy); color: var(--color-yellow); font-family: var(--font-display); font-weight: 650; font-size: 15px; flex: none; object-fit: cover; }
+  .quote-tag { margin-left: auto; padding: 4px 10px; border-radius: 999px; background: var(--color-paper); color: var(--color-ink-2); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  @media (max-width: 640px) { .quote { width: 290px; } .quote blockquote { font-size: 14px; } }
+</style>
+
+<script>
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = matchMedia("(hover: hover)").matches;
+  const seen = new WeakMap<Element, boolean>();
+  const io = new IntersectionObserver((es) => es.forEach((e) => seen.set(e.target, e.isIntersecting)), { rootMargin: "100px" });
+
+  document.querySelectorAll<HTMLElement>("[data-mq]").forEach((row) => {
+    const dir = Number(row.dataset.dir || 1);
+    const SPEED = 28; // px por segundo
+    let pos = 0, last = 0, set = -1, resumeAt = 0;
+    const half = () => (row.firstElementChild as HTMLElement).scrollWidth / 2;
+    const wrap = () => {
+      const h = half();
+      if (row.scrollLeft >= h) row.scrollLeft -= h;
+      else if (row.scrollLeft <= 0) row.scrollLeft += h;
+    };
+    const pause = (ms = 2200) => { resumeAt = performance.now() + ms; };
+    io.observe(row);
+
+    requestAnimationFrame(() => { if (dir < 0) row.scrollLeft = half() - 1; pos = row.scrollLeft; });
+
+    const loop = (t: number) => {
+      const dt = Math.min(64, t - (last || t)) / 1000;
+      last = t;
+      if (!still && seen.get(row) && t > resumeAt && !(canHover && row.matches(":hover"))) {
+        pos += dir * SPEED * dt;
+        const h = half();
+        if (pos >= h) pos -= h;
+        if (pos <= 0) pos += h;
+        row.scrollLeft = pos;
+        set = row.scrollLeft;
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+
+    // Mexeu (dedo, trackpad, roda): segura um pouco e retoma de onde parou.
+    row.addEventListener("scroll", () => {
+      if (Math.abs(row.scrollLeft - set) > 1.5) { pause(); wrap(); pos = row.scrollLeft; set = pos; }
+    }, { passive: true });
+    row.addEventListener("touchstart", () => pause(4000), { passive: true });
+
+    // Arrastar com o mouse.
+    let startX = 0, startLeft = 0, moved = false;
+    row.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      startX = e.clientX; startLeft = row.scrollLeft; moved = false;
+      row.setPointerCapture(e.pointerId);
+      row.classList.add("is-dragging");
+      pause(100000);
+    });
+    row.addEventListener("pointermove", (e) => {
+      if (!row.classList.contains("is-dragging")) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      row.scrollLeft = startLeft - dx;
+      wrap();
+      if (row.scrollLeft !== startLeft - dx) { startLeft = row.scrollLeft + dx; }
+      pos = row.scrollLeft; set = pos;
+    });
+    const end = () => { if (row.classList.contains("is-dragging")) { row.classList.remove("is-dragging"); pause(1800); } };
+    row.addEventListener("pointerup", end);
+    row.addEventListener("pointercancel", end);
+    row.addEventListener("click", (e) => { if (moved) e.preventDefault(); }, true);
+  });
+</script>

@@ -1,0 +1,225 @@
+---
+// Menu em forma de notch (no idioma do Notch Header do MyUI), sem React: pende do topo,
+// encolhe ao rolar e vira menu no celular. "Soluções" abre um painel no hover e no clique.
+import { SOLUTIONS } from "@/data/site";
+import SolutionIcon from "@/components/SolutionIcon.astro";
+// Cada página passa os próprios links (âncoras dela mesma), para o menu não tirar a pessoa da página.
+interface Props { links?: { label: string; href: string }[]; cta?: string }
+const {
+  links = [
+    { label: "Depoimentos", href: "/#depoimentos" },
+    { label: "Quem somos", href: "/#quem-somos" },
+    { label: "Perguntas", href: "/#faq" },
+  ],
+  cta = "/app#planos",
+} = Astro.props;
+---
+<div class="notch-cap">
+<header class="notch" data-notch>
+  <div class="notch-body">
+    <svg class="notch-ear notch-ear-l" viewBox="0 0 50 50" aria-hidden="true"><path d="M0 0H50C22.4 0 0 22.4 0 50Z" /></svg>
+    <svg class="notch-ear notch-ear-r" viewBox="0 0 50 50" aria-hidden="true"><path d="M0 0H50C22.4 0 0 22.4 0 50Z" /></svg>
+    <div class="notch-row">
+      <a href="/" class="notch-logo" aria-label="Avanti, página inicial">
+        <img src="/logo-yellow.png" alt="Avanti" width="92" height="16" />
+      </a>
+      <nav aria-label="Principal" class="notch-links">
+        <div class="sol" data-sol>
+          <button type="button" class="sol-btn" aria-expanded="false" aria-controls="sol-panel">
+            Soluções
+            <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div id="sol-panel" class="sol-panel">
+            <div class="sol-card">
+              {SOLUTIONS.map((s) => (
+                <a href={s.href} class="sol-item">
+                  <span class="sol-icon"><SolutionIcon name={s.icon} /></span>
+                  <span>
+                    <span class="sol-title">{s.title}</span>
+                    <span class="sol-desc">{s.desc}</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        {links.map((l) => <a href={l.href} class="notch-link">{l.label}</a>)}
+      </nav>
+      <a href={cta} class="notch-cta"><span>Seja</span><img src="/logo-navy.png" alt="Avanti" width="480" height="84" /></a>
+      <button type="button" class="notch-burger" aria-expanded="false" aria-controls="notch-menu" aria-label="Abrir menu">
+        <span></span><span></span>
+      </button>
+    </div>
+    <nav id="notch-menu" class="notch-menu" aria-label="Menu">
+      <div>
+        <p class="notch-menu-label">Soluções</p>
+        {SOLUTIONS.map((s) => (
+          <a href={s.href} class="sol-item">
+            <span class="sol-icon"><SolutionIcon name={s.icon} /></span>
+            <span>
+              <span class="sol-title">{s.title}</span>
+              <span class="sol-desc">{s.desc}</span>
+            </span>
+          </a>
+        ))}
+        <hr />
+        {links.map((l) => <a href={l.href} class="notch-mlink">{l.label}</a>)}
+      </div>
+    </nav>
+  </div>
+</header>
+</div>
+
+<style>
+  /* Faixa acima do menu: no celular o conteúdo não aparece passando por cima do notch. */
+  .notch-cap {
+    position: fixed; top: -9px; left: 0; right: 0; z-index: 50;
+    /* O Safari 26 do iPhone pinta a área do relógio com a cor de uma barra fixa larga no topo,
+       mas na prática ignora faixas com menos de ~11px. Por isso 12px de altura com 9px acima da tela: só 3px aparecem e as curvas do menu ficam livres. */
+    height: calc(env(safe-area-inset-top, 0px) + 12px);
+    background: var(--color-au-island);
+    pointer-events: none;
+  }
+  .notch {
+    /* absoluto dentro da faixa: assim o Safari só enxerga a faixa como elemento fixo do topo */
+    position: absolute; top: calc(env(safe-area-inset-top, 0px) + 9px); left: 50%; pointer-events: auto;
+    translate: -50% 0;
+    animation: notch-drop 0.9s cubic-bezier(.34, 1.4, .64, 1) both;
+    width: max-content; max-width: calc(100vw - 48px);
+  }
+  @keyframes notch-drop { from { translate: -50% -100%; } to { translate: -50% 0; } }
+  .notch-body {
+    position: relative;
+    background: var(--color-au-island);
+    color: #fff;
+    border-radius: 0 0 26px 26px;
+    box-shadow: 0 22px 50px -26px rgb(0 0 0 / 0.6);
+  }
+  .notch-ear { position: absolute; top: 0; width: 22px; height: 22px; fill: var(--color-au-island); pointer-events: none; }
+  .notch-ear-l { right: calc(100% - 1px); transform: scaleX(-1); }
+  .notch-ear-r { left: calc(100% - 1px); }
+  .notch-row { display: flex; align-items: center; gap: 4px; height: 58px; padding: 0 8px 0 18px; transition: height 300ms var(--ease-out); }
+  .notch-logo { display: block; padding: 6px 4px; margin-right: 6px; border-radius: 10px; }
+  .notch-logo img { height: 16px; width: auto; display: block; }
+  .notch-links { display: none; align-items: center; }
+  .notch-link, .sol-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--color-au-island-ink-2);
+    font-size: 14px; font-weight: 550;
+    padding: 8px 14px; border-radius: 999px;
+    transition: color 150ms, background-color 150ms;
+  }
+  .sol-btn svg { transition: transform 260ms var(--ease-out); }
+  @media (hover: hover) { .notch-link:hover, .sol-btn:hover { color: #fff; background: var(--color-navy-2); } }
+  .notch-cta {
+    display: inline-flex; align-items: center; height: 40px; padding: 0 16px; margin-left: 6px;
+    border-radius: 999px; background: var(--color-yellow); color: var(--color-ink);
+    gap: 5px; font-size: 14.5px; font-weight: 600; white-space: nowrap;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45);
+    transition: background-color 150ms, height 300ms var(--ease-out);
+  }
+  .notch-cta img { height: 11.5px; width: auto; }
+  .notch-cta:active { scale: 0.96; }
+  @media (hover: hover) { .notch-cta:hover { background: var(--color-yellow-2); } }
+
+  /* Soluções: painel claro que desce do notch */
+  .sol { position: relative; }
+  .sol-panel {
+    position: absolute; top: 100%; left: -12px; padding-top: 14px;
+    opacity: 0; visibility: hidden; translate: 0 -6px; scale: 0.98; transform-origin: 20% 0;
+    transition: opacity 180ms, translate 260ms var(--ease-out), scale 260ms var(--ease-out), visibility 0s 260ms;
+  }
+  .sol.is-open .sol-panel {
+    opacity: 1; visibility: visible; translate: 0 0; scale: 1;
+    transition: opacity 180ms, translate 300ms var(--ease-spring), scale 300ms var(--ease-spring), visibility 0s;
+  }
+  .sol.is-open .sol-btn { color: #fff; background: var(--color-navy-2); }
+  .sol.is-open .sol-btn svg { transform: rotate(180deg); }
+  .sol-card {
+    width: 384px; padding: 8px; border-radius: 24px; background: var(--color-surface); color: var(--color-ink);
+    box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06), 0 24px 60px -20px rgb(16 24 42 / 0.35);
+    display: grid; gap: 2px;
+  }
+  .sol-item { display: flex; gap: 14px; align-items: center; padding: 12px 14px; border-radius: 16px; transition: background-color 150ms; }
+  @media (hover: hover) { .sol-card .sol-item:hover { background: var(--color-paper); } }
+  .sol-icon {
+    flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px;
+    background: var(--color-paper); color: var(--color-ink);
+    transition: background-color 180ms, color 180ms, rotate 320ms var(--ease-spring), scale 320ms var(--ease-spring);
+  }
+  @media (hover: hover) { .sol-card .sol-item:hover .sol-icon { background: var(--color-yellow); rotate: -6deg; scale: 1.06; } }
+  .notch-menu .sol-icon { background: var(--color-navy-2); color: var(--color-yellow); }
+  .sol-title { display: block; font-weight: 650; font-size: 15px; line-height: 1.3; }
+  .sol-desc { display: block; font-size: 13.5px; line-height: 1.4; color: var(--color-ink-2); margin-top: 2px; }
+
+  .notch-burger { display: grid; place-content: center; gap: 5px; width: 40px; height: 40px; border-radius: 999px; margin-left: 2px; }
+  .notch-burger span { display: block; width: 16px; height: 2px; border-radius: 2px; background: #fff; transition: transform 260ms var(--ease-out); }
+  .notch-burger[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
+  .notch-burger[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+  .notch-menu { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .notch-menu > div { overflow: hidden; display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+  .notch-menu-label { font-size: 12px; font-weight: 600; color: var(--color-au-island-ink-2); padding: 8px 14px 4px; }
+  .notch-menu .sol-desc { color: var(--color-au-island-ink-2); }
+  .notch-menu hr { border: 0; border-top: 1px solid var(--color-navy-line); margin: 6px 14px; }
+  .notch-mlink { color: #fff; font-size: 16px; font-weight: 550; padding: 12px 14px; border-radius: 16px; }
+  .notch-menu a:active { background: var(--color-navy-2); }
+  .notch.is-open .notch-menu { grid-template-rows: 1fr; }
+  .notch.is-open .notch-menu > div { padding-bottom: 10px; }
+
+  .notch.is-small .notch-row { height: 48px; }
+  .notch.is-small .notch-cta { height: 34px; }
+
+  @media (min-width: 900px) {
+    .notch-links { display: flex; }
+    .notch-burger, .notch-menu { display: none; }
+  }
+  @media (max-width: 899px) { .notch-body { width: min(calc(100vw - 48px), 420px); } .notch-cta { margin-left: auto; } }
+  @media (prefers-reduced-motion: reduce) { .notch { animation: none; } }
+</style>
+
+<script>
+  const n = document.querySelector<HTMLElement>("[data-notch]");
+  if (n) {
+    // menu do celular
+    const btn = n.querySelector<HTMLButtonElement>(".notch-burger")!;
+    const setMenu = (open: boolean) => {
+      n.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+    };
+    btn.addEventListener("click", () => setMenu(!n.classList.contains("is-open")));
+    n.querySelectorAll(".notch-menu a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+
+    // Soluções: abre no hover (com tolerância) e no clique/teclado
+    const sol = n.querySelector<HTMLElement>("[data-sol]")!;
+    const solBtn = sol.querySelector<HTMLButtonElement>(".sol-btn")!;
+    let t = 0;
+    const setSol = (open: boolean) => {
+      clearTimeout(t);
+      sol.classList.toggle("is-open", open);
+      solBtn.setAttribute("aria-expanded", String(open));
+    };
+    if (matchMedia("(hover: hover)").matches) {
+      sol.addEventListener("pointerenter", () => setSol(true));
+      sol.addEventListener("pointerleave", () => { t = window.setTimeout(() => setSol(false), 160); });
+    }
+    solBtn.addEventListener("click", () => setSol(!sol.classList.contains("is-open")));
+    sol.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => { setSol(false); a.blur(); }));
+    sol.addEventListener("focusout", (e) => { if (!sol.contains(e.relatedTarget as Node)) setSol(false); });
+
+    addEventListener("pointerdown", (e) => {
+      if (!n.contains(e.target as Node)) { setMenu(false); setSol(false); }
+    });
+    addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const wasOpen = sol.classList.contains("is-open");
+      setMenu(false); setSol(false);
+      if (wasOpen) solBtn.focus();
+    });
+
+    let raf = 0;
+    const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => n.classList.toggle("is-small", scrollY > 72)); };
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+</script>

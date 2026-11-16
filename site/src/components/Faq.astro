@@ -1,0 +1,33 @@
+---
+import { LINKS } from "@/data/site";
+interface Props { items: readonly { q: string; a: string }[] }
+const { items } = Astro.props;
+---
+<div class="faq flex flex-col gap-3">
+  {items.map((f, i) => (
+    <details class="card group" name="faq" open={i === 0}>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-6 px-6 py-5 text-[17px] font-semibold md:px-7">
+        {f.q}
+        <span class="faq-icon relative grid size-8 shrink-0 place-items-center rounded-full bg-paper-2" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        <p class="px-6 pb-6 text-ink-2 md:px-7">
+          {f.a}
+          {f.q.startsWith("Quanto custa") && <> <a href={LINKS.plans} class="font-semibold text-ink underline underline-offset-4">Ver os planos</a>.</>}
+        </p>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style is:global>
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq-icon::before, .faq-icon::after { content: ""; position: absolute; width: 12px; height: 2px; border-radius: 2px; background: var(--color-ink); transition: transform 260ms var(--ease-out); }
+  .faq-icon::after { transform: rotate(90deg); }
+  details[open] .faq-icon::after { transform: rotate(0deg); }
+  details[open] .faq-icon { background: var(--color-yellow); }
+  .faq-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms var(--ease-out); }
+  .faq-body > p { overflow: hidden; min-height: 0; }
+  details[open] .faq-body { grid-template-rows: 1fr; }
+  @media (prefers-reduced-motion: reduce) { .faq-body, .faq-icon::after { transition: none; } }
+</style>

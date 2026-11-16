@@ -1,0 +1,54 @@
+---
+import Btn from "@/components/Btn.astro";
+import SolutionIcon from "@/components/SolutionIcon.astro";
+import { DESTS, dest, HEADLINE, PROOF } from "@/data/links";
+const cards = DESTS.filter((d) => d.icon);
+const fundador = dest("fundador");
+---
+<section data-v="basica" class="basica mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col px-5 pb-8 pt-10">
+  <header class="rise text-center" style="--i:0">
+    <img src="/logo-navy.png" alt="Avanti" width="140" height="25" class="mx-auto h-[24px] w-auto" />
+    <h1 class="mx-auto mt-6 max-w-[14ch] text-[2.4rem]">{HEADLINE}</h1>
+    <p class="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-[14px] font-medium text-ink-2">
+      <span class="size-2 rounded-full bg-yellow"></span>{PROOF}
+    </p>
+  </header>
+
+  <div class="rise mt-7" style="--i:1">
+    <Btn href={dest("app").href} variant="yellow" icon="arrow" avanti class="!h-[60px] w-full !justify-between !pl-6 !text-[18px]" data-go="app" />
+  </div>
+
+  <nav class="mt-4 flex flex-col gap-3" aria-label="Soluções">
+    {cards.slice(1).map((d, i) => (
+      <a href={d.href} data-go={d.id} class="rise card-link" style={`--i:${i + 2}`}>
+        <span class="grid size-12 flex-none place-items-center rounded-2xl bg-yellow-soft text-ink"><SolutionIcon name={d.icon!} /></span>
+        <span class="min-w-0 flex-1">
+          <b class="block font-display text-[1.1rem] font-semibold leading-tight tracking-tight">{d.label}</b>
+          <small class="mt-0.5 block text-[14px] leading-snug text-ink-2">{d.desc}</small>
+        </span>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="rise mt-auto pt-8" style="--i:6">
+    <Btn href={fundador.href} variant="line" icon="whatsapp" class="w-full" data-go="fundador">{fundador.cta}</Btn>
+    <p class="mt-6 text-center text-[13px] text-ink-3">© Avanti · CNPJ 62.401.678/0001-33</p>
+  </div>
+</section>
+
+<style>
+  .rise { animation: rise 600ms var(--ease-out) both; animation-delay: calc(var(--i) * 70ms); }
+  @keyframes rise { from { opacity: 0; translate: 0 14px; } }
+  .card-link {
+    display: flex; align-items: center; gap: 14px;
+    min-height: 76px; padding: 12px 14px;
+    background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 24px;
+    box-shadow: 0 1px 2px rgb(16 24 42 / 0.05);
+    transition: transform 180ms var(--ease-out), box-shadow 180ms;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .card-link:active { transform: scale(0.975); box-shadow: none; }
+  .chev { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: var(--color-paper-2); color: var(--color-ink); flex: none; }
+  @media (prefers-reduced-motion: reduce) { .rise { animation: none; } }
+</style>
