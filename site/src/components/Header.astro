@@ -14,7 +14,7 @@ const {
   cta = "/app#planos",
 } = Astro.props;
 ---
-<div class="notch-cap" aria-hidden="true"></div>
+<div class="notch-cap">
 <header class="notch" data-notch>
   <div class="notch-body">
     <svg class="notch-ear notch-ear-l" viewBox="0 0 50 50" aria-hidden="true"><path d="M0 0H50C22.4 0 0 22.4 0 50Z" /></svg>
@@ -68,11 +68,12 @@ const {
     </nav>
   </div>
 </header>
+</div>
 
 <style>
   /* Faixa acima do menu: no celular o conteúdo não aparece passando por cima do notch. */
   .notch-cap {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 49;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
     /* O Safari 26 do iPhone pinta a área do relógio com a cor de uma barra fixa larga no topo,
        mas ignora barras finas demais (por isso 24px e não 6px). */
     height: calc(env(safe-area-inset-top, 0px) + 24px);
@@ -80,7 +81,8 @@ const {
     pointer-events: none;
   }
   .notch {
-    position: fixed; top: env(safe-area-inset-top, 0px); left: 50%; z-index: 50;
+    /* absoluto dentro da faixa: assim o Safari só enxerga a faixa como elemento fixo do topo */
+    position: absolute; top: env(safe-area-inset-top, 0px); left: 50%; pointer-events: auto;
     translate: -50% 0;
     animation: notch-drop 0.9s cubic-bezier(.34, 1.4, .64, 1) both;
     width: max-content; max-width: calc(100vw - 48px);
