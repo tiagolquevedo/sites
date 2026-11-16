@@ -1,0 +1,128 @@
+---
+import Btn from "@/components/Btn.astro";
+import { dest, HEADLINE } from "@/data/links";
+
+// Conversa roteirizada (sem IA): cada opção leva a uma resposta fixa e ao destino certo.
+const options = [
+  { key: "atleta", chip: "Sou atleta", reply: "Então o app é o seu lugar: treino mental no dia a dia, com seus dados e seu report.", to: "app" as const },
+  { key: "acomp", chip: "Quero acompanhamento", reply: "Na assessoria você tem encontros online e regulares com um psicólogo, com plano feito para o seu esporte.", to: "assessoria" as const },
+  { key: "psi", chip: "Sou psicólogo(a)", reply: "Que bom! Temos uma comunidade e supervisão em grupo e individual para quem atua com o esporte.", to: "educacao" as const },
+  { key: "org", chip: "Falo por um clube ou equipe", reply: "A gente monta programas para clubes, federações e equipes. Dá uma olhada.", to: "organizacoes" as const },
+  { key: "duvida", chip: "Tenho uma dúvida", reply: "Pode chamar! Eu respondo direto no WhatsApp.", to: "fundador" as const },
+];
+---
+<section data-v="conversa" class="conversa mx-auto flex h-[100svh] w-full max-w-[480px] flex-col bg-paper-2">
+  <header class="flex items-center gap-3 bg-navy px-4 pb-3 pt-[max(14px,env(safe-area-inset-top))] text-white">
+    <img src="/favicon.png" alt="" width="40" height="40" class="size-10 rounded-full bg-yellow" />
+    <div class="leading-tight">
+      <b class="font-display text-[1.05rem] font-semibold">Avanti</b>
+      <small class="block text-[12.5px] text-[#aeb7cc]">Preparação mental para atletas</small>
+    </div>
+  </header>
+
+  <div class="msgs flex-1 overflow-y-auto px-3 py-4" data-msgs aria-live="polite"></div>
+  <div class="quick px-3 pb-[max(16px,env(safe-area-inset-bottom))] pt-2" data-quick></div>
+
+  <!-- Moldes (o JS clona): intro + uma resposta por opção -->
+  <template data-intro>
+    <p>Oi! Aqui é a <b>Avanti</b> 👋</p>
+    <p>{HEADLINE} <b>Quem é você?</b></p>
+  </template>
+  {options.map((o) => {
+    const d = dest(o.to);
+    return (
+      <template data-reply={o.key} data-chip={o.chip}>
+        <p>{o.reply}</p>
+        <div data-cta>
+          {o.to === "app" ? (
+            <Btn href={d.href} variant="yellow" icon="arrow" avanti class="w-full !justify-between !pl-5" data-go={d.id} />
+          ) : o.to === "fundador" ? (
+            <Btn href={d.href} variant="line" icon="whatsapp" class="w-full" data-go={d.id}>{d.cta}</Btn>
+          ) : (
+            <Btn href={d.href} variant="yellow" icon="arrow" class="w-full !justify-between !pl-5" data-go={d.id}>{d.cta}</Btn>
+          )}
+        </div>
+      </template>
+    );
+  })}
+</section>
+
+<style>
+  .conversa :global(.m) { max-width: 86%; margin-bottom: 8px; padding: 11px 14px; border-radius: 20px; font-size: 16px; line-height: 1.4; animation: pop 340ms var(--ease-spring) both; }
+  .conversa :global(.m p + p) { margin-top: 6px; }
+  .conversa :global(.them) { background: var(--color-surface); border-bottom-left-radius: 6px; border: 1px solid var(--color-line); }
+  .conversa :global(.me) { background: var(--color-yellow); margin-left: auto; border-bottom-right-radius: 6px; font-weight: 600; }
+  .conversa :global(.m [data-cta]) { margin-top: 12px; }
+  .conversa :global(.typing) { display: flex; gap: 5px; width: 62px; padding: 15px 16px; margin-bottom: 8px; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 20px; border-bottom-left-radius: 6px; }
+  .conversa :global(.typing i) { width: 7px; height: 7px; border-radius: 50%; background: var(--color-ink-3); animation: dot 1s infinite; }
+  .conversa :global(.typing i:nth-child(2)) { animation-delay: 0.15s; }
+  .conversa :global(.typing i:nth-child(3)) { animation-delay: 0.3s; }
+  .quick { display: flex; flex-wrap: wrap; gap: 8px; min-height: 76px; }
+  .quick :global(.chip) { min-height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid rgb(16 24 42 / 0.14); background: var(--color-surface); color: var(--color-ink); font-weight: 600; font-size: 15.5px; letter-spacing: -0.01em; box-shadow: 0 1px 2px rgb(16 24 42 / 0.06); transition: transform 160ms var(--ease-out); animation: pop 340ms var(--ease-spring) both; -webkit-tap-highlight-color: transparent; }
+  .quick :global(.chip:active) { transform: scale(0.95); }
+  .quick :global(.chip.ghost) { background: transparent; box-shadow: none; color: var(--color-ink-2); }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.94); } }
+  @keyframes dot { 50% { transform: translateY(-4px); opacity: 0.45; } }
+  @media (prefers-reduced-motion: reduce) { .conversa :global(.m), .quick :global(.chip) { animation: none; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-v="conversa"]');
+  if (root && document.documentElement.dataset.variant === "conversa") {
+    const box = root.querySelector<HTMLElement>("[data-msgs]")!;
+    const quick = root.querySelector<HTMLElement>("[data-quick]")!;
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const down = () => box.scrollTo({ top: box.scrollHeight, behavior: "smooth" });
+
+    const bubble = (cls: string, html?: string, tpl?: HTMLTemplateElement) => {
+      const m = document.createElement("div");
+      m.className = `m ${cls}`;
+      if (tpl) m.append(tpl.content.cloneNode(true)); else m.innerHTML = html ?? "";
+      box.append(m);
+      down();
+      return m;
+    };
+    async function them(tpl: HTMLTemplateElement, delay = 650) {
+      const t = document.createElement("div");
+      t.className = "typing";
+      t.innerHTML = "<i></i><i></i><i></i>";
+      box.append(t);
+      down();
+      await wait(delay);
+      t.remove();
+      bubble("them", undefined, tpl);
+    }
+    const chip = (label: string, fn: () => void, ghost = false) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip" + (ghost ? " ghost" : "");
+      b.textContent = label;
+      b.addEventListener("click", fn);
+      return b;
+    };
+
+    async function start() {
+      box.innerHTML = "";
+      quick.innerHTML = "";
+      const intro = root!.querySelector<HTMLTemplateElement>("[data-intro]")!;
+      // intro em dois balões
+      const frag = intro.content.querySelectorAll("p");
+      for (const p of frag) {
+        const t = document.createElement("template");
+        t.content.append(p.cloneNode(true));
+        await them(t, 600);
+      }
+      const replies = [...root!.querySelectorAll<HTMLTemplateElement>("template[data-reply]")];
+      for (const r of replies) {
+        quick.append(chip(r.dataset.chip!, async () => {
+          quick.innerHTML = "";
+          bubble("me", r.dataset.chip);
+          await them(r);
+          quick.append(chip("↺ Voltar ao início", start, true));
+          down();
+        }));
+      }
+    }
+    start();
+  }
+</script>

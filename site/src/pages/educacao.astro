@@ -9,7 +9,7 @@ import { LINKS, eduFaq } from "@/data/site";
 
 const title = "Avanti Educação · A psicologia do esporte não precisa ser solitária";
 const description =
-  "Comunidade gratuita para psicólogos e estudantes que querem trabalhar com atletas. Em breve: supervisão em grupo quinzenal (6 a 8 participantes) e cursos de extensão, primeiro para quem está na comunidade.";
+  "Comunidade para psicólogos e estudantes que querem trabalhar com atletas. Supervisão em grupo (6 a 8 participantes, quinzenal, R$ 300/mês) e individual, e cursos de extensão em breve.";
 
 const TALLY = `https://tally.so/embed/${LINKS.tallyForm}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
 
@@ -17,12 +17,6 @@ const TALLY = `https://tally.so/embed/${LINKS.tallyForm}?alignLeft=1&hideTitle=1
 const SEATS = 8;
 const YOU = 4; // a cadeira de baixo, de frente para quem lê
 
-const community = [
-  { t: "Gente no mesmo caminho", d: "Psicólogos e estudantes que querem trabalhar com atletas, trocando dúvidas, leituras e experiências." },
-  { t: "O esporte visto de dentro", d: "O Tiago, campeão mundial de vela, traz os desafios de quem compete e convida atletas para conversar sobre o lado mental." },
-  { t: "Aprender sempre", d: "Conversas e conteúdos sobre performance, bem-estar e autoconhecimento no esporte, o que a graduação costuma deixar de fora." },
-  { t: "As turmas abrem aqui primeiro", d: "A supervisão em grupo e os cursos de extensão chegam antes para quem está na comunidade." },
-];
 
 const jsonLd = [
   {
@@ -47,11 +41,7 @@ const jsonLd = [
     <section class="relative pt-24 md:pt-32">
       <div class="wrap grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
         <div class="text-center lg:text-left">
-          <a href="#comunidade" class="pill inline-flex items-center gap-2.5 rounded-full border border-line bg-surface py-2 pl-3 pr-4 text-[14px] font-medium text-ink-2">
-            <span class="live-dot" aria-hidden="true"></span>
-            <span><strong class="font-semibold text-ink">Comunidade aberta</strong><span class="hidden sm:inline"> para psicólogos e estudantes</span><span class="sm:hidden"> e gratuita</span></span>
-          </a>
-          <h1 class="mx-auto mt-6 max-w-[14ch] text-[clamp(2.6rem,1.3rem+3.8vw,4.6rem)] lg:mx-0">
+          <h1 class="mx-auto max-w-[14ch] text-[clamp(2.6rem,1.3rem+3.8vw,4.6rem)] lg:mx-0">
             A psicologia não precisa ser solitária
           </h1>
           <p class="lead mx-auto mt-5 max-w-[44ch] lg:mx-0">
@@ -61,10 +51,10 @@ const jsonLd = [
             <Btn href="#lista" icon="arrow">Entrar na lista</Btn>
             <Btn href={LINKS.comunidade} variant="line" icon="whatsapp">Entrar na comunidade</Btn>
           </div>
-          <p class="mt-5 text-[14px] text-ink-3">A comunidade é gratuita, num grupo do WhatsApp</p>
         </div>
 
-        <figure class="hero-photo relative mx-auto w-full max-w-[520px]">
+        <!-- No celular a foto sai: os dois aparecem com rosto na Metodologia. -->
+        <figure class="hero-photo relative mx-auto hidden w-full max-w-[520px] lg:block">
           <img src="/img/fundadores.webp" alt="Lucas Rosito e Tiago Quevedo, fundadores da Avanti" width="1200" height="1200" fetchpriority="high" class="aspect-[5/4] w-full rounded-[32px] object-cover md:rounded-panel" />
           <figcaption>
             <span class="sticker sticker-a"><strong>Lucas Rosito</strong>25+ anos na psicologia do esporte</span>
@@ -86,65 +76,40 @@ const jsonLd = [
 
         <div class="mt-12 grid gap-8 md:mt-16 md:grid-cols-2 md:gap-16">
           <p class="lead max-w-[46ch]">
-            O sigilo fecha a porta do consultório, e muita gente acaba fechando junto as próprias dúvidas. Com atletas, isso pesa mais: a faculdade forma para a clínica, mas quase não fala de performance, de bem-estar e de autoconhecimento dentro do esporte.
+            O sigilo fecha a porta do consultório, e <strong class="hl">muita gente acaba fechando junto as próprias dúvidas</strong>. Com atletas, isso pesa mais: a faculdade prepara para a clínica, mas <strong>quase não fala de performance, de bem-estar e de autoconhecimento dentro do esporte</strong>.
           </p>
-          <div>
-            <p class="lead max-w-[46ch]">
-              Foi o que mais ouvimos de psicólogos e estudantes que nos procuraram. Por isso criamos a comunidade: um lugar para pensar junto.
-            </p>
-            <p class="note mt-6 max-w-[52ch]">
-              E o esporte está pedindo mais da psicologia. O Time Brasil levou 10 psicólogos e 1 psiquiatra para os Jogos de Paris 2024<sup><a href="#fontes">1</a></sup>, e cerca de 1 em cada 3 atletas de elite relata sintomas de sofrimento psíquico<sup><a href="#fontes">2</a></sup>.
-            </p>
-          </div>
+          <p class="lead max-w-[46ch]">
+            Foi o que mais ouvimos de <strong>psicólogos e estudantes</strong> que nos procuraram. Por isso criamos a comunidade: <strong class="hl">um lugar para pensar junto</strong>.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- 3. Comunidade -->
-    <section id="comunidade" class="pt-24 md:pt-32">
-      <div class="wrap">
-        <div class="relative overflow-hidden rounded-[32px] bg-navy text-white md:rounded-panel">
-          <div class="relative p-7 sm:p-10 md:p-16">
-            <div class="grid gap-8 md:grid-cols-[1fr_1fr] md:items-end md:gap-14">
-              <h2 class="h2 max-w-[13ch]">Uma comunidade para pensar junto</h2>
-              <div>
-                <p class="max-w-[44ch] text-[17px] leading-relaxed text-white/75">
-                  Gratuita, no WhatsApp, para quem quer se desenvolver e trabalhar numa área da psicologia que só cresce.
-                </p>
-                <div class="mt-6">
-                  <Btn href={LINKS.comunidade} variant="yellow" icon="whatsapp">Entrar na comunidade</Btn>
-                </div>
-              </div>
-            </div>
-            <dl class="together mt-12 md:mt-16">
-              {community.map((c) => (
-                <div>
-                  <dt>{c.t}</dt>
-                  <dd>{c.d}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- 4. Supervisão: a roda -->
     <section id="supervisao" class="pt-24 md:pt-32">
       <div class="wrap grid items-center gap-12 md:grid-cols-[1fr_1fr] md:gap-16">
         <div>
-          <h2 class="h2 max-w-[13ch]">Supervisão em grupo</h2>
+          <h2 class="h2 max-w-[13ch]">Supervisão em grupo e individual</h2>
           <p class="lead mt-5 max-w-[44ch]">
-            Uma roda de 6 a 8 pessoas, a cada 15 dias, para levar os casos e os desafios do trabalho com atletas e pensar neles com a metodologia da Avanti.
+            Leve os casos e os desafios do trabalho com atletas e pense neles com a metodologia da Avanti. Em grupo, numa roda de 6 a 8 pessoas a cada 15 dias. Ou individual, só você e o supervisor.
           </p>
-          <dl class="specs mt-8">
-            <div><dt>Grupo</dt><dd>6 a 8 participantes</dd></div>
-            <div><dt>Encontros</dt><dd>Quinzenais</dd></div>
-            <div><dt>Primeira turma</dt><dd>Em breve</dd></div>
-            <div><dt>Quem entra</dt><dd>Quem está na comunidade</dd></div>
-          </dl>
-          <div class="mt-9">
-            <Btn href="#lista" icon="arrow">Quero a supervisão</Btn>
+          <div class="modes mt-8">
+            <div class="mode">
+              <div>
+                <p class="mode-name">Em grupo</p>
+                <p class="mode-note">Primeira turma em breve</p>
+              </div>
+              <p class="mode-price">R$ 300<small>/mês</small></p>
+              <Btn href="#lista" icon="arrow">Quero a supervisão em grupo</Btn>
+            </div>
+            <div class="mode">
+              <div>
+                <p class="mode-name">Individual</p>
+                <p class="mode-note">Valor e horários combinados com você</p>
+              </div>
+              <Btn href={LINKS.whatsappMsg("Olá! Sou da área da psicologia e quero saber mais sobre a supervisão individual da Avanti.")} variant="line" icon="whatsapp">Quero a supervisão individual</Btn>
+            </div>
           </div>
         </div>
 
@@ -241,13 +206,13 @@ const jsonLd = [
     </section>
 
     <!-- 8. Chamada: a comunidade -->
-    <section class="pt-24 md:pt-32">
+    <section id="comunidade" class="pt-24 md:pt-32">
       <div class="wrap">
         <div class="relative grid items-center overflow-hidden rounded-[32px] bg-yellow md:grid-cols-[1.05fr_0.95fr] md:rounded-panel">
           <div class="relative z-10 p-8 sm:p-10 md:p-16">
             <h2 class="h2 max-w-[13ch]">Ninguém precisa fazer isso sozinho</h2>
             <p class="mt-4 max-w-[40ch] text-[17px] leading-relaxed text-ink/80">
-              Entre no grupo gratuito da comunidade Avanti no WhatsApp. É lá que as turmas de supervisão e de cursos de extensão abrem primeiro.
+              Entre na comunidade Avanti no WhatsApp.
             </p>
             <div class="mt-8 flex flex-wrap items-center gap-3">
               <Btn href={LINKS.comunidade} icon="whatsapp">Entrar na comunidade</Btn>
@@ -270,12 +235,6 @@ const jsonLd = [
         </div>
         <Faq items={eduFaq} />
       </div>
-      <div class="wrap">
-        <ol id="fontes" class="sources">
-          <li><a href="https://www.otempo.com.br/sports/olimpiada/olimpiada-2024/2024/8/1/sob-os-holofotes-do-mundo--saude-mental-e-mais-um-adversario-par" target="_blank" rel="noopener">O Tempo, 2024: Time Brasil em Paris com 10 psicólogos e 1 psiquiatra</a></li>
-          <li><a href="https://www.mdpi.com/2075-4663/14/7/296" target="_blank" rel="noopener">Sports (MDPI), 2026: revisão que apoia a declaração de consenso do COI sobre saúde mental de atletas de elite</a></li>
-        </ol>
-      </div>
     </section>
 
   </main>
@@ -284,12 +243,6 @@ const jsonLd = [
 </Base>
 
 <style is:global>
-  .pill { transition: border-color 180ms; }
-  @media (hover: hover) { .pill:hover { border-color: rgb(16 24 42 / 0.25); } }
-  .live-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #1fae54; }
-  .live-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; background: #1fae54; opacity: 0.35; animation: live 2.2s var(--ease-out) infinite; }
-  @keyframes live { from { scale: 0.5; opacity: 0.45; } to { scale: 1.6; opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { .live-dot::after { animation: none; } }
 
   /* Hero: a foto dos fundadores com dois adesivos */
   .hero-photo figcaption { position: absolute; inset: 0; pointer-events: none; }
@@ -311,20 +264,21 @@ const jsonLd = [
   .alone p.alone-end { margin-top: 0.18em; color: var(--color-ink); }
   .alone-end span { background: linear-gradient(transparent 62%, var(--color-yellow) 62%, var(--color-yellow) 92%, transparent 92%); padding: 0 0.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   @media (max-width: 640px) { .alone p:nth-child(2), .alone p:nth-child(3) { padding-left: 0; } }
-  .note { font-size: 15px; line-height: 1.6; color: var(--color-ink-3); }
-  .note sup a { padding: 0 2px; font-weight: 650; color: var(--color-ink-2); }
 
-  /* Comunidade: quatro frases em grade, sem ícones */
-  .together { display: grid; gap: 0; border-top: 1px solid var(--color-navy-line); }
-  @media (min-width: 768px) { .together { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; } }
-  .together > div { padding: 24px 0; border-bottom: 1px solid var(--color-navy-line); }
-  .together dt { font-family: var(--font-display); font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.6rem); font-weight: 650; letter-spacing: -0.02em; }
-  .together dd { margin-top: 6px; max-width: 46ch; font-size: 16px; line-height: 1.55; color: rgb(255 255 255 / 0.68); }
 
-  /* Supervisão */
-  .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; max-width: 460px; }
-  .specs dt { font-size: 13px; font-weight: 650; color: var(--color-ink-3); }
-  .specs dd { margin-top: 2px; font-size: 16.5px; font-weight: 600; }
+
+
+  /* Supervisão: os dois modos, um embaixo do outro */
+  .modes { display: grid; max-width: 520px; border-top: 1px solid var(--color-line); }
+  .mode { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px 20px; padding: 22px 0; border-bottom: 1px solid var(--color-line); }
+  .mode > a { grid-column: 1 / -1; justify-self: start; }
+  .mode-name { font-family: var(--font-display); font-size: 21px; font-weight: 650; letter-spacing: -0.02em; }
+  .mode-note { margin-top: 2px; font-size: 14.5px; color: var(--color-ink-3); }
+  .mode-price { font-family: var(--font-display); font-size: 26px; font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mode-price small { margin-left: 2px; font-family: var(--font-sans); font-size: 14px; font-weight: 500; letter-spacing: 0; color: var(--color-ink-3); }
+  /* Destaques no texto: negrito e um marca-texto amarelo baixo */
+  .lead strong { font-weight: 650; color: var(--color-ink); }
+  .hl { background: linear-gradient(transparent 64%, var(--color-yellow-soft) 64%, var(--color-yellow-soft) 94%, transparent 94%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
   /* A roda: 8 cadeiras em volta da mesa, uma é sua */
   .roda-wrap { display: grid; justify-items: center; gap: 18px; }
@@ -395,9 +349,6 @@ const jsonLd = [
   .next-step p { max-width: 36ch; font-size: 15.5px; line-height: 1.45; }
   @keyframes pop { from { opacity: 0; translate: 0 10px; scale: 0.98; } }
 
-  .sources { display: grid; gap: 4px; margin-top: 20px; padding-left: 18px; list-style: decimal; font-size: 12.5px; color: var(--color-ink-3); }
-  .sources a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgb(16 24 42 / 0.2); }
-  @media (hover: hover) { .sources a:hover { color: var(--color-ink); } }
 </style>
 
 <script>

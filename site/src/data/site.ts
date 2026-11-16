@@ -146,7 +146,7 @@ export const appFaq = [
 export const APP_INCLUDED = [
   "Acesso completo ao app e aos cursos do método Avanti",
   "Report diário, Mental Score e algoritmo de alertas",
-  "Avaliação de perfil de atleta e testes psicológicos",
+  "Avaliações psicológicas e de perfil de atleta",
   "Relatórios mensais personalizados",
   "Campeonatos e metas",
   "Airton, assistente com IA",
@@ -157,16 +157,12 @@ export const APP_INCLUDED = [
 
 export const eduFaq = [
   {
-    q: "A comunidade é paga?",
-    a: "Não. A comunidade Avanti é um grupo gratuito no WhatsApp, aberto a psicólogos e estudantes de Psicologia que querem trabalhar com esporte.",
-  },
-  {
     q: "Estudante pode participar?",
     a: "Pode. A comunidade é para psicólogos e estudantes de Psicologia. No formulário, é só marcar que você é estudante.",
   },
   {
-    q: "Como vai funcionar a supervisão em grupo?",
-    a: "Em grupos de 6 a 8 participantes, com encontros quinzenais, a partir da metodologia da Avanti. As primeiras turmas abrem em breve, primeiro para quem está na comunidade.",
+    q: "Como vai funcionar a supervisão?",
+    a: "Em grupo, são 6 a 8 participantes com encontros quinzenais, por R$ 300 por mês; as primeiras turmas abrem em breve, primeiro para quem está na comunidade. A supervisão individual é combinada direto com a gente pelo WhatsApp.",
   },
   {
     q: "Quando abrem as turmas?",
