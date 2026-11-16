@@ -31,7 +31,7 @@ export interface Dest {
 
 /** Na ordem em que aparecem. */
 export const DESTS: Dest[] = [
-  { id: "app", label: "App Avanti", desc: "Treino mental no dia a dia, com dados e IA.", href: LINKS.plans, icon: "app", cta: "Seja Avanti" },
+  { id: "app", label: "App Avanti", desc: "Treino mental no dia a dia, com dados e IA.", href: "/app", icon: "app", cta: "Seja Avanti" },
   { id: "assessoria", label: "Assessoria individual", desc: "Acompanhamento com psicólogo, 100% online.", href: "/#assessoria", icon: "assessoria", cta: "Conhecer a assessoria" },
   { id: "educacao", label: "Educação", desc: "Comunidade, supervisão e cursos para psicólogos.", href: "/educacao", icon: "educacao", cta: "Entrar na comunidade" },
   { id: "organizacoes", label: "Organizações", desc: "Programas para clubes, federações e equipes.", href: "/#organizacoes", icon: "organizacoes", cta: "Ver programas" },
@@ -77,7 +77,7 @@ export const COMUNIDADE = {
   title: "Comunidade Avanti",
   cards: [
     { id: "site", label: "Avanti", desc: "Conheça tudo", href: "/", img: "/links/site-preview.webp", pos: "50% 0%" },
-    { id: "app", label: "Aplicativo", desc: "Para atletas", href: LINKS.plans, mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp", "/app/app-report-resumo-440.webp"] },
+    { id: "app", label: "Aplicativo", desc: "Para atletas", href: "/app", mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp", "/app/app-report-resumo-440.webp"] },
     { id: "assessoria", label: "Assessoria", desc: "Individual", href: "/#assessoria", img: "/links/assessoria.webp", pos: "50% 50%" },
     { id: "educacao", label: "Educação", desc: "Para psicólogos", href: "/educacao", img: "/img/fundadores.webp", pos: "50% 46%", zoom: 1.3 },
   ],
@@ -88,7 +88,7 @@ export const DESTAQUE = {
   tag: "App Avanti",
   title: "Treine a mente todo dia.",
   desc: "Rotina, report e seus dados em um só lugar.",
-  href: LINKS.plans,
+  href: "/app",
   mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp"],
   badge: "/links/membership.webp",
   stores: [
