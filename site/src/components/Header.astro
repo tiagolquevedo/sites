@@ -73,9 +73,10 @@ const {
   /* Faixa acima do menu: no celular o conteúdo não aparece passando por cima do notch. */
   .notch-cap {
     position: fixed; top: 0; left: 0; right: 0; z-index: 49;
-    height: calc(env(safe-area-inset-top, 0px) + 6px);
+    /* O Safari 26 do iPhone pinta a área do relógio com a cor de uma barra fixa larga no topo,
+       mas ignora barras finas demais (por isso 24px e não 6px). */
+    height: calc(env(safe-area-inset-top, 0px) + 24px);
     background: var(--color-paper);
-    box-shadow: 0 -200px 0 200px var(--color-paper);
     pointer-events: none;
   }
   .notch {
