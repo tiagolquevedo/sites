@@ -1,0 +1,678 @@
+---
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Faq from "@/components/Faq.astro";
+import Btn from "@/components/Btn.astro";
+import Check from "@/components/Check.astro";
+import TeamFlag from "@/components/TeamFlag.tsx";
+import CheckoutFly from "@/components/CheckoutFly.tsx";
+import { LINKS, PRICE, testimonials, appFaq, APP_INCLUDED as included } from "@/data/site";
+
+const title = "App Avanti · A preparação mental dos melhores atletas do mundo";
+const description =
+  "Autoconhecimento e dados para atletas: report diário, Mental Score, algoritmo de alertas, testes psicológicos, campeonatos e metas e os cursos do método Avanti. R$ 30/mês ou R$ 249/ano.";
+
+const ph = (name: string) => `/app/${name}-440.webp`;
+const PH_W = 440;
+const PH_H = 915;
+
+// Exemplos de avisos do algoritmo (o primeiro é texto real do app).
+const alerts = [
+  { t: "Dia acima do seu padrão!", d: "Você parece estar em um ótimo momento. Continue cuidando de si." },
+  { t: "Seu sono caiu nos últimos 3 dias", d: "Vale priorizar o descanso nesta reta antes do campeonato." },
+  { t: "Faltam 5 dias para o seu campeonato", d: "Revise as suas metas e o seu plano para a competição." },
+  { t: "Ansiedade acima do seu normal", d: "Separamos uma aula sobre como lidar com a pressão." },
+];
+
+const steps = [
+  { img: "app-report-bem-estar", t: "Registre o seu dia", d: "Os melhores atletas do mundo fazem journaling, e agora você também pode fazer. Em 2 minutos, anote treino, sono, humor, energia e emoções. A rotina dos melhores atletas do mundo, no seu bolso." },
+  { img: "app-dados-mental-score", t: "Enxergue os seus padrões", d: "O app aprende como você funciona e transforma a sua rotina em Mental Score, calendário e relatórios mensais." },
+  { img: "app-report-resumo", t: "Receba alertas e feedback", d: "O algoritmo acompanha o seu bem-estar dentro dos seus próprios padrões e avisa quando algo foge do normal." },
+  { img: "app-metas", t: "Prepare os seus campeonatos", d: "Defina metas, planeje e avalie cada competição. Tudo vira contexto para o próximo passo." },
+  { img: "app-compartilhar-semana", t: "Compartilhe a sua evolução", d: "O seu dia e a sua semana viram um card pronto para o story e para a comunidade Avanti. Quem te acompanha vê a sua constância e se inspira junto." },
+];
+
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    name: "Avanti",
+    operatingSystem: "iOS, Android",
+    applicationCategory: "HealthApplication",
+    description,
+    offers: [
+      { "@type": "Offer", price: "30.00", priceCurrency: "BRL", name: "Plano mensal" },
+      { "@type": "Offer", price: "249.00", priceCurrency: "BRL", name: "Plano anual" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: appFaq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+<Base title={title} description={description} path="/app" jsonLd={jsonLd}>
+  <Header
+    links={[
+      { label: "Como funciona", href: "#como-funciona" },
+      { label: "Recursos", href: "#recursos" },
+      { label: "Planos", href: "#planos" },
+      { label: "Perguntas", href: "#faq" },
+    ]}
+    cta="#planos"
+  />
+
+  <main>
+    <!-- 1. Hero -->
+    <section class="relative pt-24 md:pt-32">
+      <div class="wrap grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+        <div class="text-center lg:text-left">
+        <a href="#depoimentos" class="pill inline-flex items-center gap-3 rounded-full border border-line bg-surface py-1.5 pl-1.5 pr-4 text-[14px] font-medium text-ink-2">
+          <span class="flex -space-x-2">
+            {testimonials.slice(0, 3).map((t) => (
+              <img src={t.photo} alt="" width="28" height="28" class="size-7 rounded-full border-2 border-surface object-cover" />
+            ))}
+          </span>
+          <span><strong class="font-semibold text-ink">1.000+ atletas</strong> impactados</span>
+        </a>
+        <h1 class="mx-auto mt-6 max-w-[21ch] text-[clamp(2.2rem,1.2rem+2.6vw,3.55rem)] lg:mx-0">
+          A preparação mental dos melhores atletas do mundo, agora disponível para você
+        </h1>
+        <p class="lead mx-auto mt-5 max-w-[46ch] lg:mx-0">
+          Do amador ao profissional, unimos ciência, tecnologia e dados para a sua preparação mental ser feita sob medida.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+          <Btn href="#planos" avanti />
+          <Btn href="#como-funciona" variant="line">Como funciona</Btn>
+        </div>
+        <p class="mt-5 text-[14px] text-ink-3">7 dias de garantia, no iPhone e no Android</p>
+        </div>
+
+        <!-- O app avisando: a coisa viva da página -->
+        <div class="hero-stage relative mx-auto w-full max-w-[520px]">
+          <div class="absolute inset-x-0 bottom-0 top-[18%] rounded-[36px]  bg-yellow" aria-hidden="true"></div>
+          <img src="/app/app-home-vela-720.webp" alt="Tela inicial do app Avanti" width="720" height="1497" fetchpriority="high" class="relative mx-auto w-[62%] max-w-[300px] translate-y-6 drop-shadow-[0_24px_30px_rgb(16_24_42_/_0.18)]" />
+          <div class="alerts" data-alerts aria-live="polite">
+            {alerts.map((a, i) => (
+              <button type="button" class:list={["alert", i === 0 && "is-on"]} data-i={i} aria-label={`${a.t}. Próximo aviso`}>
+                <span class="alert-icon" aria-hidden="true"><img src="/logo-yellow.png" alt="" width="480" height="84" /></span>
+                <span class="min-w-0 text-left">
+                  <span class="alert-meta">Avanti · agora</span>
+                  <span class="alert-title">{a.t}</span>
+                  <span class="alert-desc">{a.d}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. A dor -->
+    <section class="pt-24 md:pt-36">
+      <div class="wrap">
+        <h2 class="h2 max-w-[30ch]">Você treina bem. Tem repertório. Só não sabe como destravar isso na hora do campeonato.</h2>
+        <p class="lead mt-5 max-w-[56ch]">Todo atleta reconhece isso, mas poucos conhecem os padrões psicológicos que derrubam o desempenho na hora da competição.</p>
+
+        <div class="pains mt-10 grid gap-4 md:mt-14 md:grid-cols-3 md:gap-5">
+          <article class="card pain">
+            <svg viewBox="0 0 240 110" class="pain-chart" aria-hidden="true">
+              <line x1="0" y1="100" x2="240" y2="100" class="axis" />
+              <rect x="34" y="18" width="62" height="82" rx="10" class="bar-good" />
+              <rect x="144" y="64" width="62" height="36" rx="10" class="bar-bad" />
+              <text x="65" y="12" class="lbl">treino</text>
+              <text x="175" y="56" class="lbl">competição</text>
+            </svg>
+            <h3>Você treina bem, mas compete mal</h3>
+            <p>O cenário muda e você também. A confiança cai e leva junto meses de preparação.</p>
+          </article>
+          <article class="card pain">
+            <svg viewBox="0 0 240 110" class="pain-chart" aria-hidden="true">
+              <line x1="0" y1="100" x2="240" y2="100" class="axis" />
+              <path d="M6 40 C 50 34, 90 30, 132 32 S 150 88, 176 90 S 220 84, 234 86" class="line-bad" />
+              <circle cx="150" cy="58" r="5" class="dot" />
+              <text x="160" y="22" class="lbl">a pressão chega</text>
+            </svg>
+            <h3>A pressão chega e você some</h3>
+            <p>Parece que você esqueceu como competir. O que ia bem no treino não sai na hora que importa.</p>
+          </article>
+          <article class="card pain">
+            <svg viewBox="0 0 240 110" class="pain-chart" aria-hidden="true">
+              <line x1="0" y1="100" x2="240" y2="100" class="axis" />
+              <path d="M6 70 L 36 26 L 66 80 L 96 34 L 126 88 L 156 22 L 186 76 L 216 40 L 234 62" class="line-bad" />
+            </svg>
+            <h3>Às vezes vai bem, mas falta constância</h3>
+            <p>Bons resultados vêm de consistência, e consistência começa pela mente.</p>
+          </article>
+        </div>
+
+        <div class="nope mt-12 rounded-card bg-surface p-7 md:mt-14 md:p-10" style="box-shadow:0 0 0 1px rgb(16 24 42 / 0.06)">
+          <div class="grid items-center gap-7 md:grid-cols-12">
+            <p class="font-display text-[clamp(1.4rem,1.1rem+1vw,2rem)] font-semibold leading-tight tracking-[-0.02em] md:col-span-5">Cansamos de protocolos genéricos. Por isso, criamos algo diferente.</p>
+            <ul class="flex flex-wrap gap-2.5 md:col-span-7 md:justify-end">
+              <li class="nope-chip">gurus e promessas milagrosas</li>
+              <li class="nope-chip">receitas prontas feitas com IA</li>
+              <li class="nope-chip">dicas e frases bonitas</li>
+              <li class="nope-chip">resultados rápidos e permanentes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. O método (Educação) -->
+    <section id="metodo" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="relative overflow-hidden rounded-[32px] border border-[#f1dc8a] bg-yellow-soft md:rounded-panel">
+          <div class="grid items-center md:grid-cols-12">
+            <div class="relative z-10 p-8 sm:p-10 md:col-span-7 md:p-14">
+              <p class="text-[15px] font-semibold text-ink-2">Avanti Academy</p>
+              <h2 class="h2 mt-2 max-w-[17ch]">Aprenda o método que formou campeões</h2>
+              <p class="lead mt-5 max-w-[48ch]">O mesmo modelo mental que já formou campeões mundiais, brasileiros, medalhistas olímpicos e pan-americanos, agora preparando a sua mente.</p>
+              <ul class="mt-7 space-y-3 text-[16px]">
+                <li class="flex gap-3"><Check />Aulas curtas sobre foco, ansiedade, pressão e emoções</li>
+                <li class="flex gap-3"><Check />Uma trilha feita para o seu perfil e o seu esporte</li>
+                <li class="flex gap-3"><Check />Neurociência aplicada ao que você vive no treino e na competição</li>
+              </ul>
+              <div class="mt-9">
+                <Btn href="#planos" avanti />
+              </div>
+            </div>
+            <div class="relative flex justify-center pb-0 md:col-span-5 md:h-full md:items-end">
+              <div class="courses" aria-hidden="true">
+                <span>Lidando com a pressão</span>
+                <span>Neurociência da mente cognitiva</span>
+                <span>Autocrítica e sabotagem</span>
+              </div>
+              <img src={ph("app-academy")} alt="Cursos da Avanti Academy dentro do app" width={PH_W} height={PH_H} loading="lazy" class="phone relative -mb-28 w-[58%] max-w-[260px] rotate-[3deg] md:-mb-24 md:mr-6 md:w-[70%]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Como funciona (o momento coreografado) -->
+    <section id="como-funciona" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-5 md:grid-cols-12 md:items-end">
+          <h2 class="h2 md:col-span-7">Autoconhecimento que vira dados</h2>
+          <p class="lead md:col-span-5">Um app que aprende os seus padrões e acompanha os seus estados mentais para cuidar de você e da sua evolução.</p>
+        </div>
+
+        <div class="steps mt-10 grid gap-10 md:mt-16 lg:grid-cols-2 lg:gap-16" data-steps>
+          <ol class="flex flex-col gap-6 lg:gap-0">
+            {steps.map((s, i) => (
+              <li class:list={["step", i === 0 && "is-on"]} data-step={i}>
+                <span class="step-n" aria-hidden="true">{i + 1}</span>
+                <div>
+                  <h3 class="text-[clamp(1.4rem,1.15rem+0.8vw,1.9rem)]">{s.t}</h3>
+                  <p class="mt-2 max-w-[44ch] text-ink-2">{s.d}</p>
+                  <img src={ph(s.img)} alt="" width={PH_W} height={PH_H} loading="lazy" class="phone mx-auto mt-6 w-[72%] max-w-[230px] lg:hidden" />
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div class="hidden lg:block">
+            <div class="steps-stage">
+              <div class="absolute inset-x-6 bottom-10 top-24 rounded-[36px] bg-yellow-soft" aria-hidden="true"></div>
+              {steps.map((s, i) => (
+                <img class:list={["phone steps-img", i === 0 && "is-on"]} src={ph(s.img)} alt={s.t} width={PH_W} height={PH_H} loading="lazy" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Recursos -->
+    <section id="recursos" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-6 md:grid-cols-12 md:items-end">
+          <h2 class="h2 max-w-[18ch] md:col-span-7">Um ecossistema de preparação mental na palma da mão</h2>
+          <div class="md:col-span-5 md:flex md:justify-end">
+            <Btn href="#planos" avanti />
+          </div>
+        </div>
+
+        <div class="tiles mt-10 grid gap-4 md:mt-14 md:grid-cols-12 md:gap-5">
+          <article class="tile border border-[#f1dc8a] bg-yellow-soft md:col-span-7">
+            <div class="tile-text">
+              <h3 class="tile-title">Testes psicológicos</h3>
+              <p>A avaliação de perfil de atleta mapeia os seus padrões e mostra onde focar.</p>
+            </div>
+            <div class="duo">
+              <img class="phone" src={ph("app-avaliacao-perfil")} alt="Início da avaliação de perfil de atleta" width={PH_W} height={PH_H} loading="lazy" />
+              <img class="phone" src={ph("app-avaliacao-resultado")} alt="Resultado da avaliação com os padrões do atleta" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile tile-dark bg-navy text-white md:col-span-5">
+            <div class="tile-text">
+              <h3 class="tile-title">Airton, a IA que te conhece</h3>
+              <p>Peça para ele avaliar seus dados, criar campeonatos, enxergar padrões e sugerir conteúdos.</p>
+            </div>
+            <div class="solo">
+              <img class="phone" src={ph("app-airton-chat")} alt="Conversa com o Airton, assistente com IA" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <article class="tile card md:col-span-5">
+            <div class="tile-text">
+              <h3 class="tile-title">Comunidade Avanti</h3>
+              <p>Consistência é mais fácil quando você não está sozinho. Siga atletas, compartilhe treinos e suba de nível.</p>
+            </div>
+            <div class="solo">
+              <img class="phone" src={ph("app-comunidade")} alt="Feed da comunidade com atletas subindo de nível" width={PH_W} height={PH_H} loading="lazy" />
+            </div>
+          </article>
+
+          <div class="flex flex-col gap-4 md:col-span-7 md:gap-5 max-md:contents">
+            <article class="tile card mini">
+              <div class="tile-text">
+                <h3 class="tile-title">Feito para você, não para todo mundo</h3>
+                <p>O app cruza o seu teste, os seus reports e os seus campeonatos e recomenda o que estudar em seguida.</p>
+              </div>
+              <div class="mock" aria-hidden="true">
+                <ul class="mock-src">
+                  <li><span class="mock-ok"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8.4 2.6 2.6L12 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Seu teste de perfil</span><em>autocrítica alta</em></li>
+                  <li><span class="mock-ok"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8.4 2.6 2.6L12 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Seus últimos reports</span><em>sono abaixo do normal</em></li>
+                  <li><span class="mock-ok"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8.4 2.6 2.6L12 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Seu próximo campeonato</span><em>em 12 dias</em></li>
+                </ul>
+                <div class="mock-rec">
+                  <span class="mock-play"><svg viewBox="0 0 16 16"><path d="M5.5 3.8v8.4L12 8z" fill="currentColor"/></svg></span>
+                  <span class="min-w-0"><small>Para você hoje</small><strong>Autocrítica e sabotagem</strong></span>
+                  <span class="mock-time">aula · 6 min</span>
+                </div>
+              </div>
+            </article>
+            <article class="tile card mini">
+              <div class="tile-text">
+                <h3 class="tile-title">Seu psicólogo e seu treinador na mesma página</h3>
+                <p>Conecte quem te acompanha e eles enxergam os seus dados para te ajudar melhor. Você escolhe quem vê e o quê.</p>
+              </div>
+              <div class="mock">
+                <p class="mock-label">Quem vê os seus dados</p>
+                <button type="button" class="share" role="switch" aria-checked="true">
+                  <span class="share-av">P</span>
+                  <span class="min-w-0"><strong>Seu psicólogo</strong><small>Reports, Mental Score e testes</small></span>
+                  <span class="toggle" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="share" role="switch" aria-checked="true">
+                  <span class="share-av">T</span>
+                  <span class="min-w-0"><strong>Seu treinador</strong><small>Treinos, metas e campeonatos</small></span>
+                  <span class="toggle" aria-hidden="true"></span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Time Avanti: a bandeira (Cloth Banner do MyUI) -->
+    <section class="pt-24 md:pt-32">
+      <div class="wrap grid items-center gap-6 md:grid-cols-12 md:gap-10">
+        <div class="md:col-span-5">
+          <h2 class="h2 max-w-[14ch]">Você não treina sozinho</h2>
+          <p class="lead mt-5 max-w-[42ch]">Quem assina entra para o time Avanti: atletas do amador ao profissional que registram o dia, compartilham treinos e sobem de nível juntos.</p>
+          <div class="mt-8"><Btn href="#planos" avanti /></div>
+        </div>
+        <div class="-mx-5 md:col-span-7 md:mx-0">
+          <TeamFlag client:visible />
+          <p class="mt-1 text-center text-[13px] text-ink-3">Puxe a bandeira.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Depoimentos: os atletas de referência, com foto grande -->
+    <section id="depoimentos" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="grid gap-6 md:grid-cols-12 md:items-end">
+          <h2 class="h2 md:col-span-7">Quem usa, aprova</h2>
+          <p class="lead md:col-span-5">Atletas de ponta e um treinador olímpico que já usam a Avanti na rotina.</p>
+        </div>
+        <div class="athletes mt-10 md:mt-14" data-athletes>
+          {testimonials.map((t) => {
+            const [sport, feat] = t.role.split(" · ");
+            return (
+              <figure class="athlete">
+                <div class="athlete-photo">
+                  <img src={t.portrait} alt={`${t.name}, ${t.role}`} width="560" height="700" loading="lazy" />
+                </div>
+                <blockquote>“{t.quote}”</blockquote>
+                <figcaption>
+                  <strong>{t.name}</strong>
+                  <span>{sport}</span>
+                  <em class="athlete-feat">{feat}</em>
+                </figcaption>
+              </figure>
+            );
+          })}
+        </div>
+        <div class="athlete-dots" data-dots aria-hidden="true">
+          {testimonials.map((_, i) => <span class:list={[i === 0 && "is-on"]}></span>)}
+        </div>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Btn href="#planos" avanti />
+          <Btn href={LINKS.testimonialsApp} variant="line">Ver todos os depoimentos do app</Btn>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Planos (o cartão "Membership Avanti" do site atual) -->
+    <section id="planos" class="pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="text-center">
+          <h2 class="h2 mx-auto max-w-[24ch]">Escolha o seu plano e entre para o time de atletas da Avanti</h2>
+        </div>
+
+        <article class="member mx-auto mt-10 max-w-[600px] md:mt-14" data-checkout data-sel="year" data-href-year={LINKS.checkoutYearly} data-href-month={LINKS.checkoutMonthly}>
+          <div class="member-ribbon" aria-hidden="true"><span><img src="/logo-navy.png" alt="" width="480" height="84" /></span></div>
+          <h3 class="member-title">Membership Avanti</h3>
+
+          <div class="member-row">
+            <div class="member-price">
+              <p class="if-year"><span>{PRICE.year}</span> / ano</p>
+              <p class="if-month"><span>{PRICE.month}</span> / mês</p>
+            </div>
+            <div class="member-switch">
+              <span class="member-opt" data-for="month">Mensal</span>
+              <button type="button" class="member-toggle" role="switch" aria-checked="true" aria-label="Plano anual"><span></span></button>
+              <span class="member-opt" data-for="year">Anual</span>
+            </div>
+          </div>
+          <div class="member-save">
+            <p class="if-year">Economize R$ 111 (31%) com a assinatura anual</p>
+            <p class="if-month">Cancele quando quiser, sem multa</p>
+          </div>
+
+          <p class="member-incl">O que está incluso:</p>
+          <ul class="member-list">
+            {included.map((it) => (
+              <li>
+                <span class="member-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10182a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                {it}
+              </li>
+            ))}
+          </ul>
+
+          <CheckoutFly client:visible href={LINKS.checkoutYearly} height={220} />
+          <p class="member-note"><strong>7 dias de garantia.</strong> Se não gostar, cancele e não cobramos nada.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 8. FAQ -->
+    <section id="faq" class="pt-24 md:pt-32">
+      <div class="wrap grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+        <div class="md:sticky md:top-28 md:self-start">
+          <h2 class="h2">Perguntas sobre o app</h2>
+          <p class="lead mt-4 max-w-[34ch]">Ficou alguma dúvida? Chama o fundador no WhatsApp.</p>
+          <Btn href={LINKS.whatsappMsg("Olá! Tenho uma dúvida sobre o app Avanti.")} variant="line" icon="whatsapp" class="mt-7">Fale com o fundador</Btn>
+        </div>
+        <Faq items={appFaq} />
+      </div>
+    </section>
+
+    <!-- 9. Chamada final -->
+    <section class="pb-6 pt-24 md:pt-32">
+      <div class="wrap">
+        <div class="relative overflow-hidden rounded-[32px] bg-yellow md:rounded-panel">
+          <div class="relative z-10 p-8 sm:p-10 md:max-w-[58%] md:p-16">
+            <h2 class="h2 max-w-[14ch]">Comece hoje a treinar a sua mente</h2>
+            <p class="mt-4 max-w-[40ch] text-[17px] leading-relaxed text-ink/80">7 dias de garantia. Sem compromisso. Cancele quando quiser.</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <Btn href="#planos" avanti />
+              <Btn href={LINKS.whatsapp} variant="glass" icon="whatsapp">Fale com o fundador</Btn>
+            </div>
+          </div>
+          <img src="/app/app-conquista-elite-720.webp" alt="" width="720" height="1497" loading="lazy" class="pointer-events-none hidden rotate-[6deg] md:absolute md:block md:-bottom-40 md:right-[9%] md:m-0 md:w-[24%] md:max-w-[280px]" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  .pill { transition: border-color 180ms, translate 260ms var(--ease-spring); }
+  @media (hover: hover) { .pill:hover { border-color: rgb(16 24 42 / 0.25); translate: 0 -1px; } }
+
+  /* Avisos do algoritmo sobre o celular do hero */
+  .hero-stage { padding-bottom: 0; overflow: hidden; border-radius: 0 0 36px 36px; }
+  .alerts { position: absolute; left: 50%; top: 22%; width: min(92%, 380px); translate: -50% 0; height: 96px; }
+  .alert {
+    position: absolute; inset: 0 0 auto; display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 13px 14px; border-radius: 22px; text-align: left; cursor: pointer;
+    background: rgb(255 255 255 / 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06), 0 18px 40px -16px rgb(16 24 42 / 0.45);
+    opacity: 0; translate: 0 -18px; scale: 0.94;
+    transition: opacity 420ms var(--ease-out), translate 760ms var(--ease-spring), scale 760ms var(--ease-spring);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .alert.is-on { opacity: 1; translate: 0 0; scale: 1; z-index: 2; }
+  .alert.is-out { opacity: 0; translate: 0 22px; scale: 0.96; transition-duration: 320ms, 520ms, 520ms; }
+  .alert:active { scale: 0.98; }
+  .alert-icon { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 11px; background: var(--color-navy); }
+  .alert-icon img { width: 32px; height: auto; }
+  .alert-meta { display: block; font-size: 11.5px; color: var(--color-ink-3); }
+  .alert-title { display: block; font-size: 14.5px; font-weight: 650; line-height: 1.25; color: var(--color-ink); }
+  .alert-desc { display: block; margin-top: 1px; font-size: 13px; line-height: 1.35; color: var(--color-ink-2); }
+  @media (prefers-reduced-motion: reduce) { .alert { transition: opacity 200ms; translate: none; scale: none; } }
+
+  /* Dores */
+  .pain { padding: 26px; }
+  .pain h3 { margin-top: 22px; font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); }
+  .pain p { margin-top: 8px; color: var(--color-ink-2); }
+  .pain-chart { width: 100%; height: auto; display: block; padding: 18px 14px 6px; border-radius: 18px; background: var(--color-paper); overflow: visible; }
+  .pain-chart .axis { stroke: var(--color-line); stroke-width: 2; }
+  .pain-chart .bar-good { fill: var(--color-navy); }
+  .pain-chart .bar-bad { fill: var(--color-yellow); }
+  .pain-chart .line-bad { fill: none; stroke: var(--color-yellow); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .pain-chart .dot { fill: var(--color-navy); }
+  .pain-chart .lbl { font: 600 12px var(--font-sans); fill: var(--color-ink-3); text-anchor: middle; }
+  .nope-chip { position: relative; padding: 9px 16px; border-radius: 999px; background: var(--color-paper); color: var(--color-ink-2); font-size: 15px; font-weight: 550; }
+  .nope-chip::after { content: ""; position: absolute; left: 12px; right: 12px; top: 54%; height: 1.5px; border-radius: 2px; background: rgb(16 24 42 / 0.45); }
+
+  /* Método */
+  .courses { position: absolute; z-index: 2; left: 6%; top: 18%; display: none; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .courses span { padding: 8px 14px; border-radius: 14px; background: #fff; font-size: 14px; font-weight: 600; box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06), 0 10px 22px -14px rgb(16 24 42 / 0.5); }
+  .courses span:nth-child(2) { margin-left: 18px; }
+  .courses span:nth-child(3) { margin-left: 6px; }
+  @media (min-width: 1024px) { .courses { display: flex; } }
+
+  /* Como funciona */
+  .step { display: flex; gap: 18px; }
+  .step-n { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px; background: var(--color-paper-2); font-family: var(--font-display); font-weight: 650; transition: background-color 260ms, color 260ms, scale 400ms var(--ease-spring); }
+  @media (min-width: 1024px) {
+    .step { min-height: 52vh; align-items: center; opacity: 0.35; transition: opacity 400ms var(--ease-out); }
+    .step:first-child { min-height: 46vh; align-items: flex-start; padding-top: 8vh; }
+    .step.is-on { opacity: 1; }
+    .step.is-on .step-n { background: var(--color-yellow); scale: 1.08; }
+    .steps-stage { position: sticky; top: 14vh; height: 72vh; display: grid; place-items: center; }
+    .steps-img { position: absolute; width: auto; height: 86%; max-height: 640px; opacity: 0; translate: 0 18px; transition: opacity 420ms var(--ease-out), translate 600ms var(--ease-spring); }
+    .steps-img.is-on { opacity: 1; translate: 0 0; }
+  }
+  @media (max-width: 1023px) {
+    .step .step-n { background: var(--color-yellow); }
+    /* No celular e tablet, os passos viram cartões que se arrastam. */
+    .steps ol { flex-direction: row; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; margin-inline: -20px; padding: 0 20px 6px; scrollbar-width: none; }
+    .steps ol::-webkit-scrollbar { display: none; }
+    .step { flex: none; width: min(84%, 360px); flex-direction: column; gap: 14px; scroll-snap-align: start; padding: 24px 24px 0; overflow: hidden; border-radius: var(--radius-card); background: var(--color-surface); box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06); }
+    .step .phone { margin-bottom: -40px; }
+  }
+  /* Dores: carrossel no celular */
+  @media (max-width: 767px) {
+    .pains { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; margin-inline: -20px; padding: 0 20px 6px; scrollbar-width: none; }
+    .pains::-webkit-scrollbar { display: none; }
+    .pains > .pain { flex: none; width: 82%; scroll-snap-align: start; }
+  }
+
+  /* Recursos */
+  .tile.mini { flex: 1; padding-bottom: 30px; }
+  .mock { margin: 22px 28px 0; padding: 14px; border-radius: 20px; background: var(--color-paper); display: grid; gap: 8px; }
+  @media (min-width: 768px) { .mock { margin: 24px 34px 0; } }
+  .mock-label { font-size: 12.5px; font-weight: 600; color: var(--color-ink-3); padding: 2px 4px 2px; }
+  .mock-src { display: grid; gap: 6px; }
+  .mock-src li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: var(--color-surface); font-size: 14px; font-weight: 600; }
+  .mock-src em { margin-left: auto; font-style: normal; font-weight: 500; font-size: 13px; color: var(--color-ink-3); white-space: nowrap; }
+  .mock-ok { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 8px; background: var(--color-yellow-soft); color: var(--color-ink); flex: none; }
+  .mock-ok svg { width: 14px; height: 14px; }
+  .mock-rec { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: var(--color-navy); color: #fff; }
+  .mock-rec small { display: block; font-size: 12px; color: rgb(255 255 255 / 0.6); }
+  .mock-rec strong { display: block; font-size: 15px; font-weight: 650; }
+  .mock-play { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--color-yellow); color: var(--color-ink); flex: none; }
+  .mock-play svg { width: 16px; height: 16px; }
+  .mock-time { margin-left: auto; font-size: 12.5px; color: rgb(255 255 255 / 0.6); white-space: nowrap; }
+  @media (max-width: 420px) { .mock-src em, .mock-time { display: none; } }
+  .share { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 16px; background: var(--color-surface); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: scale 160ms var(--ease-out); }
+  .share:active { scale: 0.98; }
+  .share strong { display: block; font-size: 14.5px; font-weight: 650; }
+  .share small { display: block; font-size: 12.5px; color: var(--color-ink-3); }
+  .share-av { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: var(--color-navy); color: var(--color-yellow); font-family: var(--font-display); font-weight: 650; flex: none; }
+  .toggle { position: relative; margin-left: auto; width: 44px; height: 26px; border-radius: 999px; background: var(--color-line); flex: none; transition: background-color 220ms; }
+  .toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgb(16 24 42 / 0.25); transition: translate 420ms var(--ease-spring); }
+  .share[aria-checked="true"] .toggle { background: var(--color-yellow); }
+  .share[aria-checked="true"] .toggle::after { translate: 18px 0; }
+
+  /* Depoimentos: cartões com a foto do atleta */
+  .athletes { display: grid; gap: 16px; }
+  @media (min-width: 640px) { .athletes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .athletes { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; } }
+  .athlete { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-card); background: var(--color-navy); color: #fff; }
+  .athlete-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+  .athlete-photo img { width: 100%; height: 100%; object-fit: cover; transition: scale 700ms var(--ease-out); }
+  .athlete-photo::after { content: ""; position: absolute; inset: auto 0 0; height: 45%; background: linear-gradient(transparent, var(--color-navy)); }
+  .athlete figcaption .athlete-feat { display: inline-flex; margin-top: 12px; padding: 6px 12px; border-radius: 999px; background: var(--color-yellow); color: var(--color-ink); font-size: 13px; font-weight: 650; font-style: normal; }
+  .athlete blockquote { position: relative; z-index: 1; margin-top: -34px; padding: 0 22px; font-size: 15.5px; line-height: 1.5; font-weight: 500; }
+  .athlete figcaption { margin: auto 22px 0; padding: 18px 0 22px; border-top: 1px solid rgb(255 255 255 / 0.14); margin-top: 18px; }
+  .athlete figcaption strong { display: block; font-family: var(--font-display); font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
+  .athlete figcaption span { display: block; margin-top: 2px; font-size: 14px; color: var(--color-yellow); }
+  @media (hover: hover) { .athlete:hover .athlete-photo img { scale: 1.04; } }
+  .athlete-dots { display: none; }
+  /* No celular: carrossel que anda sozinho e dá para arrastar com o dedo. */
+  @media (max-width: 639px) {
+    .athletes { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; margin-inline: -20px; padding: 0 20px 4px; scrollbar-width: none; }
+    .athletes::-webkit-scrollbar { display: none; }
+    .athlete { flex: none; width: 80%; scroll-snap-align: start; }
+    .athlete-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+    .athlete-dots span { width: 7px; height: 7px; border-radius: 99px; background: var(--color-line); transition: width 300ms var(--ease-out), background-color 300ms; }
+    .athlete-dots span.is-on { width: 22px; background: var(--color-ink); }
+  }
+
+  /* Depoimentos */
+
+  /* Planos: cartão "Membership Avanti" */
+  .member { position: relative; overflow: hidden; padding: 32px 28px 26px; border-radius: 20px; background: rgb(16 24 42 / 0.04); border: 1px solid rgb(16 24 42 / 0.09); }
+  @media (max-width: 640px) { .member { padding: 26px 18px 22px; } }
+  .member-ribbon { position: absolute; top: 0; right: 0; width: 96px; height: 96px; overflow: hidden; pointer-events: none; }
+  .member-ribbon span { position: absolute; top: 20px; right: -26px; width: 124px; padding: 6px 0; rotate: 45deg; background: var(--color-yellow); display: grid; place-items: center; }
+  .member-ribbon img { height: 9px; width: auto; }
+  .member-title { padding-right: 56px; font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); letter-spacing: -0.02em; white-space: nowrap; }
+  .member-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 26px; }
+  .member-price { display: grid; font-size: 15px; color: rgb(16 24 42 / 0.5); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .member-price span { font-family: var(--font-display); font-size: clamp(2.3rem, 1.6rem + 2.4vw, 3rem); font-weight: 650; line-height: 1; letter-spacing: -0.03em; color: var(--color-yellow); }
+  .member-switch { display: flex; align-items: center; gap: 8px; padding-bottom: 6px; font-size: 13px; }
+  .member-opt { color: rgb(16 24 42 / 0.5); cursor: pointer; transition: color 200ms; }
+  .member[data-sel="year"] .member-opt[data-for="year"], .member[data-sel="month"] .member-opt[data-for="month"] { color: var(--color-ink); font-weight: 650; }
+  .member-toggle { position: relative; width: 44px; height: 24px; flex: none; border-radius: 12px; background: rgb(16 24 42 / 0.15); transition: background-color 250ms; cursor: pointer; }
+  .member-toggle span { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 0.3); transition: translate 320ms var(--ease-spring); }
+  .member-toggle[aria-checked="true"] { background: var(--color-yellow); }
+  .member-toggle[aria-checked="true"] span { translate: 20px 0; }
+  .member-toggle:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  .member-save { display: grid; min-height: 20px; margin-top: 8px; font-size: 13.5px; font-weight: 600; color: #0f8a5f; }
+  .member-price > p, .member-save > p { grid-area: 1 / 1; }
+  .member .if-year, .member .if-month { transition: opacity 240ms var(--ease-out), translate 380ms var(--ease-spring), visibility 0s 240ms; }
+  .member[data-sel="year"] .if-year, .member[data-sel="month"] .if-month { transition-delay: 0s; }
+  .member[data-sel="year"] .if-month, .member[data-sel="month"] .if-year { opacity: 0; translate: 0 6px; visibility: hidden; }
+  .member-incl { margin-top: 18px; font-size: 13px; font-weight: 700; color: rgb(16 24 42 / 0.55); }
+  .member-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; font-size: 15px; }
+  @media (max-width: 640px) { .member-list { font-size: 14px; } }
+  .member-list li { display: flex; align-items: center; gap: 10px; }
+  .member-check { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex: none; border-radius: 50%; background: var(--color-yellow); }
+  /* O palco do botão sobe por trás da lista: o botão fica no lugar do CTA e decola por cima. */
+  .member .checkout-fly { position: relative; z-index: 1; margin: -118px -28px 0; }
+  @media (max-width: 640px) { .member .checkout-fly { margin: -118px -18px 0; } }
+  .checkout-fly { display: flex; align-items: flex-end; justify-content: center; container-type: inline-size; }
+  .checkout-fly > .btn { margin-bottom: 8px; }
+  .member-note { margin-top: 14px; text-align: center; font-size: 13px; color: rgb(16 24 42 / 0.55); }
+  .member-note strong { color: var(--color-ink); font-weight: 650; }
+</style>
+
+<script>
+  // Carrossel dos atletas no celular: avança sozinho; o dedo pausa.
+  {
+    const row = document.querySelector<HTMLElement>("[data-athletes]");
+    const dots = [...document.querySelectorAll<HTMLElement>("[data-dots] span")];
+    if (row) {
+      const cards = [...row.children] as HTMLElement[];
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const mobile = matchMedia("(max-width: 639px)");
+      let visible = false, holdUntil = 0;
+      new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.5 }).observe(row);
+      const current = () => Math.round(row.scrollLeft / (cards[1].offsetLeft - cards[0].offsetLeft));
+      row.addEventListener("scroll", () => { const i = current(); dots.forEach((d, k) => d.classList.toggle("is-on", k === i)); }, { passive: true });
+      row.addEventListener("touchstart", () => (holdUntil = performance.now() + 6000), { passive: true });
+      setInterval(() => {
+        if (still || !mobile.matches || !visible || document.hidden || performance.now() < holdUntil) return;
+        const next = (current() + 1) % cards.length;
+        row.scrollTo({ left: cards[next].offsetLeft - cards[0].offsetLeft, behavior: "smooth" });
+      }, 4200);
+    }
+  }
+
+  // Cartão de planos: chave Mensal/Anual (tocar no nome também troca).
+  document.querySelectorAll<HTMLElement>("[data-checkout]").forEach((card) => {
+    const sw = card.querySelector<HTMLButtonElement>(".member-toggle");
+    if (!sw) return;
+    const set = (year: boolean) => {
+      card.dataset.sel = year ? "year" : "month";
+      sw.setAttribute("aria-checked", String(year));
+      sw.setAttribute("aria-label", year ? "Plano anual" : "Plano mensal");
+    };
+    sw.addEventListener("click", () => set(card.dataset.sel !== "year"));
+    card.querySelectorAll<HTMLElement>(".member-opt").forEach((o) => o.addEventListener("click", () => set(o.dataset.for === "year")));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>(".share").forEach((b) =>
+    b.addEventListener("click", () => b.setAttribute("aria-checked", String(b.getAttribute("aria-checked") !== "true")))
+  );
+
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Avisos do hero: um por vez; tocar mostra o próximo.
+  const box = document.querySelector<HTMLElement>("[data-alerts]");
+  if (box) {
+    const items = [...box.querySelectorAll<HTMLElement>(".alert")];
+    let i = 0, timer = 0, visible = true;
+    const show = (n: number) => {
+      const cur = items[i];
+      cur.classList.remove("is-on");
+      cur.classList.add("is-out");
+      setTimeout(() => cur.classList.remove("is-out"), 360);
+      i = n % items.length;
+      items[i].classList.add("is-on");
+    };
+    const loop = () => { clearInterval(timer); if (!still) timer = window.setInterval(() => { if (visible && !document.hidden) show(i + 1); }, 5200); };
+    items.forEach((el) => el.addEventListener("click", () => { show(i + 1); loop(); }));
+    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(box);
+    loop();
+  }
+
+  // Como funciona: o passo no meio da tela troca a tela do celular.
+  const wrap = document.querySelector<HTMLElement>("[data-steps]");
+  if (wrap) {
+    const steps = [...wrap.querySelectorAll<HTMLElement>(".step")];
+    const imgs = [...wrap.querySelectorAll<HTMLElement>(".steps-img")];
+    const set = (n: number) => {
+      steps.forEach((s, k) => s.classList.toggle("is-on", k === n));
+      imgs.forEach((s, k) => s.classList.toggle("is-on", k === n));
+    };
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) set(Number((e.target as HTMLElement).dataset.step)); }), { rootMargin: "-45% 0px -45% 0px" });
+    steps.forEach((s) => io.observe(s));
+  }
+</script>

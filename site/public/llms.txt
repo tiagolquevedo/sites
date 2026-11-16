@@ -1,0 +1,17 @@
+# Avanti
+
+> Um ecossistema completo de psicologia do esporte: app, assessoria individual com psicólogos e educação para profissionais. Mais de 1.000 atletas impactados, do amador ao profissional.
+
+## Soluções
+- App Avanti (iOS e Android): report diário em 2 minutos, seus dados e o Mental Score, Airton (assistente com IA), card de constância para compartilhar e cursos da Avanti Academy. A assinatura é feita pelo site: R$ 30/mês ou R$ 249/ano (https://www.avantiperformance.com.br/app#planos).
+- Assessoria individual: acompanhamento online com psicólogo, integrado ao app.
+- Educação para psicólogos e estudantes: comunidade gratuita no WhatsApp e, em breve, supervisão em grupo (6 a 8 participantes, encontros quinzenais) e cursos de extensão, com abordagem clínica aplicada ao esporte (TCC e Terapia do Esquema) (https://www.avantiperformance.com.br/educacao).
+- Organizações: programas para clubes, federações e equipes.
+
+## Fundadores
+- Lucas Rosito, psicólogo, há mais de 25 anos acompanhando atletas; 2x psicólogo do Time Brasil (COB).
+- Tiago Quevedo, ex-atleta profissional; 6x campeão brasileiro, campeão sul-americano e mundial.
+
+## Contato
+- WhatsApp: +55 51 99792-9080
+- Site: https://www.avantiperformance.com.br

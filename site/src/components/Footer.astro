@@ -1,0 +1,42 @@
+---
+import { LINKS } from "@/data/site";
+---
+<footer class="pb-10 pt-16">
+  <div class="wrap">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="col-span-2 md:col-span-1">
+        <img src="/logo-navy.png" alt="Avanti" width="120" height="21" class="h-[21px] w-auto" />
+        <p class="mt-4 max-w-[30ch] text-[15px] text-ink-2">Um ecossistema completo de psicologia do esporte.</p>
+      </div>
+      <nav aria-label="Soluções" class="text-[15px]">
+        <p class="font-semibold">Soluções</p>
+        <ul class="mt-4 space-y-2.5 text-ink-2">
+          <li><a href="/#app" class="hover:text-ink">App</a></li>
+          <li><a href="/#assessoria" class="hover:text-ink">Assessoria</a></li>
+          <li><a href="/educacao" class="hover:text-ink">Educação</a></li>
+          <li><a href="/#organizacoes" class="hover:text-ink">Organizações</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Empresa" class="text-[15px]">
+        <p class="font-semibold">Empresa</p>
+        <ul class="mt-4 space-y-2.5 text-ink-2">
+          <li><a href="/#quem-somos" class="hover:text-ink">Quem somos</a></li>
+          <li><a href="/#depoimentos" class="hover:text-ink">Depoimentos</a></li>
+          <li><a href="/#faq" class="hover:text-ink">Perguntas frequentes</a></li>
+          <li><a href={LINKS.whatsapp} target="_blank" rel="noopener" class="hover:text-ink">Contato</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Legal" class="text-[15px]">
+        <p class="font-semibold">Legal</p>
+        <ul class="mt-4 space-y-2.5 text-ink-2">
+          <li><a href="/termos-de-uso" class="hover:text-ink">Termos de uso</a></li>
+          <li><a href="/politica-de-privacidade" class="hover:text-ink">Política de privacidade</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="mt-12 flex flex-col gap-2 text-[13px] text-ink-3 sm:flex-row sm:justify-between">
+      <p>© {new Date().getFullYear()} Avanti. Todos os direitos reservados.</p>
+      <p>CNPJ 62.401.678/0001-33</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,12 @@
+# Cloudflare Pages: documentos legais (mesmos endereços do site atual)
+/termos-de-uso            /Avanti-Termos-de-Uso.pdf            200
+/politica-de-privacidade  /Avanti-Politica-de-Privacidade.pdf  200
+/docs                     /docs.html                           200
+
+# Endereços antigos
+/lp        /app  301
+/lp.html   /app  301
+/app.html  /app  301
+
+# Assessoria: por enquanto, WhatsApp com mensagem pronta
+/assessoria  https://wa.me/5551997929080?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20assessoria%20individual%20da%20Avanti.  302
