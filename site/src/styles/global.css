@@ -208,3 +208,10 @@
   .cycle img.is-on { opacity: 1; }
 
 }
+
+/* Botões principais das páginas do site sem sombra. A página de links (html[data-variant]) mantém. */
+html:not([data-variant]) .btn, html:not([data-variant]) .btn:hover { box-shadow: none; }
+/* Cards, header e celulares também sem sombra nas páginas do site. */
+html:not([data-variant]) :is(.card, .quote, .notch-body, .sol-card, .step, .alert) { box-shadow: none; }
+html:not([data-variant]) .nope { box-shadow: none !important; } /* tinha sombra inline */
+html:not([data-variant]) :is(.phone, [class*="drop-shadow"]) { filter: none; }
