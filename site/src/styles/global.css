@@ -193,12 +193,6 @@
   .phone { display: block; height: auto; filter: drop-shadow(0 16px 20px rgb(16 24 42 / 0.16)); transition: rotate 600ms var(--ease-spring), translate 600ms var(--ease-spring); }
   .tile-dark .phone { filter: drop-shadow(0 16px 24px rgb(0 0 0 / 0.35)); }
   .duo .phone { width: min(47%, 240px); }
-    /* No celular, a vitrine vira um carrossel de cartões (arrasta com o dedo). */
-  @media (max-width: 767px) {
-    .tiles { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 20px; margin-inline: -20px; padding: 0 20px 6px; scrollbar-width: none; }
-    .tiles::-webkit-scrollbar { display: none; }
-    .tiles > .tile { flex: none; width: 86%; scroll-snap-align: start; }
-  }
   .duo .phone:first-child { rotate: -3deg; translate: 8px 0; z-index: 1; }
   .duo .phone:last-child { rotate: 3deg; translate: -8px 10px; }
   .solo .phone { width: min(58%, 224px); }

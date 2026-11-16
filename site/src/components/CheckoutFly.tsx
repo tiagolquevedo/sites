@@ -14,7 +14,7 @@ interface Props {
 }
 
 const HANDOFF = 520; // o botão decola no palco e, aí, vira foguete
-const ROCKET = 1050; // tempo até sair pelo topo da tela
+const ROCKET = 1400; // tempo até sair pelo topo da tela
 const COVER = 1250; // o amarelo descendo do topo
 const HOLD = 1000; // a logo parada antes de abrir o pagamento
 const SMOKE = "208,201,182";
@@ -105,7 +105,7 @@ export default function CheckoutFly({ href, theme = "light", height = 210, label
     trail.style.cssText = `position:fixed;left:${x - r.width * 0.22}px;top:0;width:${r.width * 0.44}px;height:${r.bottom}px;z-index:9998;transform-origin:bottom;transform:scaleY(0);border-radius:999px;background:linear-gradient(to top,rgba(${SMOKE},0),rgba(${SMOKE},.85) 30%,rgba(${SMOKE},.6));filter:blur(10px);pointer-events:none;`;
     document.body.appendChild(trail);
 
-    const ease = "cubic-bezier(.55,0,.85,.35)"; // começa devagar e dispara
+    const ease = "cubic-bezier(.55,0,.75,.55)"; // começa devagar e acelera, sem disparar demais
     ship.animate(
       [
         { transform: "translate(0,0) rotate(0deg)" },

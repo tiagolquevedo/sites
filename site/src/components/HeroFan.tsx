@@ -23,7 +23,7 @@ export default function HeroFan() {
     <FanGallery
       key={small ? "s" : "l"}
       className="hero-fan"
-      items={small ? [items[1], items[0], items[2]] : items}
+      items={small ? [items[0], items[1], items[4]] : items}
       entrance="rise"
       trigger="auto"
       cardWidth={232}
