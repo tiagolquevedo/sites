@@ -1,0 +1,167 @@
+---
+import Btn from "@/components/Btn.astro";
+import SolutionIcon from "@/components/SolutionIcon.astro";
+import { DESTS, dest, HEADLINE, PROOF } from "@/data/links";
+const app = dest("app");
+const assessoria = dest("assessoria");
+const educacao = dest("educacao");
+const fundador = dest("fundador");
+---
+<section data-v="stories" class="stories relative mx-auto h-[100svh] w-full max-w-[480px] overflow-hidden bg-navy text-white" aria-roledescription="carrossel">
+  <div class="bars" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+
+  <!-- 1. Quem somos -->
+  <article class="slide on" data-slide>
+    <div class="glow"></div>
+    <img src="/logo-yellow.png" alt="Avanti" width="140" height="25" class="logo" />
+    <div class="body">
+      <h1 class="text-[3rem] text-white">{HEADLINE}</h1>
+      <p class="mt-4 text-[1.05rem] text-[#aeb7cc]">Para atleta, treinador, psicólogo e organização.</p>
+      <p class="mt-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-[14px] font-medium"><span class="size-2 rounded-full bg-yellow"></span>{PROOF}</p>
+    </div>
+    <p class="hint">toque para avançar</p>
+  </article>
+
+  <!-- 2. App -->
+  <article class="slide" data-slide>
+    <div class="glow"></div>
+    <div class="phone"><img src="/app/app-home-vela-440.webp" alt="Tela inicial do app Avanti" width="440" height="915" /></div>
+    <div class="body">
+      <p class="tag">App Avanti</p>
+      <h2 class="mt-3 text-[2.5rem] text-white">Sua mente também treina.</h2>
+      <p class="mt-3 text-[#aeb7cc]">{app.desc}</p>
+      <Btn href={app.href} variant="yellow" icon="arrow" avanti class="cta !h-14 w-full !justify-between !pl-6 !text-[17px]" data-go="app" />
+    </div>
+  </article>
+
+  <!-- 3. Assessoria -->
+  <article class="slide" data-slide>
+    <img src="/img/natacao.webp" alt="" class="photo" width="1400" height="1050" />
+    <div class="shade"></div>
+    <div class="body">
+      <p class="tag">Assessoria individual</p>
+      <h2 class="mt-3 text-[2.5rem] text-white">Acompanhamento de perto.</h2>
+      <p class="mt-3 text-[#d4dae8]">{assessoria.desc}</p>
+      <Btn href={assessoria.href} variant="yellow" icon="arrow" class="cta !h-14 w-full !justify-between !pl-6 !text-[17px]" data-go="assessoria">{assessoria.cta}</Btn>
+    </div>
+  </article>
+
+  <!-- 4. Educação -->
+  <article class="slide" data-slide>
+    <img src="/img/fundadores.webp" alt="" class="photo" width="1400" height="1050" />
+    <div class="shade"></div>
+    <div class="body">
+      <p class="tag">Educação</p>
+      <h2 class="mt-3 text-[2.5rem] text-white">Para quem cuida da mente de quem compete.</h2>
+      <p class="mt-3 text-[#d4dae8]">{educacao.desc}</p>
+      <Btn href={educacao.href} variant="yellow" icon="arrow" class="cta !h-14 w-full !justify-between !pl-6 !text-[17px]" data-go="educacao">{educacao.cta}</Btn>
+    </div>
+  </article>
+
+  <!-- 5. Menu final: nunca termina em beco sem saída -->
+  <article class="slide" data-slide data-last>
+    <div class="glow"></div>
+    <div class="body list">
+      <h2 class="text-[2.3rem] text-white">Para onde você quer ir?</h2>
+      <nav class="mt-5 flex flex-col gap-3">
+        {DESTS.filter((d) => d.icon).map((d) => (
+          <a href={d.href} data-go={d.id} class="row">
+            <span class="grid size-11 flex-none place-items-center rounded-2xl bg-yellow text-ink"><SolutionIcon name={d.icon!} /></span>
+            <b class="flex-1 font-display text-[1.05rem] font-semibold tracking-tight">{d.label}</b>
+            <span class="chev" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+          </a>
+        ))}
+      </nav>
+      <Btn href={fundador.href} variant="line" icon="whatsapp" class="cta mt-4 w-full" data-go="fundador">{fundador.cta}</Btn>
+    </div>
+  </article>
+
+  <!-- Zonas de toque: esquerda volta, direita avança. Segurar pausa. -->
+  <button class="tap tap-l" type="button" aria-label="Anterior"></button>
+  <button class="tap tap-r" type="button" aria-label="Próximo"></button>
+</section>
+
+<style>
+  .stories { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  .bars { position: absolute; z-index: 30; top: max(14px, env(safe-area-inset-top)); left: 14px; right: 14px; display: flex; gap: 5px; }
+  .bars i { flex: 1; height: 3.5px; border-radius: 4px; background: rgb(255 255 255 / 0.25); overflow: hidden; }
+  .bars b { display: block; height: 100%; width: 0; background: var(--color-yellow); }
+  .bars i.done b { width: 100%; }
+  .bars i.run b { animation: fill var(--dur, 6s) linear forwards; animation-play-state: var(--state, running); }
+  @keyframes fill { to { width: 100%; } }
+
+  .slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 22px max(28px, env(safe-area-inset-bottom)); opacity: 0; pointer-events: none; transition: opacity 280ms; }
+  .slide.on { opacity: 1; pointer-events: none; }
+  .slide.on .cta, .slide.on .row { pointer-events: auto; }
+  .slide > * { position: relative; z-index: 2; }
+  .glow { position: absolute !important; inset: 0; z-index: 0 !important; background: radial-gradient(90% 55% at 80% 0%, rgb(252 196 8 / 0.28), transparent 65%), radial-gradient(80% 50% at 0% 100%, rgb(60 90 190 / 0.35), transparent 70%); }
+  .photo { position: absolute !important; inset: 0; z-index: 0 !important; width: 100%; height: 100%; object-fit: cover; }
+  .shade { position: absolute !important; inset: 0; z-index: 1 !important; background: linear-gradient(to top, rgb(14 26 54 / 0.96) 30%, rgb(14 26 54 / 0.15) 75%); }
+  .logo { position: absolute !important; top: 62px; left: 22px; height: 24px; width: auto; }
+  .slide > .body { padding-top: 24px; z-index: 25; }
+  .body.list { padding-top: 0; }
+  .tag { display: inline-block; background: var(--color-yellow); color: var(--color-ink); font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; }
+  .cta { margin-top: 22px; }
+  .hint { margin-top: 28px; font-size: 13px; color: #8d97b0; text-align: center; }
+
+  .phone { align-self: center; width: min(54%, 230px); margin-bottom: 22px; filter: drop-shadow(0 24px 40px rgb(0 0 0 / 0.5)); }
+  .phone img { width: 100%; height: auto; display: block; }
+
+  .row { display: flex; align-items: center; gap: 14px; min-height: 66px; padding: 10px 14px; border-radius: 22px; background: rgb(255 255 255 / 0.08); border: 1px solid rgb(255 255 255 / 0.12); transition: transform 160ms var(--ease-out), background 160ms; -webkit-tap-highlight-color: transparent; }
+  .row:active { transform: scale(0.97); background: rgb(255 255 255 / 0.16); }
+  .chev { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: rgb(255 255 255 / 0.12); flex: none; }
+
+  .tap { position: absolute; z-index: 20; top: 0; bottom: 0; background: none; border: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  .tap-l { left: 0; width: 32%; }
+  .tap-r { right: 0; width: 68%; }
+  /* Os CTAs ficam acima das zonas de toque */
+  .slide .cta, .slide .row { z-index: 25; }
+  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-v="stories"]');
+  if (root && document.documentElement.dataset.variant === "stories") {
+    const slides = [...root.querySelectorAll<HTMLElement>("[data-slide]")];
+    const bars = [...root.querySelectorAll<HTMLElement>(".bars i")];
+    const DUR = 6000;
+    let i = 0, timer = 0, left = DUR, startedAt = 0;
+
+    const run = () => {
+      clearTimeout(timer);
+      if (i >= slides.length - 1) return; // o último é o menu: fica parado
+      startedAt = performance.now();
+      timer = window.setTimeout(() => go(i + 1), left);
+    };
+    function go(n: number) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      left = DUR;
+      slides.forEach((s, k) => s.classList.toggle("on", k === i));
+      bars.forEach((b, k) => {
+        b.className = k < i ? "done" : "";
+        b.style.setProperty("--state", "running");
+      });
+      void root!.offsetWidth;
+      if (i < slides.length - 1) bars[i].className = "run"; else bars[i].className = "done";
+      run();
+    }
+    const pause = () => {
+      clearTimeout(timer);
+      left = Math.max(0, left - (performance.now() - startedAt));
+      bars[i]?.style.setProperty("--state", "paused");
+    };
+    const resume = () => { bars[i]?.style.setProperty("--state", "running"); run(); };
+
+    const l = root.querySelector<HTMLElement>(".tap-l")!;
+    const r = root.querySelector<HTMLElement>(".tap-r")!;
+    let held = false, downAt = 0;
+    for (const t of [l, r]) {
+      t.addEventListener("pointerdown", () => { downAt = performance.now(); held = false; pause(); const h = setTimeout(() => (held = true), 220); t.addEventListener("pointerup", () => clearTimeout(h), { once: true }); });
+      t.addEventListener("pointercancel", resume);
+    }
+    l.addEventListener("pointerup", () => { held ? resume() : go(i - 1); });
+    r.addEventListener("pointerup", () => { held ? resume() : go(i + 1); });
+    document.addEventListener("visibilitychange", () => (document.hidden ? pause() : resume()));
+    go(0);
+  }
+</script>

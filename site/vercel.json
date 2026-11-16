@@ -1,14 +1,49 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/docs", "destination": "/docs.html" },
-    { "source": "/termos-de-uso", "destination": "/Avanti-Termos-de-Uso.pdf" },
-    { "source": "/politica-de-privacidade", "destination": "/Avanti-Politica-de-Privacidade.pdf" }
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "bio.avantiperformance.com.br"
+        }
+      ],
+      "destination": "/links"
+    },
+    {
+      "source": "/docs",
+      "destination": "/docs.html"
+    },
+    {
+      "source": "/termos-de-uso",
+      "destination": "/Avanti-Termos-de-Uso.pdf"
+    },
+    {
+      "source": "/politica-de-privacidade",
+      "destination": "/Avanti-Politica-de-Privacidade.pdf"
+    }
   ],
   "redirects": [
-    { "source": "/lp", "destination": "/app", "permanent": true },
-    { "source": "/lp.html", "destination": "/app", "permanent": true },
-    { "source": "/app.html", "destination": "/app", "permanent": true },
-    { "source": "/assessoria", "destination": "https://wa.me/5551997929080?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20assessoria%20individual%20da%20Avanti.", "permanent": false }
+    {
+      "source": "/lp",
+      "destination": "/app",
+      "permanent": true
+    },
+    {
+      "source": "/lp.html",
+      "destination": "/app",
+      "permanent": true
+    },
+    {
+      "source": "/app.html",
+      "destination": "/app",
+      "permanent": true
+    },
+    {
+      "source": "/assessoria",
+      "destination": "https://wa.me/5551997929080?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20assessoria%20individual%20da%20Avanti.",
+      "permanent": false
+    }
   ]
 }

@@ -7,14 +7,16 @@ interface Props {
   icon?: "arrow" | "whatsapp" | "none";
   avanti?: boolean;
   class?: string;
+  [attr: `data-${string}`]: string | undefined;
 }
-const { href, variant = "ink", avanti = false, class: cls } = Astro.props;
+const { href, variant = "ink", avanti = false, class: cls, ...rest } = Astro.props;
 const icon = Astro.props.icon ?? (avanti ? "arrow" : "none");
 const external = /^https?:/.test(href);
 const logo = variant === "ink" ? "/logo-yellow.png" : "/logo-navy.png";
 ---
 <a
   href={href}
+  {...rest}
   class:list={["btn", `btn-${variant}`, icon === "arrow" && "has-arrow", cls]}
   target={external ? "_blank" : undefined}
   rel={external ? "noopener" : undefined}

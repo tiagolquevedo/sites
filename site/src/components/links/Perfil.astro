@@ -1,0 +1,295 @@
+---
+import { siInstagram, siYoutube, siWhatsapp, siApple, siGoogleplay } from "simple-icons";
+import Btn from "@/components/Btn.astro";
+import { PERFIL, SOCIAL, COMUNIDADE, DESTAQUE, VIDA_DE_ATLETA, NEWSLETTER } from "@/data/links";
+
+const brand: Record<string, string> = { instagram: siInstagram.path, youtube: siYoutube.path, whatsapp: siWhatsapp.path };
+const storeIcon: Record<string, string> = { appstore: siApple.path, googleplay: siGoogleplay.path };
+const hasVideo = !!DESTAQUE.video;
+// O "A" da marca Avanti (vetor extraído da logo oficial; viewBox 0 0 1200 907).
+const A_PATH = "M824.5 540.7L682.3 197.2L540.1 540.8L824.5 540.7ZM468.8 709.9L387.2 907L176 906.9C175.1 906.9 172.6 906.1 171.9 905.9C171 905.5 171.1 902.6 171.6 901.4L261 700.7L0.3 700.2L105.9 540.7L332.3 540.7L573.4 -0.2L952.6 -0.2C960.4 -0.3 966.5 -0.2 973.3 1.9L868.3 166.2L1198.4 904.4C1192.9 907 1186.7 907.1 1179.7 906.9L976.1 906.9L894.8 710L468.8 709.9Z";
+---
+<section data-v="perfil" class="perfil mx-auto w-full max-w-[480px] flex-col">
+  <!-- Topo: foto baixa, a logo sobe -->
+  <header class="hero">
+    <div class="hero-slides" data-seconds={PERFIL.coverSeconds} aria-hidden="true">
+      {PERFIL.covers.map((src, i) => (
+        <img src={src} alt="" class={`hero-img${i === 0 ? " on" : ""}`} width="1000" height="571" fetchpriority={i === 0 ? "high" : "auto"} />
+      ))}
+    </div>
+    <div class="hero-fade"></div>
+    <button type="button" class="share" data-share aria-label="Compartilhar esta página">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="5" cy="12" r="1.9" /><circle cx="12" cy="12" r="1.9" /><circle cx="19" cy="12" r="1.9" /></svg>
+    </button>
+
+    <div class="who">
+      <img src="/links/avatar.webp" alt="Avanti" width="76" height="76" class="avatar" />
+      <h1 class="name">
+        <span class="pearl">{PERFIL.name}</span>
+        <svg class="seal" viewBox="0 0 24 24" aria-label="Perfil oficial" role="img">
+          <path fill="#fcc408" d="M12 1.6l2.5 1.7 3-.1 1.2 2.8 2.7 1.3-.2 3 1.6 2.5-1.6 2.5.2 3-2.7 1.3-1.2 2.8-3-.1L12 22.4l-2.5-1.7-3 .1-1.2-2.8-2.7-1.3.2-3L1.2 11.2l1.6-2.5-.2-3 2.7-1.3 1.2-2.8 3 .1z" />
+          <path d="M7.7 12.2l3 3 5.6-6" fill="none" stroke="#10182a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </h1>
+      <p class="bio">{PERFIL.bio}</p>
+
+      <nav class="social" aria-label="Redes">
+        {SOCIAL.map((s) => (
+          <a href={s.href} data-go={`social_${s.id}`} aria-label={s.label} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+            {brand[s.id] ? (
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d={brand[s.id]} /></svg>
+            ) : (
+              <svg viewBox="0 0 1200 907" width="19" height="15" fill="currentColor" aria-hidden="true"><path d={A_PATH} /></svg>
+            )}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </header>
+
+  <div class="stack">
+    <!-- Cartões da comunidade: foto no topo, título e uma linha -->
+    <section>
+      <div class="row">
+        {COMUNIDADE.cards.map((c) => (
+          <a href={c.href} data-go={c.id} class="pf-tile">
+            <span class="pf-media">
+              {"mocks" in c && c.mocks ? (
+                <span class="mini" aria-hidden="true">
+                  {c.mocks.map((m, i) => <img src={m} alt="" width="440" height="915" loading="lazy" class={`n${i}`} />)}
+                </span>
+              ) : (
+                <img src={c.img} alt="" width="400" height="300" loading="lazy" style={`object-position:${c.pos};transform:scale(${c.zoom ?? 1});transform-origin:${c.pos}`} />
+              )}
+            </span>
+            <span class="pf-text">
+              <b>{c.label}<svg viewBox="0 0 16 16" width="9" height="9" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg></b>
+              <small>{c.desc}</small>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Destaque: app (mockups hoje, vídeo depois) -->
+    <article class="feature">
+      <div class="feature-bg"></div>
+      <div class="mocks" aria-hidden="true">
+        {DESTAQUE.mocks.map((m, i) => <img src={m} alt="" width="440" height="915" loading="lazy" class={`m${i}`} />)}
+      </div>
+      <div class="feature-body">
+        <p class="tagrow"><img src={DESTAQUE.badge} alt="" width="22" height="22" class="badge" loading="lazy" /><span class="kick">{DESTAQUE.tag}</span></p>
+        <h2>{DESTAQUE.title}</h2>
+        <div class="actions">
+          <Btn href={DESTAQUE.href} variant="yellow" icon="arrow" avanti class="feature-btn" data-go="destaque_app" />
+          {DESTAQUE.stores.map((st) => (
+            <span class="store" aria-hidden="true" title={st.label}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d={storeIcon[st.id]} /></svg>
+            </span>
+          ))}
+        </div>
+      </div>
+      {hasVideo && <span class="play" aria-hidden="true"></span>}
+    </article>
+
+    <!-- Vida de Atleta: foto à direita, degradê à esquerda -->
+    <a href={VIDA_DE_ATLETA.href} data-go="youtube_vida_de_atleta" target="_blank" rel="noopener" class="video" aria-label={`${VIDA_DE_ATLETA.title}: assistir no YouTube`}>
+      <img src={VIDA_DE_ATLETA.img} alt="" width="960" height="541" loading="lazy" />
+      <span class="video-text">
+        <span class="kick">{VIDA_DE_ATLETA.title}</span>
+        <span class="vt">“{VIDA_DE_ATLETA.overlay}”</span>
+        <span class="pill"><svg viewBox="0 0 24 24" width="13" height="13" fill="#ff0033"><path d={siYoutube.path} /></svg>Assistir<svg viewBox="0 0 16 16" width="9" height="9" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+      </span>
+    </a>
+
+    <!-- Newsletter -->
+    <div class="news">
+      <span class="news-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m4 7.5 8 5.5 8-5.5" /></svg>
+      </span>
+      <b>{NEWSLETTER.title}</b>
+      {NEWSLETTER.url ? (
+        <Btn href={NEWSLETTER.url} variant="ink" icon="arrow" class="news-btn" data-go="newsletter">Entrar</Btn>
+      ) : (
+        <span class="soon">Em breve</span>
+      )}
+    </div>
+
+    <footer class="foot">
+      <span>© {new Date().getFullYear()} Avanti</span><i>·</i>
+      <a href="/politica-de-privacidade">Privacidade</a><i>·</i>
+      <a href="/termos-de-uso">Termos</a>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .perfil { min-height: 100svh; background: var(--color-paper); overflow-x: hidden; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+
+  /* ---------- topo: foto baixa, logo sobe ---------- */
+  .hero { position: relative; }
+  .hero-slides { position: absolute; inset: 0 0 auto 0; height: 214px; overflow: hidden; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0; transition: opacity 1.4s ease-in-out; }
+  .hero-img.on { opacity: 1; }
+  .hero-fade { position: absolute; inset: 0 0 auto 0; height: 214px; background: linear-gradient(to bottom, rgb(246 244 238 / 0) 40%, rgb(246 244 238 / 0.55) 68%, rgb(246 244 238 / 0.92) 88%, var(--color-paper) 100%); }
+  .share { position: absolute; z-index: 3; top: max(10px, env(safe-area-inset-top)); right: 12px; width: 36px; height: 36px; border-radius: 12px; border: 1px solid rgb(255 255 255 / 0.5); background: rgb(255 255 255 / 0.28); color: #fff; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; place-items: center; -webkit-tap-highlight-color: transparent; }
+  .share:active { transform: scale(0.92); }
+  .who { position: relative; z-index: 2; padding: 90px 16px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .avatar { width: 76px; height: 76px; border-radius: 999px; border: 3px solid var(--color-paper); box-shadow: 0 8px 20px -10px rgb(16 24 42 / 0.55); object-fit: cover; background: var(--color-navy); }
+  .name { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 1.4rem; letter-spacing: -0.035em; }
+  .seal { width: 19px; height: 19px; flex: none; translate: 0 1px; }
+  .bio { margin-top: 4px; max-width: 34ch; font-size: 13px; line-height: 1.35; color: var(--color-ink-2); }
+  .social { margin-top: 10px; display: flex; gap: 10px; }
+  .social a { width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; background: var(--color-surface); border: 1px solid var(--color-line); color: var(--color-ink); box-shadow: 0 1px 2px rgb(16 24 42 / 0.06); transition: transform 180ms var(--ease-spring), background 160ms; -webkit-tap-highlight-color: transparent; }
+  .social a:active { transform: scale(0.9); background: var(--color-yellow); }
+
+  /* ---------- pilha ---------- */
+  .stack { display: flex; flex-direction: column; gap: 10px; padding: 0 14px; }
+  .label { font-size: 12.5px; font-weight: 700; color: var(--color-ink-2); margin: 0 4px 6px; font-family: var(--font-sans); }
+  .kick { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-yellow); }
+
+  /* cartões da fileira: foto no topo, título + linha */
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .pf-tile { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: var(--color-surface); box-shadow: 0 10px 18px -14px rgb(16 24 42 / 0.55); transition: transform 180ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+  .pf-tile:active { transform: scale(0.96); }
+  .pf-media { display: block; position: relative; height: 58px; background: var(--color-navy); }
+  .pf-media { overflow: hidden; }
+  .pf-media > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pf-media:has(.mini) { background: radial-gradient(90% 100% at 50% 0%, #22346a, var(--color-navy)); }
+  .mini { position: absolute; inset: 0; }
+  .mini img { position: absolute; width: 28%; top: 12px; border-radius: 4px 4px 0 0; box-shadow: 0 6px 10px -3px rgb(0 0 0 / 0.6); border: 1px solid rgb(255 255 255 / 0.14); border-bottom: 0; }
+  .mini .n0 { left: 4%; top: 16px; rotate: -4deg; }
+  .mini .n1 { left: 36%; top: 9px; z-index: 2; }
+  .mini .n2 { right: 4%; top: 16px; rotate: 4deg; }
+  .pf-text { display: block; padding: 7px 4px 8px 7px; min-width: 0; }
+  .pf-text b { display: flex; align-items: center; justify-content: space-between; gap: 2px; font-family: var(--font-display); font-weight: 600; font-size: 0.71rem; letter-spacing: -0.03em; line-height: 1.1; white-space: nowrap; }
+  .pf-text b svg { flex: none; color: var(--color-ink-3); }
+  .pf-text small { display: block; margin-top: 2px; font-size: 9px; letter-spacing: -0.015em; line-height: 1.2; color: var(--color-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* cartões grandes: texto fino, botões discretos */
+  .feature, .video { position: relative; border-radius: 14px; overflow: hidden; background: var(--color-navy); color: #fff; box-shadow: 0 16px 26px -20px rgb(16 24 42 / 0.8); }
+  .feature h2, .vt { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em; color: #fff; }
+
+  .feature { height: 128px; }
+  .feature-bg { position: absolute; inset: 0; background: radial-gradient(70% 100% at 95% 0%, rgb(252 196 8 / 0.26), transparent 65%), radial-gradient(60% 90% at 100% 100%, rgb(70 100 200 / 0.3), transparent 70%), var(--color-navy); }
+  .mocks { position: absolute; right: 10px; top: 16px; width: 38%; height: 100%; }
+  .mocks img { position: absolute; width: 48%; border-radius: 8px 8px 0 0; box-shadow: 0 12px 20px -8px rgb(0 0 0 / 0.7); border: 1.5px solid rgb(255 255 255 / 0.1); border-bottom: 0; }
+  .mocks .m0 { right: 32%; top: 6px; rotate: -6deg; }
+  .mocks .m1 { right: 0; top: 16px; rotate: 5deg; }
+  .feature-body { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 0 14px; max-width: 66%; }
+  .tagrow { display: flex; align-items: center; gap: 6px; }
+  .badge { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgb(255 255 255 / 0.5); }
+  .feature h2 { font-size: 1.02rem; line-height: 1.08; }
+  .actions { display: flex; align-items: center; gap: 6px; }
+  .actions :global(.feature-btn) { flex: none; border-radius: 10px !important; height: 34px !important; padding: 0 5px 0 13px !important; gap: 9px !important; font-size: 12.5px !important; font-weight: 600 !important; box-shadow: none !important; }
+  .actions :global(.feature-btn .btn-arrow) { width: 24px; height: 24px; border-radius: 7px; }
+  .actions :global(.feature-btn .btn-arrow svg) { width: 12px; height: 12px; }
+  .store { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: #fff; border: 1px solid rgb(255 255 255 / 0.22); background: rgb(255 255 255 / 0.06); -webkit-tap-highlight-color: transparent; transition: transform 160ms var(--ease-out); }
+  .store { pointer-events: none; }
+  .play { position: absolute; z-index: 3; right: 12px; bottom: 12px; width: 36px; height: 36px; border-radius: 10px; background: rgb(14 26 54 / 0.7); border: 1.5px solid #fff; }
+
+  /* Vida de Atleta: foto à direita, degradê à esquerda */
+  .video { display: block; height: 128px; -webkit-tap-highlight-color: transparent; transition: transform 180ms var(--ease-out); }
+  .video:active { transform: scale(0.985); }
+  .video img { position: absolute; right: 0; top: 0; width: 68%; height: 100%; object-fit: cover; object-position: 60% 30%; display: block; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 48%); mask-image: linear-gradient(to right, transparent 0%, #000 48%); }
+  .video-text { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; padding: 0 16px; max-width: 62%; }
+  .vt { font-size: 1.02rem; line-height: 1.05; text-transform: uppercase; color: var(--color-yellow); letter-spacing: -0.01em; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 9px; border-radius: 8px; background: rgb(255 255 255 / 0.14); border: 1px solid rgb(255 255 255 / 0.2); font-size: 11.5px; font-weight: 600; color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+
+  /* ---------- newsletter ---------- */
+  .news { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 8px; border-radius: 14px; background: var(--color-paper-2); border: 1px solid var(--color-line); }
+  .news-ico { flex: none; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--color-surface); }
+  .news b { flex: 1; min-width: 0; font-family: var(--font-display); font-weight: 600; font-size: 0.92rem; letter-spacing: -0.02em; line-height: 1.1; }
+  .news :global(.news-btn) { border-radius: 10px; height: 36px; padding: 0 5px 0 14px; font-size: 13px; }
+  .news :global(.news-btn .btn-arrow) { width: 26px; height: 26px; border-radius: 7px; }
+  .soon { flex: none; height: 32px; padding: 0 13px; margin-right: 4px; display: inline-grid; place-items: center; border-radius: 10px; background: var(--color-surface); border: 1px dashed rgb(16 24 42 / 0.22); font-size: 12px; font-weight: 600; color: var(--color-ink-3); }
+
+  .foot { display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 11.5px; color: var(--color-ink-3); }
+  .foot a { padding: 6px 2px; text-decoration: underline; text-underline-offset: 3px; }
+  .foot i { font-style: normal; }
+
+  /* Telas baixas (iPhone SE e parecidos) */
+  @media (max-height: 720px) {
+    .bio { display: none; }
+    .hero-slides, .hero-fade { height: 160px; }
+    .who { padding-top: 56px; }
+    .pf-media { height: 52px; }
+    .feature { height: 118px; }
+    .video { height: 118px; }
+  }
+
+  /* ---------- toque de glamour (leve, só CSS) ---------- */
+
+  /* Brilho perolado atravessando o nome (adaptado do MyUI pearl-shine) */
+  .pearl {
+    background-image: linear-gradient(105deg, var(--color-ink) 40%, #e2a800 50%, var(--color-ink) 60%);
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: pf-pearl 4s ease-in-out 1s infinite;
+  }
+  @keyframes pf-pearl { 0% { background-position: 100% 0; } 88%, 100% { background-position: -60% 0; } }
+
+  /* Aro amarelo com um respiro de luz em volta do avatar */
+  .avatar { box-shadow: 0 0 0 2px var(--color-yellow), 0 0 26px rgb(252 196 8 / 0.45), 0 10px 22px -10px rgb(16 24 42 / 0.6); animation: pf-glow 4.5s ease-in-out infinite; }
+  @keyframes pf-glow { 50% { box-shadow: 0 0 0 2px var(--color-yellow), 0 0 38px rgb(252 196 8 / 0.7), 0 10px 22px -10px rgb(16 24 42 / 0.6); } }
+
+  /* Feixe de luz correndo na borda do botão principal (adaptado do MyUI beam-button) */
+  .actions :global(.feature-btn)::after {
+    content: ""; position: absolute; inset: -2px; border-radius: inherit; padding: 2px; pointer-events: none;
+    background: conic-gradient(from var(--pf-ang, 0deg), transparent 0 68%, rgb(255 255 255 / 0.95) 92%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: pf-spin 3s linear infinite;
+  }
+  @keyframes pf-spin { to { --pf-ang: 360deg; } }
+
+  /* Entrada em sequência, uma vez só */
+  .who > *, .stack > *, .pf-tile { animation: pf-rise 620ms var(--ease-out) both; }
+  .who > :nth-child(1) { animation-delay: 0ms; } .who > :nth-child(2) { animation-delay: 70ms; }
+  .who > :nth-child(3) { animation-delay: 130ms; } .who > :nth-child(4) { animation-delay: 190ms; }
+  .stack > :nth-child(1) { animation-delay: 240ms; } .stack > :nth-child(2) { animation-delay: 320ms; }
+  .stack > :nth-child(3) { animation-delay: 390ms; } .stack > :nth-child(4) { animation-delay: 460ms; }
+  .stack > :nth-child(5) { animation-delay: 520ms; }
+  .pf-tile:nth-child(1) { animation-delay: 260ms; } .pf-tile:nth-child(2) { animation-delay: 310ms; }
+  .pf-tile:nth-child(3) { animation-delay: 360ms; } .pf-tile:nth-child(4) { animation-delay: 410ms; }
+  @keyframes pf-rise { from { opacity: 0; translate: 0 12px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pearl { animation: none; color: var(--color-ink); background: none; }
+    .avatar, .who > *, .stack > *, .pf-tile { animation: none; }
+    .actions :global(.feature-btn)::after { animation: none; }
+  }
+</style>
+
+<style is:global>
+  @property --pf-ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-v="perfil"]');
+  // Fotos de fundo: trocam sozinhas, uma de cada vez (parado se a pessoa pediu menos movimento).
+  const slides = root?.querySelector<HTMLElement>(".hero-slides");
+  const imgs = slides ? [...slides.querySelectorAll<HTMLElement>(".hero-img")] : [];
+  if (slides && imgs.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let k = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      imgs[k].classList.remove("on");
+      k = (k + 1) % imgs.length;
+      imgs[k].classList.add("on");
+    }, Number(slides.dataset.seconds || 5) * 1000);
+  }
+  const btn = root?.querySelector<HTMLButtonElement>("[data-share]");
+  btn?.addEventListener("click", async () => {
+    const url = location.origin + location.pathname;
+    try {
+      if (navigator.share) await navigator.share({ title: document.title, url });
+      else {
+        await navigator.clipboard.writeText(url);
+        btn.setAttribute("aria-label", "Link copiado");
+      }
+    } catch (_) { /* cancelado */ }
+  });
+</script>
