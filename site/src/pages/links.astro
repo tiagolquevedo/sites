@@ -35,7 +35,7 @@ const description = "App, assessoria, educação e organizações: escolha por o
       var dest = a.dataset.go;
       try {
         var u = new URL(a.getAttribute("href"), location.href);
-        if (u.origin === location.origin) {
+        if (u.origin === location.origin || /(^|\.)avantiperformance\.com\.br$/.test(u.hostname)) {
           u.searchParams.set("utm_source", UTM.source);
           u.searchParams.set("utm_medium", UTM.medium);
           u.searchParams.set("utm_campaign", "bio-" + variant);

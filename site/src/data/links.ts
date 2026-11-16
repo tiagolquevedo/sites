@@ -1,5 +1,8 @@
 import { LINKS } from "@/data/site";
 
+/** Em produção os links levam ao site principal (a bio roda em bio.*, então "/" aqui seria a própria bio). */
+const MAIN = import.meta.env.PROD ? "https://avantiperformance.com.br" : "";
+
 /**
  * Tudo que muda no link da bio mora aqui: variante padrão, destinos e textos.
  * As quatro variantes leem este arquivo; para trocar um link ou a ordem, edite só aqui.
@@ -31,10 +34,10 @@ export interface Dest {
 
 /** Na ordem em que aparecem. */
 export const DESTS: Dest[] = [
-  { id: "app", label: "App Avanti", desc: "Treino mental no dia a dia, com dados e IA.", href: "/app", icon: "app", cta: "Seja Avanti" },
-  { id: "assessoria", label: "Assessoria individual", desc: "Acompanhamento com psicólogo, 100% online.", href: "/#assessoria", icon: "assessoria", cta: "Conhecer a assessoria" },
-  { id: "educacao", label: "Educação", desc: "Comunidade, supervisão e cursos para psicólogos.", href: "/educacao", icon: "educacao", cta: "Entrar na comunidade" },
-  { id: "organizacoes", label: "Organizações", desc: "Programas para clubes, federações e equipes.", href: "/#organizacoes", icon: "organizacoes", cta: "Ver programas" },
+  { id: "app", label: "App Avanti", desc: "Treino mental no dia a dia, com dados e IA.", href: `${MAIN}/app`, icon: "app", cta: "Seja Avanti" },
+  { id: "assessoria", label: "Assessoria individual", desc: "Acompanhamento com psicólogo, 100% online.", href: `${MAIN}/#assessoria`, icon: "assessoria", cta: "Conhecer a assessoria" },
+  { id: "educacao", label: "Educação", desc: "Comunidade, supervisão e cursos para psicólogos.", href: `${MAIN}/educacao`, icon: "educacao", cta: "Entrar na comunidade" },
+  { id: "organizacoes", label: "Organizações", desc: "Programas para clubes, federações e equipes.", href: `${MAIN}/#organizacoes`, icon: "organizacoes", cta: "Ver programas" },
   { id: "fundador", label: "Fale com o fundador", desc: "Tire dúvidas direto no WhatsApp.", href: LINKS.whatsapp, cta: "Fale com o fundador" },
 ];
 
@@ -69,17 +72,17 @@ export const SOCIAL = [
   // TODO: trocar pelo canal da Avanti, se existir (hoje aponta para o canal onde o vídeo foi publicado).
   { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@tiagolquevedo" },
   { id: "whatsapp", label: "WhatsApp", href: LINKS.whatsapp },
-  { id: "site", label: "Site", href: "/" },
+  { id: "site", label: "Site", href: `${MAIN}/` },
 ] as const;
 
 /** Primeira fileira horizontal. */
 export const COMUNIDADE = {
   title: "Comunidade Avanti",
   cards: [
-    { id: "site", label: "Avanti", desc: "Conheça tudo", href: "/", img: "/links/site-preview.webp", pos: "50% 0%" },
-    { id: "app", label: "Aplicativo", desc: "Para atletas", href: "/app", mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp", "/app/app-report-resumo-440.webp"] },
-    { id: "assessoria", label: "Assessoria", desc: "Individual", href: "/#assessoria", img: "/links/assessoria.webp", pos: "50% 50%" },
-    { id: "educacao", label: "Educação", desc: "Para psicólogos", href: "/educacao", img: "/img/fundadores.webp", pos: "50% 46%", zoom: 1.3 },
+    { id: "site", label: "Avanti", desc: "Conheça tudo", href: `${MAIN}/`, img: "/links/site-preview.webp", pos: "50% 0%" },
+    { id: "app", label: "Aplicativo", desc: "Para atletas", href: `${MAIN}/app`, mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp", "/app/app-report-resumo-440.webp"] },
+    { id: "assessoria", label: "Assessoria", desc: "Individual", href: `${MAIN}/#assessoria`, img: "/links/assessoria.webp", pos: "50% 50%" },
+    { id: "educacao", label: "Educação", desc: "Para psicólogos", href: `${MAIN}/educacao`, img: "/img/fundadores.webp", pos: "50% 46%", zoom: 1.3 },
   ],
 };
 
@@ -88,7 +91,7 @@ export const DESTAQUE = {
   tag: "App Avanti",
   title: "Treine a mente todo dia.",
   desc: "Rotina, report e seus dados em um só lugar.",
-  href: "/app",
+  href: `${MAIN}/app`,
   mocks: ["/app/app-home-vela-440.webp", "/app/app-mental-score-440.webp"],
   badge: "/links/membership.webp",
   stores: [
