@@ -73,16 +73,16 @@ const {
 <style>
   /* Faixa acima do menu: no celular o conteúdo não aparece passando por cima do notch. */
   .notch-cap {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    position: fixed; top: -9px; left: 0; right: 0; z-index: 50;
     /* O Safari 26 do iPhone pinta a área do relógio com a cor de uma barra fixa larga no topo,
-       e precisa de pelo menos 3px de altura. A faixa vai só até o topo do menu, para não cobrir as curvas. */
-    height: calc(env(safe-area-inset-top, 0px) + 3px);
+       mas na prática ignora faixas com menos de ~11px. Por isso 12px de altura com 9px acima da tela: só 3px aparecem e as curvas do menu ficam livres. */
+    height: calc(env(safe-area-inset-top, 0px) + 12px);
     background: var(--color-au-island);
     pointer-events: none;
   }
   .notch {
     /* absoluto dentro da faixa: assim o Safari só enxerga a faixa como elemento fixo do topo */
-    position: absolute; top: env(safe-area-inset-top, 0px); left: 50%; pointer-events: auto;
+    position: absolute; top: calc(env(safe-area-inset-top, 0px) + 9px); left: 50%; pointer-events: auto;
     translate: -50% 0;
     animation: notch-drop 0.9s cubic-bezier(.34, 1.4, .64, 1) both;
     width: max-content; max-width: calc(100vw - 48px);
