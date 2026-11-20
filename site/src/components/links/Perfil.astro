@@ -1,7 +1,7 @@
 ---
 import { siInstagram, siYoutube, siWhatsapp, siApple, siGoogleplay } from "simple-icons";
 import Btn from "@/components/Btn.astro";
-import { PERFIL, SOCIAL, COMUNIDADE, DESTAQUE, VIDA_DE_ATLETA, NEWSLETTER } from "@/data/links";
+import { PERFIL, SOCIAL, COMUNIDADE, CURSO, DESTAQUE, VIDA_DE_ATLETA, NEWSLETTER } from "@/data/links";
 
 const brand: Record<string, string> = { instagram: siInstagram.path, youtube: siYoutube.path, whatsapp: siWhatsapp.path };
 const storeIcon: Record<string, string> = { appstore: siApple.path, googleplay: siGoogleplay.path };
@@ -70,6 +70,18 @@ const A_PATH = "M824.5 540.7L682.3 197.2L540.1 540.8L824.5 540.7ZM468.8 709.9L38
         ))}
       </div>
     </section>
+
+    <!-- TEMPORÁRIO: curso de extensão (liga/desliga em CURSO.ativo) -->
+    {CURSO.ativo && (
+      <a href={CURSO.href} data-go="curso_extensao" target="_blank" rel="noopener" class="video curso" aria-label={`${CURSO.title}: ${CURSO.cta} pelo WhatsApp`}>
+        <img src={CURSO.img} alt="" width="960" height="540" />
+        <span class="video-text">
+          <span class="kick">{CURSO.kick}</span>
+          <span class="vt">{CURSO.title}</span>
+          <span class="pill cta"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d={siWhatsapp.path} /></svg>{CURSO.cta}<svg viewBox="0 0 16 16" width="9" height="9" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </span>
+      </a>
+    )}
 
     <!-- Destaque: app (mockups hoje, vídeo depois) -->
     <article class="feature">
@@ -196,6 +208,12 @@ const A_PATH = "M824.5 540.7L682.3 197.2L540.1 540.8L824.5 540.7ZM468.8 709.9L38
   .vt { font-size: 1.02rem; line-height: 1.05; text-transform: uppercase; color: var(--color-yellow); letter-spacing: -0.01em; }
   .pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 9px; border-radius: 8px; background: rgb(255 255 255 / 0.14); border: 1px solid rgb(255 255 255 / 0.2); font-size: 11.5px; font-weight: 600; color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 
+  /* Curso de extensão (temporário): mesmo molde do Vida de Atleta, título branco e botão amarelo */
+  /* Foto inteira, sem corte: a largura segue a altura do card (16:9), em qualquer tela. */
+  .curso img { width: auto; height: 100%; aspect-ratio: 16 / 9; object-fit: contain; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%); mask-image: linear-gradient(to right, transparent 0%, #000 38%); }
+  .curso .vt { color: #fff; text-transform: none; font-size: 1.08rem; letter-spacing: -0.03em; }
+  .curso .cta { background: var(--color-yellow); border-color: var(--color-yellow); color: var(--color-navy); backdrop-filter: none; -webkit-backdrop-filter: none; }
+
   /* ---------- newsletter ---------- */
   .news { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 8px; border-radius: 14px; background: var(--color-paper-2); border: 1px solid var(--color-line); }
   .news-ico { flex: none; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--color-surface); }
@@ -242,7 +260,7 @@ const A_PATH = "M824.5 540.7L682.3 197.2L540.1 540.8L824.5 540.7ZM468.8 709.9L38
   .who > :nth-child(3) { animation-delay: 130ms; } .who > :nth-child(4) { animation-delay: 190ms; }
   .stack > :nth-child(1) { animation-delay: 240ms; } .stack > :nth-child(2) { animation-delay: 320ms; }
   .stack > :nth-child(3) { animation-delay: 390ms; } .stack > :nth-child(4) { animation-delay: 460ms; }
-  .stack > :nth-child(5) { animation-delay: 520ms; }
+  .stack > :nth-child(5) { animation-delay: 520ms; } .stack > :nth-child(6) { animation-delay: 570ms; }
   .pf-tile:nth-child(1) { animation-delay: 260ms; } .pf-tile:nth-child(2) { animation-delay: 310ms; }
   .pf-tile:nth-child(3) { animation-delay: 360ms; } .pf-tile:nth-child(4) { animation-delay: 410ms; }
   @keyframes pf-rise { from { opacity: 0; translate: 0 12px; } }

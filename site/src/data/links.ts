@@ -86,6 +86,19 @@ export const COMUNIDADE = {
   ],
 };
 
+/**
+ * TEMPORÁRIO: card do curso de extensão (dez/2026), primeiro dos cards horizontais.
+ * Para tirar: `ativo: false` (ou apague este bloco e o <a class="video curso"> em Perfil.astro).
+ */
+export const CURSO = {
+  ativo: true,
+  kick: "9 e 16 de dezembro",
+  title: "Curso de extensão Avanti",
+  cta: "Garantir minha vaga",
+  href: "https://api.whatsapp.com/send/?phone=5551997929080&text=Oi%2C+quero+garantir+minha+vaga+no+curso+da+Avanti%21&type=phone_number&app_absent=0",
+  img: "/links/curso-extensao.webp",
+};
+
 /** Destaque principal. Hoje com mockups do app; para virar vídeo, preencha `video` (a imagem vira a capa). */
 export const DESTAQUE = {
   tag: "App Avanti",
