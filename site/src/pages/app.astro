@@ -678,9 +678,14 @@ const jsonLd = [
 
   // Quem chega por #planos (ex.: link da bio) tem de cair na seção de preço: as imagens acima
   // carregam depois e empurram a página, então reposiciona quando tudo terminou de carregar.
+  // Só corrige se a seção de fato saiu do lugar (e a pessoa ainda não rolou), para não dar "pulinho".
   if (location.hash === "#planos") {
-    const go = () => document.getElementById("planos")?.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
-    go();
-    window.addEventListener("load", () => { go(); setTimeout(go, 400); }, { once: true });
+    const el = document.getElementById("planos");
+    const top = () => (el ? el.getBoundingClientRect().top : 0);
+    const want = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    let touched = false;
+    ["wheel", "touchstart", "keydown"].forEach((ev) => addEventListener(ev, () => (touched = true), { once: true, passive: true }));
+    const fix = () => { if (el && !touched && Math.abs(top() - want()) > 8) el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" }); };
+    window.addEventListener("load", () => requestAnimationFrame(fix), { once: true });
   }
 </script>

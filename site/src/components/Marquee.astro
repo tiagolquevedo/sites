@@ -36,14 +36,15 @@ const { rows, label = "Depoimentos", class: cls = "" } = Astro.props;
 
 <style is:global>
   .marquee { display: grid; gap: 14px; }
+  /* A fileira não rola: o trilho anda por transform (animado na GPU), então a rolagem
+     da página nunca é tocada. pan-y deixa o dedo rolar a página na vertical normalmente. */
   .mq {
-    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; cursor: grab;
+    overflow: hidden; touch-action: pan-y; cursor: grab;
     mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   }
-  .mq::-webkit-scrollbar { display: none; }
   .mq.is-dragging { cursor: grabbing; user-select: none; }
   .mq.is-dragging .quote { pointer-events: none; }
-  .mq-track { display: flex; gap: 14px; width: max-content; padding: 2px 0 4px; }
+  .mq-track { display: flex; gap: 14px; width: max-content; padding: 2px 0 4px; will-change: transform; }
   .quote { width: 420px; flex: none; display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 20px; background: var(--color-surface); box-shadow: 0 0 0 1px rgb(16 24 42 / 0.06); }
   .quote blockquote { font-size: 14.5px; line-height: 1.55; color: var(--color-ink); }
   .quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; line-height: 1.25; }
@@ -55,68 +56,84 @@ const { rows, label = "Depoimentos", class: cls = "" } = Astro.props;
 </style>
 
 <script>
+  // Cada fileira é uma animação de transform (Web Animations): o navegador anima na GPU,
+  // sem JavaScript por quadro e sem mexer em rolagem. Arrastar só move o "relógio" da animação.
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const canHover = matchMedia("(hover: hover)").matches;
-  const seen = new WeakMap<Element, boolean>();
-  const io = new IntersectionObserver((es) => es.forEach((e) => seen.set(e.target, e.isIntersecting)), { rootMargin: "100px" });
+  const SPEED = 28; // px por segundo
 
   document.querySelectorAll<HTMLElement>("[data-mq]").forEach((row) => {
-    const dir = Number(row.dataset.dir || 1);
-    const SPEED = 28; // px por segundo
-    let pos = 0, last = 0, set = -1, resumeAt = 0;
-    const half = () => (row.firstElementChild as HTMLElement).scrollWidth / 2;
-    const wrap = () => {
-      const h = half();
-      if (row.scrollLeft >= h) row.scrollLeft -= h;
-      else if (row.scrollLeft <= 0) row.scrollLeft += h;
+    const track = row.firstElementChild as HTMLElement;
+    const sign = Number(row.dataset.dir || 1) < 0 ? -1 : 1;
+    let anim: Animation | null = null;
+    let dur = 1, half = 1;
+    let visible = false, hovered = false, held = false, holdTimer = 0;
+
+    const time = () => Number(anim?.currentTime ?? 0);
+    const wrapT = (t: number) => ((t % dur) + dur) % dur;
+    const sync = () => {
+      if (!anim) return;
+      const run = !still && visible && !hovered && !held;
+      if (run && anim.playState !== "running") anim.play();
+      else if (!run && anim.playState === "running") anim.pause();
     };
-    const pause = (ms = 2200) => { resumeAt = performance.now() + ms; };
-    io.observe(row);
-
-    requestAnimationFrame(() => { if (dir < 0) row.scrollLeft = half() - 1; pos = row.scrollLeft; });
-
-    const loop = (t: number) => {
-      const dt = Math.min(64, t - (last || t)) / 1000;
-      last = t;
-      if (!still && seen.get(row) && t > resumeAt && !(canHover && row.matches(":hover"))) {
-        pos += dir * SPEED * dt;
-        const h = half();
-        if (pos >= h) pos -= h;
-        if (pos <= 0) pos += h;
-        row.scrollLeft = pos;
-        set = row.scrollLeft;
-      }
-      requestAnimationFrame(loop);
+    const build = () => {
+      const w = track.scrollWidth / 2;
+      if (!w || Math.abs(w - half) < 1) return;
+      const frac = anim ? wrapT(time()) / dur : 0;
+      anim?.cancel();
+      half = w;
+      dur = (half / SPEED) * 1000;
+      anim = track.animate(
+        [{ transform: "translate3d(0,0,0)" }, { transform: `translate3d(${-half}px,0,0)` }],
+        { duration: dur, iterations: Infinity, direction: sign < 0 ? "reverse" : "normal" }
+      );
+      anim.currentTime = frac * dur;
+      anim.pause();
+      sync();
     };
-    requestAnimationFrame(loop);
+    build();
+    new ResizeObserver(build).observe(track);
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }, { rootMargin: "100px" }).observe(row);
 
-    // Mexeu (dedo, trackpad, roda): segura um pouco e retoma de onde parou.
-    row.addEventListener("scroll", () => {
-      if (Math.abs(row.scrollLeft - set) > 1.5) { pause(); wrap(); pos = row.scrollLeft; set = pos; }
-    }, { passive: true });
-    row.addEventListener("touchstart", () => pause(4000), { passive: true });
+    // Segura um tempo depois de mexer e retoma de onde parou.
+    const hold = (ms: number) => {
+      held = true; sync();
+      clearTimeout(holdTimer);
+      holdTimer = window.setTimeout(() => { held = false; sync(); }, ms);
+    };
+    if (canHover) {
+      row.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; sync(); } });
+      row.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") { hovered = false; sync(); } });
+    }
 
-    // Arrastar com o mouse.
-    let startX = 0, startLeft = 0, moved = false;
+    // Arrastar (mouse ou dedo). Movimento vertical fica com a página (touch-action: pan-y).
+    let id = -1, x0 = 0, y0 = 0, t0 = 0, dragging = false, moved = false;
     row.addEventListener("pointerdown", (e) => {
-      if (e.pointerType !== "mouse" || e.button !== 0) return;
-      startX = e.clientX; startLeft = row.scrollLeft; moved = false;
-      row.setPointerCapture(e.pointerId);
-      row.classList.add("is-dragging");
-      pause(100000);
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      id = e.pointerId; x0 = e.clientX; y0 = e.clientY; t0 = time(); dragging = false; moved = false;
+      if (e.pointerType !== "mouse") hold(4000);
     });
     row.addEventListener("pointermove", (e) => {
-      if (!row.classList.contains("is-dragging")) return;
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) > 3) moved = true;
-      row.scrollLeft = startLeft - dx;
-      wrap();
-      if (row.scrollLeft !== startLeft - dx) { startLeft = row.scrollLeft + dx; }
-      pos = row.scrollLeft; set = pos;
+      if (e.pointerId !== id || !anim) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      if (!dragging) {
+        if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(dy)) return;
+        dragging = moved = true;
+        row.setPointerCapture(id);
+        row.classList.add("is-dragging");
+        held = true; clearTimeout(holdTimer); sync();
+      }
+      // Dedo para a direita = conteúdo para a direita.
+      anim.currentTime = wrapT(t0 - sign * (dx / half) * dur);
     });
-    const end = () => { if (row.classList.contains("is-dragging")) { row.classList.remove("is-dragging"); pause(1800); } };
+    const end = (e: PointerEvent) => {
+      if (e.pointerId !== id) return;
+      id = -1;
+      if (dragging) { dragging = false; row.classList.remove("is-dragging"); hold(1800); }
+    };
     row.addEventListener("pointerup", end);
     row.addEventListener("pointercancel", end);
-    row.addEventListener("click", (e) => { if (moved) e.preventDefault(); }, true);
+    row.addEventListener("click", (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
   });
 </script>
